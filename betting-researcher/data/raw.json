@@ -1,0 +1,143 @@
+{
+  "meta": {
+    "generated": "2026-08-25",
+    "sources": ["Forebet", "Football Whispers"],
+    "tz_note": "Wakati wa Forebet ni GMT; dashboard inawekeza GMT+3 (Tanzania)"
+  },
+  "matches": [
+    {
+      "id": "bham-brentford", "date_gmt": "2026-08-25", "time_gmt": "21:00",
+      "home": "Birmingham City", "away": "Brentford", "comp": "England EFL Cup",
+      "fw": {
+        "tips": [
+          {"market": "result", "selection": "2", "odds": 1.95, "lik": "Probable"},
+          {"market": "over", "line": 2.5, "odds": 1.75, "lik": "Probable"},
+          {"market": "btts", "selection": "yes", "odds": 1.65, "lik": "Probable"}
+        ],
+        "hot_tip": "Over 1.5 Brentford goals", "btts": "Yes", "cs": "1-2"
+      },
+      "forebet": {"p1": 30, "px": 26, "p2": 44, "pred": "2", "cs": "0-1", "dc": {"market": "X2", "prob": 74, "est": true}}
+    },
+    {
+      "id": "lask-celtic", "date_gmt": "2026-08-25", "time_gmt": "21:00",
+      "home": "LASK Linz", "away": "Celtic", "comp": "UCL Qualifying",
+      "forebet": {"p1": 27, "px": 38, "p2": 35, "pred": "X", "cs": "0-0", "odds_draw": 2.49}
+    },
+    {
+      "id": "forest-leeds", "date_gmt": "2026-08-25", "time_gmt": "21:00",
+      "home": "Nottingham Forest", "away": "Leeds United", "comp": "England EFL Cup",
+      "forebet": {"p1": 21, "px": 47, "p2": 32, "pred": "X", "cs": "1-1", "odds_draw": 2.20}
+    },
+    {
+      "id": "aek-levski", "date_gmt": "2026-08-26", "time_gmt": "21:00",
+      "home": "AEK Athens", "away": "Levski Sofia", "comp": "UCL Qualifying",
+      "fw": {
+        "tips": [
+          {"market": "under", "line": 2.5, "odds": 1.77, "lik": "Probable"}
+        ]
+      },
+      "forebet": {"p1": 22, "px": 50, "p2": 28, "pred": "X", "trend": "Levski: imepoteza 0 katika mechi 7 za UCL"}
+    },
+    {
+      "id": "bradford-burnley", "date_gmt": "2026-08-26", "time_gmt": "20:45",
+      "home": "Bradford City", "away": "Burnley", "comp": "England EFL Cup",
+      "fw": {
+        "tips": [
+          {"market": "under", "line": 2.5, "odds": 1.73, "lik": "Probable"},
+          {"market": "under_team", "line": 1.5, "selection": "Burnley", "odds": 1.57, "lik": "Likely"}
+        ]
+      },
+      "forebet": {"p1": 35, "px": 39, "p2": 26, "pred": "X", "cs": "0-0"}
+    },
+    {
+      "id": "celje-slovan", "date_gmt": "2026-08-26", "time_gmt": "21:00",
+      "home": "Celje", "away": "Slovan Bratislava", "comp": "UECL Qualifying",
+      "fw": {
+        "tips": [
+          {"market": "btts", "selection": "yes", "odds": 1.83, "lik": "Probable"}
+        ]
+      },
+      "forebet": {"p1": 10, "px": 49, "p2": 41, "pred": "X"}
+    },
+    {
+      "id": "lyon-fenerbahce", "date_gmt": "2026-08-26", "time_gmt": "21:00",
+      "home": "Lyon", "away": "Fenerbahce", "comp": "UCL Qualifying",
+      "fw": {
+        "tips": [
+          {"market": "result", "selection": "1", "odds": 2.00, "lik": "Probable"},
+          {"market": "btts", "selection": "yes", "odds": 1.73, "lik": "Probable"}
+        ],
+        "hot_tip": "Lyon to win", "btts": "Yes", "cs": "2-1"
+      },
+      "forebet": {"p1": 49, "px": 28, "p2": 23, "pred": "1", "cs": "2-0", "ht": {"p1": 42, "px": 38, "p2": 20, "pred": "1"}}
+    },
+    {
+      "id": "newcastle-westbrom", "date_gmt": "2026-08-26", "time_gmt": "19:45",
+      "home": "Newcastle", "away": "West Brom", "comp": "England EFL Cup",
+      "fw": {
+        "tips": [
+          {"market": "result", "selection": "1", "odds": 2.36, "lik": "Probable"},
+          {"market": "under", "line": 2.5, "odds": 2.40, "lik": "Probable"}
+        ],
+        "hot_tip": "Under 2.5 goals", "cs": "2-0"
+      }
+    },
+    {
+      "id": "preston-everton", "date_gmt": "2026-08-26", "time_gmt": "21:00",
+      "home": "Preston North End", "away": "Everton", "comp": "England EFL Cup",
+      "fw": {
+        "tips": [
+          {"market": "result", "selection": "2", "odds": 2.63, "lik": "Possible", "note": "Everton win to nil"}
+        ]
+      },
+      "forebet": {"p2_win": 50, "pred": "2", "cs": "1-3", "dc": {"market": "X2", "prob": 77, "est": true}}
+    },
+    {
+      "id": "rapid-hearts", "date_gmt": "2026-08-26", "time_gmt": "18:45",
+      "home": "Rapid Wien", "away": "Hearts", "comp": "UECL Qualifying",
+      "fw": {
+        "tips": [
+          {"market": "result", "selection": "1", "odds": 1.62, "lik": "Probable"},
+          {"market": "btts", "selection": "yes", "odds": 1.80, "lik": "Probable"}
+        ]
+      },
+      "forebet": {"p1": 35, "px": 44, "p2": 21, "pred": "X", "dc": {"market": "1X", "prob": 76}}
+    },
+    {
+      "id": "realmadrid-sociedad", "date_gmt": "2026-08-26", "time_gmt": "21:00",
+      "home": "Real Madrid", "away": "Real Sociedad", "comp": "Spain La Liga",
+      "fw": {
+        "tips": [
+          {"market": "over", "line": 3.5, "odds": 2.15, "lik": "Probable"},
+          {"market": "btts", "selection": "yes", "odds": 1.75, "lik": "Probable"}
+        ],
+        "cs": "3-1"
+      },
+      "forebet": {"p1": 69, "px": 27, "p2": 26, "pred": "1", "cs": "2-1", "dc": {"market": "1X", "prob": 89}, "btts_yes": 73}
+    },
+    {
+      "id": "tottenham-charlton", "date_gmt": "2026-08-26", "time_gmt": "20:45",
+      "home": "Tottenham", "away": "Charlton", "comp": "England EFL Cup",
+      "fw": {
+        "tips": [
+          {"market": "btts", "selection": "yes", "odds": 1.98, "lik": "Probable"}
+        ],
+        "cs": "2-1"
+      },
+      "forebet": {"p1": 35, "px": 37, "p2": 28, "pred": "X", "cs": "2-2", "odds_draw": 2.77}
+    },
+    {
+      "id": "viking-dinamo", "date_gmt": "2026-08-26", "time_gmt": "21:00",
+      "home": "Viking FK", "away": "Dinamo Zagreb", "comp": "UCL Qualifying",
+      "fw": {
+        "tips": [
+          {"market": "over", "line": 3.5, "odds": 2.40, "lik": "Probable"},
+          {"market": "btts", "selection": "yes", "odds": 1.50, "lik": "Probable"},
+          {"market": "result", "selection": "1", "odds": 2.45, "lik": "Probable"}
+        ],
+        "cs": "3-2"
+      },
+      "forebet": {"p1": 18, "px": 48, "p2": 34, "pred": "X", "cs": "2-2", "odds_draw": 3.41}
+    }
+  ]
+}

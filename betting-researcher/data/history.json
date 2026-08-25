@@ -1,0 +1,127 @@
+{
+  "bham-brentford": {
+    "form": {"home": "DDWDWW", "away": "WDDLWL"},
+    "quality": {"home": 3, "away": 1},
+    "positions": {"home": "13th Championship", "away": "3rd Premier League"},
+    "h2h": "4 of last 6 H2H meetings ended in draws",
+    "h2h_adv": {"side": "even", "strength": 1},
+    "gf": {"home": 1.4, "away": 4.7}, "ga": {"home": 0.9, "away": 0.8},
+    "leg1": null,
+    "context": "Brentford scored 14 goals in last 3 outings (3+ in each); Brentford unbeaten last 5; Birmingham unbeaten last 14 & 2+ goals in each of last 6 home games"
+  },
+  "lask-celtic": {
+    "form": {"home": null, "away": null},
+    "quality": {"home": 3, "away": 2},
+    "positions": {"home": "Austrian Bundesliga", "away": "Scottish Premiership"},
+    "h2h": "—", "h2h_adv": {"side": "none", "strength": 0},
+    "gf": {"home": 1.2, "away": 1.4}, "ga": {"home": 1.2, "away": 1.0},
+    "leg1": null,
+    "context": "UCL qualifying; Celtic priced slight favourite (1.85)"
+  },
+  "forest-leeds": {
+    "form": {"home": null, "away": null},
+    "quality": {"home": 1, "away": 3},
+    "positions": {"home": "Premier League", "away": "Championship (relegated 2025)"},
+    "h2h": "—", "h2h_adv": {"side": "none", "strength": 0},
+    "gf": {"home": 1.4, "away": 1.3}, "ga": {"home": 1.1, "away": 1.2},
+    "leg1": null,
+    "context": "EFL Cup R2; Forest PL side at home vs Championship Leeds"
+  },
+  "aek-levski": {
+    "form": {"home": "DDWDWW", "away": "WWWWDW"},
+    "quality": {"home": 2, "away": 2},
+    "positions": {"home": "1st Super League (Greece)", "away": "4th Parva Liga (Bulgaria)"},
+    "h2h": "No previous meetings (new tie)",
+    "h2h_adv": {"side": "none", "strength": 0},
+    "gf": {"home": 1.3, "away": 0.7}, "ga": {"home": 0.8, "away": 0.4},
+    "leg1": "draw 0-0",
+    "context": "1st leg 0-0 in Sofia; AEK won 8 of last 11 home games (D2,L1); Levski unbeaten in 7 UCL matches & conceded just 2 in last 5; both cautious"
+  },
+  "bradford-burnley": {
+    "form": {"home": null, "away": null},
+    "quality": {"home": 3, "away": 3},
+    "positions": {"home": "Championship", "away": "Championship"},
+    "h2h": "—", "h2h_adv": {"side": "none", "strength": 0},
+    "gf": {"home": 1.3, "away": 1.3}, "ga": {"home": 0.0, "away": 1.2},
+    "leg1": null,
+    "context": "Bradford: 3 consecutive clean sheets, 3 competitive wins without conceding, 2-0 in both home games; Burnley scored 4 in their first 3 games of the season"
+  },
+  "celje-slovan": {
+    "form": {"home": null, "away": null},
+    "quality": {"home": 3, "away": 2},
+    "positions": {"home": "Slovenian PrvaLiga", "away": "Slovak Super Liga"},
+    "h2h": "Celje failed to keep a clean sheet vs Slovan in last 3 meetings",
+    "h2h_adv": {"side": "even", "strength": 1},
+    "gf": {"home": 1.2, "away": 1.3}, "ga": {"home": 1.1, "away": 1.1},
+    "leg1": null,
+    "context": "Celje scored first in 9 of last 10 & undefeated in 11; Slovan undefeated in last 4"
+  },
+  "lyon-fenerbahce": {
+    "form": {"home": "WLLLWW", "away": "LWWDWD"},
+    "quality": {"home": 1, "away": 2},
+    "positions": {"home": "4th Ligue 1", "away": "14th Süper Lig"},
+    "h2h": "1st leg 1-1; Lyon superior in overall European H2H record (per Whispers)",
+    "h2h_adv": {"side": "home", "strength": 2},
+    "gf": {"home": 0.8, "away": 1.0}, "ga": {"home": 0.4, "away": 0.2},
+    "leg1": "draw 1-1",
+    "context": "1st leg 1-1 — Fener MUST win to advance (exposed on counter); Lyon won 7 of last 10 European home games (D2,L1); Fener without Asensio (key creator); Lyon attack-minded per manager"
+  },
+  "newcastle-westbrom": {
+    "form": {"home": null, "away": null},
+    "quality": {"home": 1, "away": 3},
+    "positions": {"home": "Premier League", "away": "Championship (newly promoted)"},
+    "h2h": "First meeting since a 0-0 Premier League draw in 2021",
+    "h2h_adv": {"side": "none", "strength": 0},
+    "gf": {"home": 1.4, "away": 0.9}, "ga": {"home": 1.0, "away": 0.6},
+    "leg1": null,
+    "context": "WARNING: Newcastle won just 1 of last 5 competitive (post-Eddie Howe era); West Brom on a 7-game winning run, conceded just 4; Newcastle scored 7 in last 5"
+  },
+  "preston-everton": {
+    "form": {"home": "LLDLWL", "away": "WLLDLD"},
+    "quality": {"home": 3, "away": 1},
+    "positions": {"home": "21st Championship", "away": "4th Premier League"},
+    "h2h": "—", "h2h_adv": {"side": "none", "strength": 0},
+    "gf": {"home": 0.3, "away": 1.4}, "ga": {"home": 2.0, "away": 1.1},
+    "leg1": null,
+    "context": "Preston: 1 goal in EACH of 3 matches, 6 conceded, conceded FIRST in all 3; Everton reached EFL Cup R3+ every season since 2001-02"
+  },
+  "rapid-hearts": {
+    "form": {"home": "DWWWWW", "away": "DWDWLL"},
+    "quality": {"home": 2, "away": 2},
+    "positions": {"home": "1st Austrian Bundesliga", "away": "5th Scottish Premiership"},
+    "h2h": "—", "h2h_adv": {"side": "none", "strength": 0},
+    "gf": {"home": 1.8, "away": 1.3}, "ga": {"home": 0.7, "away": 1.3},
+    "leg1": "draw",
+    "context": "1st leg draw in Edinburgh; Hearts lost 7 of last 8 European AWAY matches; Rapid unbeaten in 4, in good position; Hearts scored in 5 of last 6"
+  },
+  "realmadrid-sociedad": {
+    "form": {"home": "WWWWLW", "away": "LDLDLD"},
+    "quality": {"home": 1, "away": 2},
+    "positions": {"home": "La Liga (title contenders)", "away": "La Liga mid-table"},
+    "h2h": "Real Madrid won last 3 H2Hs; 7 wins in last 8 H2Hs",
+    "h2h_adv": {"side": "home", "strength": 3},
+    "gf": {"home": 2.0, "away": 1.1}, "ga": {"home": 0.7, "away": 1.4},
+    "leg1": null,
+    "context": "RM won 4 in a row, unbeaten in 9 (all comps); RM on the scoresheet 5 of last 6, Sociedad 6 of last 7; Sociedad form poor (L D L D D L)"
+  },
+  "tottenham-charlton": {
+    "form": {"home": null, "away": null},
+    "quality": {"home": 1, "away": 3},
+    "positions": {"home": "Premier League", "away": "Championship (promoted 2026, won all 3 this season)"},
+    "h2h": "Spurs won the previous 5 H2Hs — but the last was in 2011 (stale)",
+    "h2h_adv": {"side": "home", "strength": 1},
+    "gf": {"home": 1.8, "away": 1.5}, "ga": {"home": 1.0, "away": 1.1},
+    "leg1": null,
+    "context": "Charlton won all 3 games this season (improved under new regime); H2H is stale (2011); Forebet model leans draw (35/37/28) — caution"
+  },
+  "viking-dinamo": {
+    "form": {"home": null, "away": "WWWDWW"},
+    "quality": {"home": 2, "away": 1},
+    "positions": {"home": "Danish Superliga", "away": "1st Croatian HNL"},
+    "h2h": "First meeting between the sides",
+    "h2h_adv": {"side": "none", "strength": 0},
+    "gf": {"home": 1.8, "away": 2.7}, "ga": {"home": 1.0, "away": 0.7},
+    "leg1": "draw 2-2",
+    "context": "1st leg 2-2 at Maksimir; Dinamo on a 30-game unbeaten run (since February), won all but 1 of 12 home games last year, unbeaten in 7; Viking scored 9 in last 5; both sides attack — goals likely"
+  }
+}

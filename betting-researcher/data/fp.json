@@ -1,0 +1,65 @@
+{
+ "bham-brentford": {
+  "home": "Birmingham City",
+  "away": "Brentford",
+  "cs": [
+   2,
+   1
+  ],
+  "league": "efl"
+ },
+ "lask-celtic": {
+  "home": "LASK",
+  "away": "Celtic",
+  "cs": [
+   3,
+   1
+  ],
+  "league": "ucl"
+ },
+ "aek-levski": {
+  "home": "AEK Athens",
+  "away": "Levski Sofia",
+  "cs": [
+   2,
+   1
+  ],
+  "league": "ucl"
+ },
+ "celje-slovan": {
+  "home": "Celje",
+  "away": "Slovan Bratislava",
+  "cs": [
+   1,
+   0
+  ],
+  "league": "ucl"
+ },
+ "lyon-fenerbahce": {
+  "home": "Lyon",
+  "away": "Fenerbahce",
+  "cs": [
+   1,
+   1
+  ],
+  "league": "ucl"
+ },
+ "viking-dinamo": {
+  "home": "Viking",
+  "away": "Dinamo Zagreb",
+  "cs": [
+   2,
+   1
+  ],
+  "league": "ucl"
+ },
+ "realmadrid-sociedad": {
+  "home": "Real Madrid",
+  "away": "Real Sociedad",
+  "cs": [
+   0,
+   1
+  ],
+  "league": "laliga"
+ }
+}

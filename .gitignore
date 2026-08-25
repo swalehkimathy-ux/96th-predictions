@@ -1,0 +1,8 @@
+node_modules/
+__pycache__/
+*.pyc
+.deploy-ctx/
+android/app/build/
+android/.gradle/
+data/records.db
+*.log

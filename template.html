@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>96th Predictions</title>
+<style>
+:root{
+  --bg0:#050a18; --bg1:#0a1430; --card:#0d1836; --card2:#0a1226;
+  --line:#1d2c55; --line2:#14224a;
+  --gold:#d9a83c; --gold2:#f0cd6e; --golddim:rgba(217,168,60,.14);
+  --tx:#f4f6fb; --sub:#8fa0c5; --dim:#5b6a8f;
+  --grn:#2fbf71; --amb:#e5b54a; --org:#e08a4f; --red:#e0604f;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  background:radial-gradient(1100px 560px at 50% -12%, #16265c 0%, var(--bg1) 46%, var(--bg0) 100%) fixed;
+  color:var(--tx);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.hidden{display:none!important}
+.ic{width:16px;height:16px;flex:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 60px}
+
+/* ---------- LANDING ---------- */
+#screen-landing{min-height:100vh;display:flex;align-items:center;justify-content:center}
+.land{text-align:center;padding:30px 18px}
+.logo{display:flex;align-items:center;justify-content:center;gap:20px}
+.ball{width:92px;height:92px;filter:drop-shadow(0 0 22px rgba(217,168,60,.35))}
+.word{font-size:32px;font-weight:800;letter-spacing:.34em;color:#fff;text-indent:.34em}
+.tag{margin:22px 0 40px;color:var(--sub);font-size:13px;letter-spacing:.1em}
+.btn-start{
+  display:inline-flex;align-items:center;gap:12px;
+  padding:19px 52px;font-size:17px;font-weight:800;letter-spacing:.16em;
+  color:#0d1531;background:linear-gradient(135deg,#f6d87e 0%,var(--gold) 55%,#c8922b 100%);
+  border:none;border-radius:14px;cursor:pointer;
+  box-shadow:0 12px 34px rgba(217,168,60,.30), inset 0 1px 0 rgba(255,255,255,.5);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 18px 44px rgba(217,168,60,.42), inset 0 1px 0 rgba(255,255,255,.5)}
+.btn-start .ic{width:20px;height:20px}
+.btn-start.locked{
+  background:linear-gradient(135deg,#22304f,#1a2542);color:var(--sub);
+  box-shadow:none;cursor:not-allowed;border:1px solid var(--line);
+}
+.btn-start.locked:hover{transform:none}
+.btn-start.locked .ic{color:var(--gold)}
+.btn-ghost{display:inline-flex;gap:8px;align-items:center;background:transparent;border:1px solid var(--line);color:var(--tx);border-radius:12px;padding:11px 20px;font-size:13px;cursor:pointer;transition:border-color .15s}
+.btn-ghost:hover{border-color:var(--gold)}
+.btn-ghost .ic{width:15px;height:15px;color:var(--gold2)}
+.land .stack{display:flex;flex-direction:column;gap:12px;align-items:center}
+.mini-stats{margin-top:26px;display:inline-flex;gap:22px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 22px}
+.mini-stats .v{font-size:18px;font-weight:800;color:var(--gold2)}
+.mini-stats .l{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+.micro{margin-top:26px;color:var(--dim);font-size:11px;letter-spacing:.12em}
+.locknote{margin-top:12px;color:var(--sub);font-size:12px}
+
+/* ---------- ANALYSIS ---------- */
+#screen-analysis{min-height:100vh;display:flex;align-items:center;justify-content:center}
+.an{width:100%;max-width:560px;margin:0 auto;background:rgba(13,24,54,.88);border:1px solid var(--line);border-radius:18px;padding:26px 26px 18px}
+.an-head{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.an-head .ball{width:44px;height:44px;filter:none}
+.an-head b{font-size:15px;letter-spacing:.2em;display:block}
+.an-head .sub{font-size:12px;color:var(--sub)}
+.pbar{height:4px;background:#182a55;border-radius:4px;overflow:hidden;margin-bottom:14px}
+#pfill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .5s ease}
+#steps{list-style:none}
+#steps li{display:flex;gap:13px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line2)}
+#steps li:last-child{border-bottom:none}
+#steps li .ic{width:19px;height:19px;color:var(--dim);margin-top:2px}
+#steps li b{font-size:13.5px;font-weight:600}
+#steps li .detail{font-size:11.5px;color:var(--sub);margin-top:4px;line-height:1.55}
+#steps li.pending b{color:var(--dim)}
+#steps li.active .ic{color:var(--gold2);animation:rot 1.05s linear infinite}
+#steps li.done .ic{color:var(--grn);animation:none}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+/* ---------- TOPBAR ---------- */
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:18px 0 6px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .ball{width:42px;height:42px;filter:none}
+.brand b{font-size:16px;letter-spacing:.22em}
+.brand span{color:var(--gold2);letter-spacing:.3em;font-size:12.5px;margin-left:2px}
+.topright{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{display:flex;gap:7px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:12.5px;color:var(--tx)}
+.chip .ic{width:14px;height:14px;color:var(--gold2)}
+.chip .geo{color:var(--dim);font-size:11px}
+.btn-ghost.sm{padding:7px 15px;font-size:12.5px;border-radius:999px}
+.btn-ghost.sm .ic{width:14px;height:14px}
+.banner{margin:14px 0 6px;background:linear-gradient(135deg,rgba(217,168,60,.12),rgba(217,168,60,.03));border:1px solid rgba(217,168,60,.38);border-radius:12px;padding:12px 16px;font-size:12.5px;color:#dfe6f5;display:flex;flex-wrap:wrap;gap:6px 26px;line-height:1.6}
+.banner b{color:var(--gold2)}
+.stale{margin:10px 0 0;border:1px solid rgba(224,138,79,.4);background:rgba(224,138,79,.08);color:#f0cdb4;border-radius:12px;padding:10px 16px;font-size:12px;display:flex;gap:9px;align-items:center}
+.stale .ic{width:15px;height:15px;color:var(--org)}
+
+h3{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2);margin:28px 0 12px;display:flex;gap:9px;align-items:center;font-weight:700}
+h3 .ic{width:15px;height:15px}
+h3 .cnt{color:var(--dim);font-weight:400;letter-spacing:0;text-transform:none}
+.scroll{overflow-x:auto;border-radius:14px}
+table.tbl{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:13px;min-width:820px}
+table.tbl th{text-align:left;color:var(--sub);font-size:10px;text-transform:uppercase;letter-spacing:.1em;padding:11px 12px;background:var(--card2);border-bottom:1px solid var(--line)}
+table.tbl td{padding:13px 12px;border-bottom:1px solid var(--line2);vertical-align:top}
+table.tbl tr:last-child td{border-bottom:none}
+.sub{color:var(--sub);font-size:11px;margin-top:4px;line-height:1.5}
+.tm b{font-size:15px;font-weight:700}
+.daychip{display:inline-block;margin-top:5px;font-size:10px;letter-spacing:.08em;color:var(--gold2);border:1px solid rgba(217,168,60,.4);border-radius:6px;padding:1px 7px;background:var(--golddim)}
+.mkt{font-weight:600}
+.odds{font-weight:800;font-size:16px;color:var(--gold2);white-space:nowrap}
+.bar{width:88px;height:7px;background:#182a55;border-radius:4px;overflow:hidden;display:inline-block;vertical-align:middle}
+.bar .f{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:4px}
+td .conf{font-weight:700;font-size:13.5px;margin-left:8px}
+.srcchip{display:inline-block;font-size:10px;border:1px solid var(--line);border-radius:6px;padding:1.5px 6px;margin:0 3px 3px 0;color:#c7d2ea;background:#101d40;white-space:nowrap}
+.flag{display:inline-flex;gap:6px;align-items:center;font-size:11px;font-weight:600;white-space:nowrap}
+.flag .ic{width:13px;height:13px}
+.flag.ok{color:var(--grn)} .flag.mid{color:var(--amb)} .flag.warn{color:var(--org)}
+.dot{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block;flex:none}
+.empty{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:30px 20px;text-align:center;color:var(--sub);font-size:13px;line-height:1.7}
+.nochips{display:flex;flex-wrap:wrap;gap:8px}
+.nochip{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 13px;font-size:12px;color:var(--sub)}
+.nochip b{color:var(--tx);font-weight:600}
+details.gone{margin-top:12px;background:#0b132b;border:1px solid var(--line);border-radius:12px;padding:6px 16px}
+details.gone summary{cursor:pointer;font-size:12.5px;color:var(--sub);display:flex;gap:9px;align-items:center;padding:8px 0;list-style:none}
+details.gone summary::-webkit-details-marker{display:none}
+details.gone summary .ic{width:14px;height:14px;color:var(--red)}
+.grow{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line2);font-size:12.5px}
+.grow:last-child{border-bottom:none}
+.grow .why{color:var(--red);font-size:11.5px;white-space:nowrap}
+.disc{margin-top:30px;border:1px solid rgba(224,96,79,.35);background:rgba(224,96,79,.07);border-radius:12px;padding:13px 16px;font-size:12.5px;color:#e8c9c0;line-height:1.65;display:flex;gap:10px}
+.disc .ic{width:16px;height:16px;color:var(--red);margin-top:2px}
+.foot{margin-top:16px;color:#4d5b7d;font-size:11px;line-height:1.7}
+
+/* ---------- BET SLIP ---------- */
+.slip{background:linear-gradient(160deg,#101c40,#0c1531);border:1px solid rgba(217,168,60,.45);border-radius:16px;padding:18px 18px 14px;margin-top:8px;position:relative}
+.slip-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.slip-head b{letter-spacing:.14em;font-size:13px;color:var(--gold2)}
+.slip-leg{display:flex;justify-content:space-between;gap:14px;align-items:baseline;padding:9px 0;border-bottom:1px dashed var(--line2);font-size:12.5px}
+.slip-leg:last-of-type{border-bottom:none}
+.slip-leg .lft{min-width:0}
+.slip-leg .mk{color:var(--gold2);font-weight:600;font-size:12px}
+.slip-leg .odds{font-size:14px}
+.slip-total{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid rgba(217,168,60,.4);flex-wrap:wrap;gap:10px}
+.slip-total .tot{font-size:22px;font-weight:800;color:var(--gold2)}
+.slip-note{margin-top:12px;font-size:11px;color:var(--sub);line-height:1.65}
+.copybtn{display:inline-flex;gap:8px;align-items:center;background:linear-gradient(135deg,#f6d87e,var(--gold) 60%,#c8922b);border:none;border-radius:10px;padding:10px 18px;font-size:12.5px;font-weight:800;letter-spacing:.06em;color:#0d1531;cursor:pointer}
+.copybtn .ic{width:14px;height:14px}
+
+/* ---------- TRACK / STATS ---------- */
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.stat .v{font-size:24px;font-weight:800}
+.stat .v.gold{color:var(--gold2)} .stat .v.grn{color:var(--grn)} .stat .v.red{color:var(--red)} .stat .v.amb{color:var(--amb)}
+.stat .l{font-size:10.5px;color:var(--sub);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+.mktstats{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.mktstat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:11.5px;color:var(--sub)}
+.mktstat b{color:var(--tx);font-size:12px}
+details.sess{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-top:12px;overflow:hidden}
+details.sess summary{cursor:pointer;display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:14px 16px;font-size:13px;list-style:none}
+details.sess summary::-webkit-details-marker{display:none}
+details.sess summary b{font-size:13.5px}
+details.sess summary .cyc{font-size:10.5px;color:var(--gold2);border:1px solid rgba(217,168,60,.4);border-radius:6px;padding:2px 8px;background:var(--golddim);letter-spacing:.06em}
+.srate{margin-left:auto;font-size:12px;font-weight:700}
+.srate.grn{color:var(--grn)} .srate.red{color:var(--red)} .srate.amb{color:var(--amb)}
+.sbody{padding:4px 16px 16px}
+.scorein{display:flex;gap:6px;align-items:center}
+.scorein input{width:74px;background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--tx);padding:7px 9px;font-size:12.5px;text-align:center}
+.scorein input.bad{border-color:var(--red)}
+.scorein button{background:var(--golddim);border:1px solid rgba(217,168,60,.4);color:var(--gold2);border-radius:8px;padding:7px 12px;font-size:11.5px;font-weight:700;cursor:pointer}
+.stchip{display:inline-flex;gap:6px;align-items:center;font-size:11px;font-weight:700;letter-spacing:.05em;white-space:nowrap}
+.stchip .ic{width:13px;height:13px}
+.st-pending{color:var(--amb)} .st-win{color:var(--grn)} .st-loss{color:var(--red)} .st-void{color:var(--dim)}
+.ovr{display:inline-flex;gap:4px;margin-left:8px}
+.ovr button{width:24px;height:22px;border-radius:6px;border:1px solid var(--line);background:var(--card2);color:var(--sub);font-size:10.5px;font-weight:800;cursor:pointer}
+.ovr button:hover{border-color:var(--gold);color:var(--gold2)}
+.ovr button.on-w{background:rgba(47,191,113,.18);border-color:var(--grn);color:var(--grn)}
+.ovr button.on-l{background:rgba(224,96,79,.18);border-color:var(--red);color:var(--red)}
+.ovr button.on-v{background:rgba(91,106,143,.25);border-color:var(--dim);color:var(--sub)}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f6d87e,var(--gold));color:#0d1531;font-weight:800;font-size:13px;padding:12px 26px;border-radius:12px;box-shadow:0 14px 40px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s}
+.toast.show{opacity:1}
+@media(max-width:640px){
+  .word{font-size:22px;letter-spacing:.24em}
+  .ball{width:70px;height:70px}
+  .btn-start{padding:16px 30px;font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" fill="currentColor"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+<symbol id="i-radar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".55"/><path d="M12 12 17.6 6.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M5 20v-8M11 20V5M17 20v-6M2.5 20h19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8L3 5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m8 12.5 2.7 2.7L16.5 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19L12 3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1.1" fill="currentColor"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m9 9 6 6M15 9l-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-layer" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m3 13 9 5 9-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" opacity=".6"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M20 3v4h-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 11V7a4 4 0 1 1 8 0v4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+<symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V6a2 2 0 0 1 2-2h9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-hist" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 1 2.34 5.66" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4 21v-4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8v4l2.5 1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-slip" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 8h6M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-ball" viewBox="0 0 48 48">
+  <circle cx="24" cy="24" r="21.5" fill="none" stroke="currentColor" stroke-width="2.4"/>
+  <polygon points="24,13.5 33.9,20.7 30.1,32.3 17.9,32.3 14.1,20.7" fill="none" stroke="currentColor" stroke-width="1.9"/>
+  <path d="M24 13.5V6.5M33.9 20.7l6.9-2.5M30.1 32.3l4.2 5.9M17.9 32.3l-4.2 5.9M14.1 20.7 7.2 18.2" stroke="currentColor" stroke-width="1.9" fill="none"/>
+</symbol>
+</defs></svg>
+
+<!-- LANDING -->
+<section id="screen-landing" class="screen">
+  <div class="land">
+    <div class="logo">
+      <svg class="ball" viewBox="0 0 48 48" role="img" aria-label="96th Predictions logo">
+        <circle cx="24" cy="24" r="22.5" fill="rgba(217,168,60,.10)"/>
+        <use href="#i-ball" style="color:#e8c25a"/>
+        <text x="24" y="27.8" text-anchor="middle" font-size="10.5" font-weight="800" fill="#f6d87e" font-family="inherit" letter-spacing=".5">96th</text>
+      </svg>
+      <div class="word">PREDICTIONS</div>
+    </div>
+    <p class="tag">UTAFITI WA MCHEZO · VYANZO 5 · UHAKIKA WA DATA</p>
+    <div class="stack" id="land-actions"></div>
+    <div id="land-live" style="margin-top:16px"></div>
+    <div id="land-stats"></div>
+    <p class="micro">UTAFITI WA BINAFSI · SI USHAURI WA KIFEDHA · KILA RUN = RECORD MPYA</p>
+  </div>
+</section>
+
+<!-- ANALYSIS -->
+<section id="screen-analysis" class="screen hidden">
+  <div class="an">
+    <div class="an-head">
+      <svg class="ball" viewBox="0 0 48 48" aria-hidden="true">
+        <use href="#i-ball" style="color:#e8c25a"/>
+        <text x="24" y="27.8" text-anchor="middle" font-size="10.5" font-weight="800" fill="#f6d87e" font-family="inherit" letter-spacing=".5">96th</text>
+      </svg>
+      <div><b>96TH PREDICTIONS</b><span class="sub">Bot inafanya analysis ya cycle hii</span></div>
+    </div>
+    <div class="pbar"><div id="pfill"></div></div>
+    <ul id="steps"></ul>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="screen-results" class="screen hidden">
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <svg class="ball" viewBox="0 0 48 48" aria-hidden="true"><use href="#i-ball" style="color:#e8c25a"/><text x="24" y="27.8" text-anchor="middle" font-size="10.5" font-weight="800" fill="#f6d87e" font-family="inherit" letter-spacing=".5">96th</text></svg>
+        <b>96TH</b><span>PREDICTIONS</span>
+      </div>
+      <div class="topright">
+        <div id="live-top"></div>
+        <div class="chip"><svg class="ic"><use href="#i-clock"/></svg><span id="clock">--:--:--</span></div>
+        <div class="chip"><svg class="ic"><use href="#i-pin"/></svg><span id="loc">…</span><span class="geo" id="geo"></span></div>
+        <button class="btn-ghost sm" id="btn-re"><svg class="ic"><use href="#i-refresh"/></svg>Tengeneza upya</button>
+        <button class="btn-ghost sm" id="btn-to-track1"><svg class="ic"><use href="#i-hist"/></svg>Historia</button>
+      </div>
+    </header>
+    <div id="banners"></div>
+    <main id="main"></main>
+  </div>
+</section>
+
+<!-- TRACK -->
+<section id="screen-track" class="screen hidden">
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <svg class="ball" viewBox="0 0 48 48" aria-hidden="true"><use href="#i-ball" style="color:#e8c25a"/><text x="24" y="27.8" text-anchor="middle" font-size="10.5" font-weight="800" fill="#f6d87e" font-family="inherit" letter-spacing=".5">96th</text></svg>
+        <b>96TH</b><span>HISTORIA &amp; USHINDI</span>
+      </div>
+      <div class="topright">
+        <div class="chip"><svg class="ic"><use href="#i-clock"/></svg><span id="clock2">--:--:--</span></div>
+        <button class="btn-ghost sm" id="btn-home"><svg class="ic"><use href="#i-bolt"/></svg>Nyuma</button>
+      </div>
+    </header>
+    <main id="track-main"></main>
+  </div>
+</section>
+
+<div class="toast" id="toast">Imenakiliwa</div>
+
+<script id="app-data" type="application/json">__APP_DATA__</script>
+<script>
+(function(){
+"use strict";
+var DATA = JSON.parse(document.getElementById("app-data").textContent);
+var curDet = null;
+var curSessionId = null;
+var LIVE = {state:"checking", at:null};
+
+/* ---------- LIVE data ---------- */
+/* URL ya server yako (m.f. "https://96th-predictions.onrender.com").
+   Wacha "" ikiwa app inaendeshwa kutoka kwenye server hiyo hiyo. */
+var API_URL = "";
+var API_BASE = "";
+function apiFetch(path, opts){
+  function attempt(i){
+    if(i >= attempts.length) return Promise.reject(new Error("api unavailable"));
+    var u = attempts[i];
+    return fetch(u, opts).then(function(r){
+      if(!r.ok) throw new Error("http " + r.status);
+      API_BASE = (u === path) ? "" : API_URL;
+      return r;
+    }, function(){ return attempt(i + 1); });
+  }
+  var attempts = API_BASE ? [API_BASE + path] : (API_URL ? [path, API_URL + path] : [path]);
+  return attempt(0);
+}
+function fetchLive(){
+  return new Promise(function(res){
+    var t = setTimeout(function(){ res(null); }, 60000);
+    try{
+      apiFetch("/api/picks", {cache:"no-store"}).then(function(r){
+        return r.json();
+      }).then(function(d){
+        clearTimeout(t);
+        if(d && d.matches && d.matches.length){ DATA = d; res(d); } else res(null);
+      }).catch(function(){ clearTimeout(t); res(null); });
+    }catch(e){ clearTimeout(t); res(null); }
+  });
+}
+function liveChip(){
+  var cls = LIVE.state === "live" ? "gold" : "";
+  var label = LIVE.state === "live" ? "LIVE" : (LIVE.state === "offline" ? "OFFLINE" : "INAFUNGA DATA…");
+  var at = LIVE.at ? " · data " + LIVE.at : "";
+  return '<span class="lv ' + cls + '"><span class="dot"></span>' + label + at + '</span>';
+}
+function setLiveFrom(d){
+  if(d && d.generated_ms){ LIVE.state = "live"; LIVE.at = fmtT(d.generated_ms); }
+  else if(LIVE.state !== "live"){ LIVE.state = "offline"; LIVE.at = null; }
+}
+function apiGet(path){
+  return apiFetch(path, {cache:"no-store"}).then(function(r){ return r.json(); });
+}
+function apiPost(path, obj){
+  return apiFetch(path, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(obj)})
+    .then(function(r){ return r.json(); });
+}
+
+/* ---------- store (localStorage + fallback) ---------- */
+var store = (function(){
+  try{
+    var t = "__p96_test__";
+    window.localStorage.setItem(t, "1");
+    window.localStorage.removeItem(t);
+    return window.localStorage;
+  }catch(e){
+    var m = {};
+    return {
+      getItem: function(k){ return Object.prototype.hasOwnProperty.call(m,k) ? m[k] : null; },
+      setItem: function(k,v){ m[k] = String(v); },
+      removeItem: function(k){ delete m[k]; }
+    };
+  }
+})();
+var SKEY = "p96.sessions.v1";
+function loadSessions(){
+  try{ return JSON.parse(store.getItem(SKEY) || "[]"); }catch(e){ return []; }
+}
+function saveSessions(s){ store.setItem(SKEY, JSON.stringify(s)); }
+
+/* ---------- utils ---------- */
+function $(id){ return document.getElementById(id); }
+function show(id){
+  ["screen-landing","screen-analysis","screen-results","screen-track"].forEach(function(s){
+    $(s).classList.toggle("hidden", s !== id);
+  });
+  clearInterval(window.__tick);
+  window.scrollTo(0,0);
+}
+function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+function esc(s){ return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function toast(msg){
+  var t = $("toast"); t.textContent = msg; t.classList.add("show");
+  setTimeout(function(){ t.classList.remove("show"); }, 1800);
+}
+function fmtT(ms){ return new Date(ms).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}); }
+function fmtDT(ms){
+  var d = new Date(ms);
+  return d.toLocaleDateString([], {day:"2-digit", month:"2-digit"}) + " " + d.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+}
+function dayLabel(ms){
+  var d = new Date(ms); var t = new Date(); t.setHours(0,0,0,0);
+  var diff = Math.floor((d - t) / 864e5);
+  if(diff <= 0) return "Leo";
+  if(diff === 1) return "Kesho";
+  return d.toLocaleDateString([], {day:"numeric", month:"short"});
+}
+function flagHtml(f){
+  if(f === "ok")   return '<span class="flag ok"><svg class="ic"><use href="#i-check"/></svg>Historia inathibitisha</span>';
+  if(f === "warn") return '<span class="flag warn"><svg class="ic"><use href="#i-warn"/></svg>Historia inapingana</span>';
+  if(f === "mid")  return '<span class="flag mid"><span class="dot"></span>Historia sawa</span>';
+  return '<span class="flag"><span class="dot" style="opacity:.4"></span>—</span>';
+}
+function bar(pct){
+  var w = Math.max(4, Math.min(100, Math.round(pct*100)));
+  return '<span class="bar"><span class="f" style="width:' + w + '%"></span></span><span class="conf">' + Math.round(pct*100) + '%</span>';
+}
+function stChip(st){
+  if(st === "win")   return '<span class="stchip st-win"><svg class="ic"><use href="#i-check"/></svg>WIN</span>';
+  if(st === "loss")  return '<span class="stchip st-loss"><svg class="ic"><use href="#i-x"/></svg>LOSS</span>';
+  if(st === "void")  return '<span class="stchip st-void"><span class="dot"></span>VOID</span>';
+  return '<span class="stchip st-pending"><span class="dot"></span>INAPOKELA</span>';
+}
+
+/* ---------- time / location ---------- */
+var TZ_CITY = {
+  "Africa/Dar_es_Salaam":["Dar es Salaam","Tanzania"],"Africa/Nairobi":["Nairobi","Kenya"],
+  "Africa/Kampala":["Kampala","Uganda"],"Africa/Juba":["Juba","Sudan Kusini"],
+  "Africa/Mogadishu":["Mogadishu","Somalia"],"Africa/Lusaka":["Lusaka","Zambia"],
+  "Africa/Maputo":["Maputo","Mozambique"],"Africa/Maseru":["Maseru","Lesotho"],
+  "Africa/Johannesburg":["Johannesburg","Afrika Kusini"],"Africa/Cairo":["Cairo","Misri"],
+  "Africa/Tripoli":["Tripoli","Libya"],"Africa/Tunis":["Tunis","Tunisia"],
+  "Africa/Lagos":["Lagos","Nigeria"],"Africa/Accra":["Accra","Ghana"],
+  "Europe/London":["London","UK"],"Europe/Paris":["Paris","Ufaransa"],"UTC":["UTC","—"]
+};
+function gmtLabel(){
+  var m = -new Date().getTimezoneOffset();
+  var sign = m >= 0 ? "+" : "-"; m = Math.abs(m);
+  return sign + Math.floor(m/60) + (m % 60 ? ":" + String(m % 60).padStart(2,"0") : "");
+}
+function detectLocation(){
+  return new Promise(function(res){
+    var tz = "UTC";
+    try{ tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"; }catch(e){}
+    var c = TZ_CITY[tz] || [tz.split("/").pop() ? tz.split("/").pop().replace(/_/g," ") : tz, "—"];
+    var out = { tz: tz, city: c[0] + (c[1] !== "—" ? ", " + c[1] : ""), gmt: gmtLabel(), geo: false };
+    var done = false;
+    function fin(extra){
+      if(done) return; done = true;
+      if(extra) for(var k in extra) out[k] = extra[k];
+      res(out);
+    }
+    try{
+      if(navigator.geolocation){
+        var t = setTimeout(function(){ fin({geo:false}); }, 4000);
+        navigator.geolocation.getCurrentPosition(
+          function(p){ clearTimeout(t); fin({geo:true, lat:p.coords.latitude.toFixed(2), lon:p.coords.longitude.toFixed(2)}); },
+          function(){ clearTimeout(t); fin({geo:false}); },
+          {timeout: 3500, maximumAge: 600000}
+        );
+      } else fin({geo:false});
+    }catch(e){ fin({geo:false}); }
+  });
+}
+
+/* ---------- smart time filter ---------- */
+function filterNow(){
+  var now = Date.now(), avail = [], gone = [];
+  DATA.matches.forEach(function(m){
+    var diff = (m.kickoff - now) / 60000;
+    if(diff < 30){
+      var r = diff < -90 ? "Imemalizika" : (diff < 0 ? "Inachezwa sasa" : "Inaanza hivi karibuni (chini ya 30 min)");
+      gone.push({m:m, reason:r});
+    } else if(diff > 48*60){
+      gone.push({m:m, reason:"Nje ya window (zaidi ya 48h)"});
+    } else avail.push(m);
+  });
+  return {avail:avail, gone:gone, now:now};
+}
+
+/* ---------- session ---------- */
+function makeSession(){
+  var f = filterNow();
+  var picks = [];
+  f.avail.forEach(function(m){
+    (m.picks || []).forEach(function(p){
+      picks.push({
+        mid:m.id, match:m.home + " – " + m.away, comp:m.comp, kickoff:m.kickoff,
+        type:p.type, market:p.market, selection:p.selection, odds:p.odds,
+        final:p.final, n:p.n, src:p.src, flag:p.flag,
+        score:null, status:"pending", manual:false
+      });
+    });
+  });
+  return {
+    id: "s" + Date.now().toString(36),
+    started_at: Date.now(),
+    cycle: "FLEXIBLE",
+    picks: picks,
+    meta: {avail: f.avail.length, gone: f.gone.length, generated_utc: DATA.generated_utc}
+  };
+}
+function saveNewSession(){
+  var s = makeSession();
+  var all = loadSessions(); all.push(s); saveSessions(all);
+  return s;
+}
+
+/* ---------- win/loss eval ---------- */
+function evalPick(p, h, a){
+  switch(p.type){
+    case "DC1X": return h >= a ? "win" : "loss";
+    case "DCX2": return a >= h ? "win" : "loss";
+    case "O15":  return (h + a) >= 2 ? "win" : "loss";
+    case "U35":  return (h + a) <= 3 ? "win" : "loss";
+    case "BTTS": return (h > 0 && a > 0) ? "win" : "loss";
+  }
+  return "pending";
+}
+function applyScore(session, mid, h, a, scoreStr){
+  session.picks.forEach(function(p){
+    if(p.mid === mid){
+      p.score = scoreStr;
+      if(!p.manual){ p.status = evalPick(p, h, a); }
+    }
+  });
+}
+function stats(sessions){
+  var all = [];
+  sessions.forEach(function(s){ all = all.concat(s.picks); });
+  var wins = all.filter(function(p){return p.status==="win";}).length;
+  var loss = all.filter(function(p){return p.status==="loss";}).length;
+  var pend = all.filter(function(p){return p.status==="pending";}).length;
+  var done = wins + loss;
+  var perMkt = {};
+  all.forEach(function(p){
+    var k = p.market || "—";
+    perMkt[k] = perMkt[k] || {w:0,l:0};
+    if(p.status === "win") perMkt[k].w++;
+    if(p.status === "loss") perMkt[k].l++;
+  });
+  return {wins:wins, loss:loss, pend:pend, total:all.length, done:done,
+          rate: done ? wins/done : null, perMkt:perMkt, sessions:sessions.length};
+}
+function sessStats(s){
+  var w = s.picks.filter(function(p){return p.status==="win";}).length;
+  var l = s.picks.filter(function(p){return p.status==="loss";}).length;
+  return {w:w, l:l, d:w+l, rate: (w+l) ? w/(w+l) : null};
+}
+
+/* ---------- landing ---------- */
+function renderLanding(){
+  var sess = loadSessions();
+  var act = $("land-actions");
+  act.innerHTML =
+    '<button class="btn-start" id="btn-start"><svg class="ic"><use href="#i-bolt"/></svg>START BOT</button>' +
+    (sess.length ? '<button class="btn-ghost" id="btn-track-land"><svg class="ic"><use href="#i-hist"/></svg>HISTORIA NA USHINDI</button>' : "") +
+    '<p class="locknote">Muda wowote — kila run = record mpya · Smart time filter: utapata pekee mechi zinazoweza kubetiwa sasa</p>';
+  $("btn-start").addEventListener("click", runAnalysis);
+  if(sess.length){
+    $("btn-track-land").addEventListener("click", function(){ show("screen-track"); renderTrack(); });
+  }
+  clearInterval(window.__lock);
+  var st = stats(sess);
+  $("land-stats").innerHTML = sess.length
+    ? '<div class="mini-stats">' +
+        '<div><div class="v gold">' + (st.rate != null ? Math.round(st.rate*100) + "%" : "—") + '</div><div class="l">Ufanisi wako</div></div>' +
+        '<div><div class="v grn">' + st.wins + '</div><div class="l">Wins</div></div>' +
+        '<div><div class="v red">' + st.loss + '</div><div class="l">Losses</div></div>' +
+        '<div><div class="v amb">' + st.pend + '</div><div class="l">Zinapokela</div></div>' +
+      '</div>'
+    : '<div class="mini-stats" style="opacity:.75"><div><div class="v" style="font-size:13px;color:var(--sub)">Hakuna records bado — bonyeza START BOT</div><div class="l">Win/loss tracking itaanza hapa</div></div></div>';
+  $("land-live").innerHTML = liveChip() + (LIVE.state === "live" ? '<span class="locknote" style="margin-left:10px">Odds na tips zina-refresh kila min 15 · Records kwenye database</span>' : (LIVE.state === "offline" ? '<span class="locknote" style="margin-left:10px">Server hai haipatikani — data embedded ya build itumia</span>' : ""));
+  if(LIVE.state === "live" && sess.length === 0){
+    apiGet("/api/stats").then(function(d){
+      if(d && d.ok && d.stats){
+        var g = d.stats;
+        $("land-stats").innerHTML = '<div class="mini-stats">' +
+          '<div><div class="v gold">' + (g.rate != null ? Math.round(g.rate*100) + "%" : "—") + '</div><div class="l">Ufanisi (server)</div></div>' +
+          '<div><div class="v grn">' + g.wins + '</div><div class="l">Wins</div></div>' +
+          '<div><div class="v red">' + g.losses + '</div><div class="l">Losses</div></div>' +
+          '<div><div class="v amb">' + g.pending + '</div><div class="l">Zinapokela</div></div>' +
+        '</div>';
+      }
+    }).catch(function(){});
+  }
+}
+
+/* ---------- analysis run ---------- */
+async function runAnalysis(){
+  show("screen-analysis");
+  $("pfill").style.width = "0%";
+  var det = await detectLocation();
+  curDet = det;
+  var fresh = await fetchLive();
+  setLiveFrom(fresh);
+  var f = filterNow();
+  var steps = [
+    {ic:"i-clock",  label:"Kutambua muda na eneo",       detail: det.city + " · " + det.tz + " (GMT" + det.gmt + ")" + (det.geo ? " · GPS " + det.lat + "," + det.lon : "")},
+    {ic:"i-radar",  label: LIVE.state === "live" ? "Kufanya LIVE fetch ya vyanzo" : "Kuscan vyanzo 5", detail: (LIVE.state === "live" ? "LIVE — data mpya " + LIVE.at + " · " : "OFFLINE — data embedded · ") + DATA.sources.join("  ·  ")},
+    {ic:"i-chart",  label:"Form, H2H na historia",        detail: "Mechi " + DATA.matches.length + " · Double Chance / Over 1.5 / Under 3.5 / BTTS"},
+    {ic:"i-filter", label:"Smart time filter",            detail: "Mechi " + f.avail.length + " zinazobakia zinazoweza kubetiwa · " + f.gone.length + " zimetoa (buffer 30 min)"},
+    {ic:"i-check",  label:"Kukamilisha picks + kuandika record", detail: "Vyanzo 4+ na uhakika 70%+ · Slip total ≤ 3.0"}
+  ];
+  var ul = $("steps"); ul.innerHTML = "";
+  steps.forEach(function(st){
+    var li = document.createElement("li");
+    li.className = "step pending";
+    li.innerHTML = '<svg class="ic"><use href="#' + st.ic + '"/></svg><div><b>' + st.label + '</b><div class="detail"></div></div>';
+    ul.appendChild(li);
+  });
+  for(var i = 0; i < steps.length; i++){
+    var li = ul.children[i];
+    li.classList.remove("pending"); li.classList.add("active");
+    await sleep(620 + Math.random()*520);
+    li.classList.remove("active"); li.classList.add("done");
+    li.querySelector(".detail").textContent = steps[i].detail;
+    $("pfill").style.width = ((i+1)/steps.length*100) + "%";
+  }
+  await sleep(420);
+  var s = saveNewSession();
+  curSessionId = s.id;
+  if(LIVE.state === "live"){ apiPost("/api/sessions", {session: s}).catch(function(){}); }
+  show("screen-results");
+  renderResults(s);
+}
+
+/* ---------- results ---------- */
+function pickRow(m, p){
+  var srcs = p.src.map(function(s){ return '<span class="srcchip">' + esc(s) + '</span>'; }).join("");
+  var histLine = (p.hist != null) ? "sources " + Math.round(p.avg*100) + "% · historia " + Math.round(p.hist*100) + "%" : "sources " + Math.round(p.avg*100) + "%";
+  return "<tr>" +
+    '<td class="tm"><b>' + fmtT(m.kickoff) + '</b><div class="sub">' + dayLabel(m.kickoff) + ' ' + new Date(m.kickoff).toLocaleDateString([], {day:"2-digit", month:"2-digit"}) + '</div><span class="daychip">' + dayLabel(m.kickoff) + '</span></td>' +
+    "<td><b>" + esc(m.home) + " – " + esc(m.away) + '</b><div class="sub">' + esc(m.comp) + "</div></td>" +
+    '<td class="mkt">' + esc(p.market) + '<div class="sub">' + esc(p.selection) + "</div></td>" +
+    '<td class="odds">' + p.odds.toFixed(2) + '<div class="sub">makadirio</div></td>' +
+    "<td>" + bar(p.final) + '<div class="sub">' + histLine + "</div></td>" +
+    "<td>" + srcs + '<div class="sub">' + p.n + " vyanzo vimekubaliana</div></td>" +
+    "<td>" + flagHtml(p.flag) + (p.form ? '<div class="sub">Form: ' + esc(p.form) + "</div>" : "") + '<div class="sub">H2H: ' + esc(p.h2h) + "</div></td>" +
+    "</tr>";
+}
+function thead(cols){ return "<tr>" + cols.map(function(c){ return "<th>" + c + "</th>"; }).join("") + "</tr>"; }
+
+/* Slip = accumulator na cap: legs kwa uratibu wa confidence, total haizidi 3.0, leg 1 kwa mechi */
+function buildSlip(session){
+  var picks = session.picks.slice().sort(function(a,b){ return b.final - a.final; });
+  var legs = [], total = 1.0, used = {};
+  picks.forEach(function(p){
+    if(used[p.mid]) return;
+    if(total * p.odds <= 3.0){
+      legs.push(p); total *= p.odds; used[p.mid] = true;
+    }
+  });
+  var skipped = picks.filter(function(p){ return !used[p.mid]; });
+  return {legs:legs, total:total, skipped:skipped};
+}
+function slipHtml(session){
+  var b = buildSlip(session);
+  if(!b.legs.length) return "";
+  var legs = b.legs.map(function(p, i){
+    return '<div class="slip-leg"><div class="lft"><b>' + (i+1) + '. ' + esc(p.match) + '</b><div class="mk">' + esc(p.market) + ' — ' + esc(p.selection) + '</div></div>' +
+           '<div class="odds">' + p.odds.toFixed(2) + '</div></div>';
+  }).join("");
+  var skipNote = b.skipped.length
+    ? '<div class="slip-note"><b>Zisichochaguliwa</b> (kwa kuwa total ingezidi 3.0): ' +
+      b.skipped.map(function(p){ return esc(p.match) + " · " + esc(p.market); }).join("  ·  ") + '</div>'
+    : "";
+  return '<div class="slip" id="slip-card">' +
+    '<div class="slip-head"><b><svg class="ic" style="vertical-align:-3px"><use href="#i-slip"/></svg> BET SLIP TAYARI <span class="sub" style="margin:0;display:inline">— total odds imehifadhiwa ≤ 3.0</span></b>' +
+    '<button class="copybtn" id="btn-copy"><svg class="ic"><use href="#i-copy"/></svg>COPY SLIP</button></div>' +
+    legs +
+    '<div class="slip-total"><div><span class="sub" style="margin:0">TOTAL ODDS (' + b.legs.length + ' legs, cap 3.0)</span><span class="tot">' + b.total.toFixed(2) + '</span></div>' +
+    '<div style="text-align:right"><span class="sub" style="margin:0">STAKE 10,000 TZS</span><div style="font-weight:800;font-size:15px">≈ ' + Math.round(10000*b.total).toLocaleString() + ' TZS</div></div></div>' +
+    skipNote +
+    '<div class="slip-note"><b>Kwa BetPawa / Sportybet / Galsportbet:</b> booking codes hutengenezwa kwenye seva za bookmakers hizo (hazipatikani nje). Ikiwa unayapika slip hii kwenye app yao, watakutengeneza <b>code yao wenyewe</b> kwa kila slip unayojenga — hapa unapata slip tayari (copy) ili uifanye kwa min 3–8 taps tu.</div>' +
+    '</div>';
+}
+function slipText(session){
+  var b = buildSlip(session);
+  var lines = ["96TH PREDICTIONS — BET SLIP (TOTAL ODDS <= 3.0)", "Run: " + fmtDT(session.started_at), ""];
+  b.legs.forEach(function(p,i){
+    lines.push((i+1) + ". " + p.match + " | " + p.market + " | " + p.selection + " | @" + p.odds.toFixed(2));
+  });
+  lines.push("", "TOTAL ODDS: " + b.total.toFixed(2), "(Utafiti wa binafsi — si ushauri wa kifedha)");
+  return lines.join("\n");
+}
+function copyText(txt){
+  function done(){ toast("Slip imenakiliwa — ikope kwenye app ya bookmaker"); }
+  function fallback(){
+    var ta = document.createElement("textarea");
+    ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); done(); }
+    catch(e){ prompt("Nakili manually:", txt); }
+    document.body.removeChild(ta);
+  }
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(done, fallback);
+    } else fallback();
+  }catch(e){ fallback(); }
+}
+
+function renderResults(session){
+  if(!session){
+    session = loadSessions().slice(-1)[0];
+  }
+  if(!session){ show("screen-landing"); renderLanding(); return; }
+  var f = filterNow();
+  var det = curDet || {city:"—", tz:"UTC", gmt:gmtLabel(), geo:false};
+  show("screen-results");
+  $("loc").textContent = det.city + " · GMT" + det.gmt;
+  $("geo").textContent = det.geo ? "(" + det.lat + ", " + det.lon + ")" : "";
+  var clock = $("clock");
+  clock.textContent = new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  window.__tick = setInterval(function(){
+    clock.textContent = new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  }, 1000);
+
+  $("live-top").innerHTML = liveChip();
+  var banners = '<div class="banner">' +
+    '<span>RUN: <b>' + fmtDT(session.started_at) + '</b></span>' +
+    '<span>RECORD IMEHIFADHIWA <b>#' + esc(session.id.slice(-4).toUpperCase()) + '</b></span>' +
+    '<span>' + (LIVE.state === "live" ? 'DATA: <b>LIVE</b> · imekusanywa ' + (LIVE.at || "sasa") : 'DATA: <b>OFFLINE</b> · embedded ya build') + '</span>' +
+    '<span>ZINAZOWEZA KUBEKIWA SASA: <b>' + f.avail.length + "</b></span>" +
+    '<span>DATA: <b>' + esc(session.meta.generated_utc) + " UTC</b></span></div>";
+  if(f.now - DATA.generated_ms > 48*3600e3){
+    banners += '<div class="stale"><svg class="ic"><use href="#i-warn"/></svg>Data ya ' + esc(DATA.generated_utc) + ' imeisha kuwa ya siku hii — jenga data mpya (build_app.py) ili kupata mechi mpya.</div>';
+  }
+  $("banners").innerHTML = banners;
+
+  var out = [];
+  out.push('<h3><svg class="ic"><use href="#i-layer"/></svg>PICKS ZA CYCLE HII <span class="cnt">— vyanzo 4+ · uhakika 70%+ · zimetajwa kwa muda wako</span></h3>');
+  var pickMatches = {};
+  session.picks.forEach(function(p){
+    var m = DATA.matches.filter(function(x){ return x.id === p.mid; })[0];
+    if(m) pickMatches[p.mid] = {m:m, p:p};
+  });
+  var order = Object.keys(pickMatches).map(function(k){ return pickMatches[k]; });
+  order.sort(function(a,b){ return a.m.kickoff - b.m.kickoff; });
+  if(!order.length){
+    out.push('<div class="empty">Hakuna pick iliyopita kiwango katika cycle hii.</div>');
+  } else {
+    out.push('<div class="scroll"><table class="tbl">' +
+      thead(["Wakati","Mechi","Pick","Odds","Uhakika","Vyanzo","Historia (form · H2H)"]) +
+      order.map(function(o){ return pickRow(o.m, o.p); }).join("") +
+      "</table></div>");
+  }
+  /* slip */
+  out.push('<h3><svg class="ic"><use href="#i-slip"/></svg>BET SLIP <span class="cnt">— iandikwa kwenye record ya cycle hii</span></h3>');
+  out.push(slipHtml(session));
+  /* near picks */
+  var near = [];
+  f.avail.forEach(function(m){
+    (m.near || []).forEach(function(p){ if(m.picks && m.picks.length) return; near.push({m:m, p:p}); });
+  });
+  near.sort(function(a,b){ return b.p.final - a.p.final; });
+  if(near.length){
+    out.push('<h3><svg class="ic"><use href="#i-chart"/></svg>KARIBU Kuingia <span class="cnt">— 3 vyanzo tu (sio za record)</span></h3>');
+    out.push('<div class="scroll"><table class="tbl">' + thead(["Wakati","Mechi","Pick","Odds","Uhakika","Vyanzo","Historia"]) +
+      near.map(function(r){ return pickRow(r.m, r.p); }).join("") + "</table></div>");
+  }
+  /* gone */
+  if(f.gone.length){
+    out.push('<details class="gone"><summary><svg class="ic"><use href="#i-x"/></svg>MECHI ZIMETOA KWA SMART TIME FILTER (' + f.gone.length + ")</summary>");
+    out.push(f.gone.map(function(g){
+      return '<div class="grow"><span>' + esc(g.m.home) + " – " + esc(g.m.away) + ' <span class="sub" style="display:inline">· ' + esc(g.m.comp) + " · " + fmtT(g.m.kickoff) + " local</span></span><span class=\"why\">" + esc(g.reason) + "</span></div>";
+    }).join(""));
+    out.push("</details>");
+  }
+  out.push('<div class="disc"><svg class="ic"><use href="#i-warn"/></svg><span><b>96th Predictions</b> ni utafiti, si uhakika. "Uhakika 70%+" ni wastani wa vyanzo 5 na historia. Hata pick ya 85% inaweza kushindwa. Odds ni makadirio. <b>Ucheze kwa uhakika.</b> Baada ya mechi kucheza, nenda kwenye <b>Historia</b> ukiingize scores — app itauliza WIN au LOSS na kukupatia winning rate.</span></div>');
+  out.push('<p class="foot">Vyanzo: ' + esc(DATA.sources.join(" · ")) + ' · Mechi zimetengenezwa kwa muda wa ' + esc(det.tz) + ' (GMT' + esc(det.gmt) + ') · Records zimehifadhiwa kwenye browser huu · 96th Predictions v4</p>');
+  $("main").innerHTML = out.join("");
+
+  var bc = $("btn-copy");
+  if(bc) bc.addEventListener("click", function(){ copyText(slipText(session)); });
+}
+
+/* ---------- track ---------- */
+function renderTrack(){
+  var c2 = $("clock2");
+  c2.textContent = new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  clearInterval(window.__tick2);
+  window.__tick2 = setInterval(function(){
+    c2.textContent = new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  }, 1000);
+
+  function paint(sessions, fromServer){
+  var st = stats(sessions);
+  var mktHtml = Object.keys(st.perMkt).map(function(k){
+    var v = st.perMkt[k];
+    var d = v.w + v.l;
+    return '<span class="mktstat"><b>' + esc(k) + '</b> · ' + (d ? Math.round(v.w/d*100) + "% (" + v.w + "W-" + v.l + "L)" : "haija timua") + '</span>';
+  }).join("");
+
+  var out = [];
+  out.push('<div class="statgrid">' +
+    '<div class="stat"><div class="v gold">' + (st.rate != null ? Math.round(st.rate*100) + "%" : "—") + '</div><div class="l">Winning rate (jumla)</div></div>' +
+    '<div class="stat"><div class="v grn">' + st.wins + '</div><div class="l">Wins</div></div>' +
+    '<div class="stat"><div class="v red">' + st.loss + '</div><div class="l">Losses</div></div>' +
+    '<div class="stat"><div class="v amb">' + st.pend + '</div><div class="l">Zinapokela (scores hazijajiwa)</div></div>' +
+    '<div class="stat"><div class="v">' + st.sessions + '</div><div class="l">Records (runs)</div></div>' +
+    '</div>');
+  out.push('<div class="mktstats">' + (mktHtml || '<span class="mktstat">Hakuna data bado</span>') + '</div>');
+
+  out.push('<h3><svg class="ic"><use href="#i-hist"/></svg>RECORDS ZA CYCLES <span class="cnt">— kiunga score ("2-1") baada ya mchezo; au override W/L/V kwa pick</span></h3>');
+  if(!sessions.length){
+    out.push('<div class="empty">Hakuna records bado. Bonyeza START BOT kwenye landing.</div>');
+  }
+  sessions.slice().reverse().forEach(function(s, ri){
+    var isOpen = ri === 0;
+    var ss = sessStats(s);
+    var rateCls = ss.rate == null ? "amb" : (ss.rate >= 0.5 ? "grn" : "red");
+    var rateTxt = ss.rate == null ? ss.d ? "—" : "—" : (Math.round(ss.rate*100) + "% (" + ss.w + "W-" + ss.l + "L)");
+    /* group picks by match */
+    var byMatch = {}; var morder = [];
+    s.picks.forEach(function(p){
+      if(!byMatch[p.mid]){ byMatch[p.mid] = {match:p.match, comp:p.comp, kickoff:p.kickoff, score:p.score, picks:[]}; morder.push(p.mid); }
+      byMatch[p.mid].picks.push(p);
+    });
+    var rows = "";
+    morder.forEach(function(mid, idx){
+      var g = byMatch[mid];
+      var scoreCell = '<div class="scorein"><input data-sid="' + esc(s.id) + '" data-mid="' + esc(mid) + '" value="' + esc(g.score || "") + '" placeholder="h-a (m.f. 2-1)">' +
+        (g.score ? '<span class="sub" style="margin:0">' + stChip2(g) + '</span>' : "") +
+        '<button data-save="' + esc(s.id) + '" data-mid="' + esc(mid) + '">Funga</button></div>';
+      rows += "<tr><td>" + (idx===0 ? "" : "") + "<b>" + esc(g.match) + '</b><div class="sub">' + esc(g.comp) + " · " + fmtT(g.kickoff) + " local</div>" + scoreCell + "</td>" +
+        g.picks.map(function(p){
+          var ovr = '<span class="ovr">' +
+            '<button data-ov-w="' + esc(s.id) + '" data-p="' + esc(p.mid + "|" + p.market) + '" class="' + (p.status==="win"?"on-w":"") + '">W</button>' +
+            '<button data-ov-l="' + esc(s.id) + '" data-p="' + esc(p.mid + "|" + p.market) + '" class="' + (p.status==="loss"?"on-l":"") + '">L</button>' +
+            '<button data-ov-v="' + esc(s.id) + '" data-p="' + esc(p.mid + "|" + p.market) + '" class="' + (p.status==="void"?"on-v":"") + '">V</button></span>';
+          return '<div style="padding:6px 0;border-bottom:1px dashed var(--line2);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">' +
+            '<span style="font-size:12.5px"><b>' + esc(p.market) + '</b> <span class="sub" style="display:inline">— ' + esc(p.selection) + ' @ ' + p.odds.toFixed(2) + '</span></span>' +
+            '<span>' + stChip(p.status) + ovr + '</span></div>';
+        }).join("") +
+        "</tr>";
+    });
+    out.push('<details class="sess" ' + (isOpen ? "open" : "") + '>' +
+      '<summary><b>' + fmtDT(s.started_at) + '</b><span class="cyc">' + esc(s.cycle) + '</span><span class="sub" style="margin:0">' + s.picks.length + ' picks · ' + s.meta.avail + ' mechi zilipo · ' + s.meta.gone + ' zimetoa</span>' +
+      '<span class="srate ' + rateCls + '">' + rateTxt + '</span></summary>' +
+      '<div class="sbody"><table class="tbl" style="min-width:560px"><tr><th>Mechi + Score</th></tr>' + rows + '</table></div></details>');
+  });
+  out.push('<p class="foot">Records: ' + (fromServer ? "<b>server (SQLite)</b> — records zinasimaa kwenye database, kila kifaa kinachoona server kinaziona" : "browser huu (localStorage) — server haipatikani") + ' · Win rate = Wins / (Wins + Losses); voids hazihesabwi.</p>');
+  $("track-main").innerHTML = out.join("");
+  wireTrack(sessions);
+  }
+
+  if(LIVE.state === "live"){
+    apiGet("/api/sessions").then(function(d){
+      if(d && d.ok && d.sessions){ paint(d.sessions, true); } else { paint(loadSessions(), false); }
+    }).catch(function(){ paint(loadSessions(), false); });
+  } else {
+    paint(loadSessions(), false);
+  }
+}
+function stChip2(g){
+  var done = g.picks.every(function(p){ return p.status !== "pending"; });
+  var anyWin = g.picks.some(function(p){ return p.status === "win"; });
+  var anyLoss = g.picks.some(function(p){ return p.status === "loss"; });
+  if(!done) return "";
+  if(anyWin && anyLoss) return '<span class="stchip st-void">Mchanganyiko</span>';
+  if(anyWin) return '<span class="stchip st-win"><svg class="ic"><use href="#i-check"/></svg>WIN</span>';
+  return '<span class="stchip st-loss"><svg class="ic"><use href="#i-x"/></svg>LOSS</span>';
+}
+function findPick(sessions, sid, pkey){
+  var s = null;
+  for(var i=0;i<sessions.length;i++){ if(sessions[i].id === sid){ s = sessions[i]; break; } }
+  if(!s) return null;
+  var parts = pkey.split("|");
+  for(var j=0;j<s.picks.length;j++){
+    if(s.picks[j].mid === parts[0] && s.picks[j].market === parts[1]) return s.picks[j];
+  }
+  return null;
+}
+function wireTrack(sessions){
+  document.querySelectorAll("[data-save]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var sid = btn.getAttribute("data-save"), mid = btn.getAttribute("data-mid");
+      var inp = document.querySelector('input[data-sid="' + sid + '"][data-mid="' + mid + '"]');
+      var v = (inp.value || "").trim();
+      var mm = v.match(/^(\d{1,2})\s*[-:]\s*(\d{1,2})$/);
+      if(!mm){ inp.classList.add("bad"); return; }
+      inp.classList.remove("bad");
+      var h = parseInt(mm[1],10), a = parseInt(mm[2],10);
+      var all = loadSessions();
+      var s = all.filter(function(x){ return x.id === sid; })[0];
+      if(s){ applyScore(s, mid, h, a, v); saveSessions(all); }
+      if(LIVE.state === "live"){
+        apiPost("/api/sessions/" + sid + "/score", {mid: mid, score: v}).catch(function(){});
+      }
+      renderTrack();
+      toast("Score " + v + " imefungwa — picks zimevaliwa");
+    });
+  });
+  ["w","l","v"].forEach(function(mode){
+    document.querySelectorAll("[data-ov-" + mode + "]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var sid = btn.getAttribute("data-ov-" + mode), pkey = btn.getAttribute("data-p");
+        var all = loadSessions();
+        var p = findPick(all, sid, pkey);
+        if(p){ p.manual = true; p.status = mode === "w" ? "win" : (mode === "l" ? "loss" : "void"); saveSessions(all); }
+        if(LIVE.state === "live"){
+          apiPost("/api/sessions/" + sid + "/override",
+            {pickKey: pkey, status: mode === "w" ? "win" : (mode === "l" ? "loss" : "void")}).catch(function(){});
+        }
+        renderTrack();
+      });
+    });
+  });
+}
+
+/* ---------- wiring ---------- */
+function init(){
+  renderLanding();
+  fetchLive().then(function(d){
+    setLiveFrom(d);
+    renderLanding();
+  });
+  $("btn-re").addEventListener("click", function(){
+    var s = loadSessions().filter(function(x){ return x.id === curSessionId; })[0];
+    if(!s){ var all = loadSessions(); s = all[all.length - 1]; }
+    renderResults(s);
+  });
+  $("btn-to-track1").addEventListener("click", function(){ show("screen-track"); renderTrack(); });
+  $("btn-home").addEventListener("click", function(){ show("screen-landing"); renderLanding(); });
+}
+init();
+})();
+</script>
+</body>
+</html>

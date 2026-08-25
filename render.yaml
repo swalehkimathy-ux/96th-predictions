@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: 96th-predictions
+    runtime: python
+    plan: free
+    buildCommand: ""
+    startCommand: python3 server.py
+    healthCheckPath: /api/status
+    env:
+      P96_PIPELINE_DIR: /opt/render/project/src/betting-researcher
+      P96_DB_PATH: /tmp/96th/records.db

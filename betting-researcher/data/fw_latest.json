@@ -1,0 +1,170 @@
+[
+ {
+  "url": "https://footballwhispers.com/blog/aek-athens-vs-levski-sofia-prediction-preview-betting-tips-26-08-2026/",
+  "tips": [
+   {
+    "market": "under",
+    "line": 2.5,
+    "odds": 1.77,
+    "lik": "Probable"
+   }
+  ],
+  "hot_tip": "Levski to qualify",
+  "btts": null,
+  "cs": null,
+  "date_gmt": "26/08/26",
+  "time_gmt": "20:00",
+  "home_guess": "Aek Athens",
+  "away_guess": "Levski Sofia Prediction Preview Betting Tips"
+ },
+ {
+  "url": "https://footballwhispers.com/blog/celje-vs-slovan-bratislava-prediction-26-08-2026/",
+  "tips": [
+   {
+    "market": "btts",
+    "selection": "yes",
+    "odds": 1.83,
+    "lik": "Probable"
+   }
+  ],
+  "hot_tip": "Slovan to score first",
+  "btts": "Yes",
+  "cs": null,
+  "date_gmt": "26/08/26",
+  "time_gmt": "20:00",
+  "home_guess": "Celje",
+  "away_guess": "Slovan Bratislava Prediction"
+ },
+ {
+  "url": "https://footballwhispers.com/blog/lyon-vs-fenerbahce-prediction-preview-betting-tips-26-08-2026/",
+  "tips": [
+   {
+    "market": "btts",
+    "selection": "yes",
+    "odds": 1.73,
+    "lik": "Probable"
+   },
+   {
+    "market": "result",
+    "selection": "1",
+    "odds": 2.0,
+    "lik": "Probable"
+   }
+  ],
+  "hot_tip": "Lyon to win",
+  "btts": "Yes",
+  "cs": "Lyon 2-1 Fenerbahce",
+  "date_gmt": "26/08/26",
+  "time_gmt": "20:00",
+  "home_guess": "Lyon",
+  "away_guess": "Fenerbahce Prediction Preview Betting Tips"
+ },
+ {
+  "url": "https://footballwhispers.com/blog/rapid-vienna-vs-hearts-prediction-26-08-2026/",
+  "tips": [
+   {
+    "market": "result",
+    "selection": "1",
+    "odds": 1.62,
+    "lik": "Probable"
+   },
+   {
+    "market": "btts",
+    "selection": "yes",
+    "odds": 1.8,
+    "lik": "Probable"
+   }
+  ],
+  "hot_tip": "Rapid Vienna to win",
+  "btts": "Yes",
+  "cs": null,
+  "date_gmt": "26/08/26",
+  "time_gmt": "17:45",
+  "home_guess": "Rapid Vienna",
+  "away_guess": "Hearts Prediction"
+ },
+ {
+  "url": "https://footballwhispers.com/blog/real-madrid-vs-real-sociedad-prediction-26-08-2026/",
+  "tips": [
+   {
+    "market": "over",
+    "line": 3.5,
+    "odds": 2.15,
+    "lik": "Probable"
+   },
+   {
+    "market": "btts",
+    "selection": "yes",
+    "odds": 1.75,
+    "lik": "Probable"
+   },
+   {
+    "market": "btts",
+    "selection": "yes",
+    "odds": 2.5,
+    "lik": "Possible"
+   }
+  ],
+  "hot_tip": "Over 10.5 total corners",
+  "btts": "Yes",
+  "cs": null,
+  "date_gmt": "26/08/26",
+  "time_gmt": "20:00",
+  "home_guess": "Real Madrid",
+  "away_guess": "Real Sociedad Prediction"
+ },
+ {
+  "url": "https://footballwhispers.com/blog/tottenham-vs-charlton-athletic-prediction-preview-betting-tips-26-08-2026/",
+  "tips": [
+   {
+    "market": "btts",
+    "selection": "yes",
+    "odds": 1.98,
+    "lik": "Probable"
+   }
+  ],
+  "hot_tip": "BTTS - Yes",
+  "btts": null,
+  "cs": "Tottenham 2-1 Charlton",
+  "date_gmt": "26/08/26",
+  "time_gmt": "19:45",
+  "home_guess": "Tottenham",
+  "away_guess": "Charlton Athletic Prediction Preview Betting Tips"
+ },
+ {
+  "url": "https://footballwhispers.com/blog/viking-vs-dinamo-zagreb-prediction-26-08-2026/",
+  "tips": [
+   {
+    "market": "over",
+    "line": 3.5,
+    "odds": 2.4,
+    "lik": "Probable"
+   },
+   {
+    "market": "btts",
+    "selection": "yes",
+    "odds": 1.5,
+    "lik": "Probable"
+   },
+   {
+    "market": "result",
+    "selection": "2",
+    "odds": 2.45,
+    "lik": "Probable"
+   },
+   {
+    "market": "btts",
+    "selection": "yes",
+    "odds": 3.9,
+    "lik": "Possible"
+   }
+  ],
+  "hot_tip": "Over 10.5 total corners",
+  "btts": "Yes",
+  "cs": null,
+  "date_gmt": "26/08/26",
+  "time_gmt": "20:00",
+  "home_guess": "Viking",
+  "away_guess": "Dinamo Zagreb Prediction"
+ }
+]
