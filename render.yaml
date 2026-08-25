@@ -6,6 +6,8 @@ services:
     buildCommand: ""
     startCommand: python3 server.py
     healthCheckPath: /api/status
-    env:
-      P96_PIPELINE_DIR: /opt/render/project/src/betting-researcher
-      P96_DB_PATH: /tmp/96th/records.db
+    envVars:
+      - key: P96_PIPELINE_DIR
+        value: /opt/render/project/src/betting-researcher
+      - key: P96_DB_PATH
+        value: /tmp/96th/records.db
