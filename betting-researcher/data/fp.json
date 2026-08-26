@@ -1,30 +1,57 @@
 {
+ "newcastle-westbrom": {
+  "home": "Newcastle",
+  "away": "West Bromwich",
+  "cs": [
+   2,
+   2
+  ],
+  "league": "efl"
+ },
+ "tottenham-charlton": {
+  "home": "Tottenham",
+  "away": "Charlton",
+  "cs": [
+   3,
+   1
+  ],
+  "league": "efl"
+ },
+ "preston-everton": {
+  "home": "Preston",
+  "away": "Everton",
+  "cs": [
+   2,
+   0
+  ],
+  "league": "efl"
+ },
+ "forest-leeds": {
+  "home": "Nottingham Forest",
+  "away": "Leeds United",
+  "cs": [
+   3,
+   1
+  ],
+  "league": "efl"
+ },
  "bham-brentford": {
   "home": "Birmingham City",
   "away": "Brentford",
+  "cs": [
+   1,
+   1
+  ],
+  "league": "efl"
+ },
+ "bradford-burnley": {
+  "home": "Bradford",
+  "away": "Burnley",
   "cs": [
    2,
    1
   ],
   "league": "efl"
- },
- "lask-celtic": {
-  "home": "LASK",
-  "away": "Celtic",
-  "cs": [
-   3,
-   1
-  ],
-  "league": "ucl"
- },
- "aek-levski": {
-  "home": "AEK Athens",
-  "away": "Levski Sofia",
-  "cs": [
-   2,
-   1
-  ],
-  "league": "ucl"
  },
  "celje-slovan": {
   "home": "Celje",
@@ -53,11 +80,29 @@
   ],
   "league": "ucl"
  },
+ "lask-celtic": {
+  "home": "LASK",
+  "away": "Celtic",
+  "cs": [
+   2,
+   2
+  ],
+  "league": "ucl"
+ },
+ "aek-levski": {
+  "home": "AEK Athens",
+  "away": "Levski Sofia",
+  "cs": [
+   1,
+   2
+  ],
+  "league": "ucl"
+ },
  "realmadrid-sociedad": {
   "home": "Real Madrid",
   "away": "Real Sociedad",
   "cs": [
-   0,
+   1,
    1
   ],
   "league": "laliga"

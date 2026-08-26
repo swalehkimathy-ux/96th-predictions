@@ -255,7 +255,7 @@ details.sess summary .cyc{font-size:10.5px;color:var(--gold2);border:1px solid r
         <div id="live-top"></div>
         <div class="chip"><svg class="ic"><use href="#i-clock"/></svg><span id="clock">--:--:--</span></div>
         <div class="chip"><svg class="ic"><use href="#i-pin"/></svg><span id="loc">…</span><span class="geo" id="geo"></span></div>
-        <button class="btn-ghost sm" id="btn-re"><svg class="ic"><use href="#i-refresh"/></svg>Tengeneza upya</button>
+        <button class="btn-ghost sm" id="btn-re"><svg class="ic"><use href="#i-refresh"/></svg>REFRESH</button>
         <button class="btn-ghost sm" id="btn-to-track1"><svg class="ic"><use href="#i-hist"/></svg>Historia</button>
       </div>
     </header>
@@ -295,13 +295,20 @@ var LIVE = {state:"checking", at:null};
 /* ---------- LIVE data ---------- */
 /* URL ya server yako (m.f. "https://96th-predictions.onrender.com").
    Wacha "" ikiwa app inaendeshwa kutoka kwenye server hiyo hiyo. */
-var API_URL = "";
+var API_URL = "https://nine6th-predictions.onrender.com";
 var API_BASE = "";
+function fetchT(url, opts, ms){
+  var c = new AbortController();
+  var t = setTimeout(function(){ c.abort(); }, ms);
+  var o = {}; for(var k in (opts || {})) o[k] = opts[k];
+  o.signal = c.signal;
+  return fetch(url, o).finally(function(){ clearTimeout(t); });
+}
 function apiFetch(path, opts){
   function attempt(i){
     if(i >= attempts.length) return Promise.reject(new Error("api unavailable"));
     var u = attempts[i];
-    return fetch(u, opts).then(function(r){
+    return fetchT(u, opts, 100000).then(function(r){
       if(!r.ok) throw new Error("http " + r.status);
       API_BASE = (u === path) ? "" : API_URL;
       return r;
@@ -312,15 +319,33 @@ function apiFetch(path, opts){
 }
 function fetchLive(){
   return new Promise(function(res){
-    var t = setTimeout(function(){ res(null); }, 60000);
-    try{
-      apiFetch("/api/picks", {cache:"no-store"}).then(function(r){
-        return r.json();
-      }).then(function(d){
-        clearTimeout(t);
-        if(d && d.matches && d.matches.length){ DATA = d; res(d); } else res(null);
-      }).catch(function(){ clearTimeout(t); res(null); });
-    }catch(e){ clearTimeout(t); res(null); }
+    var done = false;
+    function fin(d){ if(done) return; done = true; if(d){ DATA = d; } res(d || null); }
+    function attempt(n){
+      apiFetch("/api/picks", {cache:"no-store"}).then(function(r){ return r.json(); })
+        .then(function(d){
+          if(d && d.matches && d.matches.length) fin(d);
+          else if(n < 2) setTimeout(function(){ attempt(n + 1); }, 4000);
+          else fin(null);
+        })
+        .catch(function(){
+          if(n < 2) setTimeout(function(){ attempt(n + 1); }, 6000);
+          else fin(null);
+        });
+    }
+    attempt(0);
+  });
+}
+function doRefresh(){
+  var b = $("btn-re");
+  if(b){ b.style.opacity = "0.5"; }
+  toast("Inarudisha data ya live...");
+  fetchLive().then(function(d){
+    if(b){ b.style.opacity = "1"; }
+    if(d) toast("Data mpya imepita (" + (LIVE.at || "") + ")");
+    var sess = loadSessions();
+    var s = sess.filter(function(x){ return x.id === curSessionId; })[0] || (sess.length ? sess[sess.length - 1] : null);
+    if(s) renderResults(s); else renderLanding();
   });
 }
 function liveChip(){
@@ -707,6 +732,7 @@ function renderResults(session){
     '<span>RUN: <b>' + fmtDT(session.started_at) + '</b></span>' +
     '<span>RECORD IMEHIFADHIWA <b>#' + esc(session.id.slice(-4).toUpperCase()) + '</b></span>' +
     '<span>' + (LIVE.state === "live" ? 'DATA: <b>LIVE</b> · imekusanywa ' + (LIVE.at || "sasa") : 'DATA: <b>OFFLINE</b> · embedded ya build') + '</span>' +
+    (LIVE.state !== "live" ? '<button class="btn-ghost sm" id="btn-try" style="margin-left:auto"><svg class="ic"><use href="#i-refresh"/></svg>JARIBU TENA</button>' : '') +
     '<span>ZINAZOWEZA KUBEKIWA SASA: <b>' + f.avail.length + "</b></span>" +
     '<span>DATA: <b>' + esc(session.meta.generated_utc) + " UTC</b></span></div>";
   if(f.now - DATA.generated_ms > 48*3600e3){
@@ -759,10 +785,12 @@ function renderResults(session){
 
   var bc = $("btn-copy");
   if(bc) bc.addEventListener("click", function(){ copyText(slipText(session)); });
+  var bt = $("btn-try");
+  if(bt) bt.addEventListener("click", doRefresh);
 }
 
 /* ---------- track ---------- */
-function renderTrack(){
+function paintTrack(sessions, fromServer){
   var c2 = $("clock2");
   c2.textContent = new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
   clearInterval(window.__tick2);
@@ -770,7 +798,7 @@ function renderTrack(){
     c2.textContent = new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
   }, 1000);
 
-  function paint(sessions, fromServer){
+  {
   var st = stats(sessions);
   var mktHtml = Object.keys(st.perMkt).map(function(k){
     var v = st.perMkt[k];
@@ -826,17 +854,18 @@ function renderTrack(){
       '<span class="srate ' + rateCls + '">' + rateTxt + '</span></summary>' +
       '<div class="sbody"><table class="tbl" style="min-width:560px"><tr><th>Mechi + Score</th></tr>' + rows + '</table></div></details>');
   });
-  out.push('<p class="foot">Records: ' + (fromServer ? "<b>server (SQLite)</b> — records zinasimaa kwenye database, kila kifaa kinachoona server kinaziona" : "browser huu (localStorage) — server haipatikani") + ' · Win rate = Wins / (Wins + Losses); voids hazihesabwi.</p>');
+  out.push('<p class="foot">Records: ' + (fromServer ? "<b>server (SQLite)</b> — records zinasimaa kwenye database, kila kifaa kinachoona server kinaziona · <b>inajijaza yenyewe</b> baada ya mechi kumalizika (auto)" : "browser huu (localStorage) — server haipatikani") + ' · Win rate = Wins / (Wins + Losses); voids hazihesabwi.</p>');
   $("track-main").innerHTML = out.join("");
   wireTrack(sessions);
   }
-
+}
+function renderTrack(){
   if(LIVE.state === "live"){
     apiGet("/api/sessions").then(function(d){
-      if(d && d.ok && d.sessions){ paint(d.sessions, true); } else { paint(loadSessions(), false); }
-    }).catch(function(){ paint(loadSessions(), false); });
+      if(d && d.ok && d.sessions){ paintTrack(d.sessions, true); } else { paintTrack(loadSessions(), false); }
+    }).catch(function(){ paintTrack(loadSessions(), false); });
   } else {
-    paint(loadSessions(), false);
+    paintTrack(loadSessions(), false);
   }
 }
 function stChip2(g){
@@ -902,11 +931,35 @@ function init(){
     setLiveFrom(d);
     renderLanding();
   });
-  $("btn-re").addEventListener("click", function(){
-    var s = loadSessions().filter(function(x){ return x.id === curSessionId; })[0];
-    if(!s){ var all = loadSessions(); s = all[all.length - 1]; }
-    renderResults(s);
-  });
+  // AUTO-POLL: history kila 60s (baada ya mechi kumalizika scores zijijaze yenyewe)
+  //           data ya live kila min 5 (app isiyofungiwa)
+  var lastDataPoll = 0;
+  setInterval(function(){
+    if(document.hidden) return;
+    var trackVisible = !document.getElementById("screen-track").classList.contains("hidden");
+    if(trackVisible && LIVE.state === "live"){
+      apiGet("/api/sessions").then(function(d){
+        if(d && d.ok && d.sessions && !document.hidden) paintTrack(d.sessions, true);
+      }).catch(function(){});
+      return;
+    }
+    var now = Date.now();
+    if(now - lastDataPoll > 5 * 60000){
+      lastDataPoll = now;
+      fetchLive().then(function(d){
+        if(!d || document.hidden) return;
+        var resultsVisible = !document.getElementById("screen-results").classList.contains("hidden");
+        if(resultsVisible){
+          var sess = loadSessions();
+          var s = sess.filter(function(x){ return x.id === curSessionId; })[0] || (sess.length ? sess[sess.length - 1] : null);
+          if(s) renderResults(s);
+        } else {
+          renderLanding();
+        }
+      });
+    }
+  }, 60000);
+  $("btn-re").addEventListener("click", doRefresh);
   $("btn-to-track1").addEventListener("click", function(){ show("screen-track"); renderTrack(); });
   $("btn-home").addEventListener("click", function(){ show("screen-landing"); renderLanding(); });
 }

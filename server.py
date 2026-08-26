@@ -195,6 +195,7 @@ def get_payload(force=False):
         payload = build_payload()
         with PLOCK:
             CACHE.update(payload=payload, ts=time.time(), counts=payload["counts"], error=None, busy=False)
+        auto_results()
         return payload
     except Exception as e:
         with PLOCK:
@@ -202,6 +203,114 @@ def get_payload(force=False):
         if CACHE["payload"]:
             return CACHE["payload"]
         raise
+
+# ================= AUTO RESULTS (The Odds API - free tier) =================
+import urllib.request
+ODDS_API_KEY = os.environ.get("ODDS_API_KEY", "")
+_EVENTS_CACHE = {"ts": 0.0, "data": {}}
+_ALIAS = {"hearts": {"midlothian"}, "spurs": {"tottenham"}, "wolves": {"wolverhampton"}}
+
+def _norm_team(name):
+    import unicodedata
+    s = unicodedata.normalize("NFKD", name or "").lower()
+    s = "".join(c for c in s if not unicodedata.combining(c))
+    s = re.sub(r"[^a-z0-9 ]+", " ", s)
+    s = re.sub(r"\b(fc|fk|cf|afc|sc|sk|bk|ac)\b", " ", s)
+    return re.sub(r"\s+", " ", s).strip()
+
+def _same_team(a, b):
+    na, nb = _norm_team(a), _norm_team(b)
+    if not na or not nb:
+        return False
+    if na == nb or na in nb or nb in na:
+        return True
+    ta, tb = set(na.split()), set(nb.split())
+    common = ta & tb
+    if common and len(common) >= min(len(ta), len(tb)) * 0.5:
+        return True
+    for al, extra in _ALIAS.items():
+        if al in ta and (tb & extra):
+            return True
+        if al in tb and (ta & extra):
+            return True
+    return False
+
+def sport_for_comp(comp):
+    c = (comp or "").lower()
+    rules = [
+        (["uecl", "conference"], "soccer_europe_europa_conference_league"),
+        (["uel", "europa league"], "soccer_europe_europa_league"),
+        (["ucl", "champions"], "soccer_europe_champions_league"),
+        (["efl", "carabao", "league cup"], "soccer_england_carabao_cup"),
+        (["la liga", "laliga", "primera"], "soccer_spain_primera_division"),
+        (["championship"], "soccer_england_championship"),
+        (["premier"], "soccer_england_premier"),
+    ]
+    for keys, sport in rules:
+        if any(k in c for k in keys):
+            return sport
+    return None
+
+def _odds_events(sport):
+    now = time.time()
+    if now - _EVENTS_CACHE["ts"] < 600 and sport in _EVENTS_CACHE["data"]:
+        return _EVENTS_CACHE["data"][sport]
+    url = ("https://api.the-odds-api.com/v4/sports/%s/events?status=completed"
+           "&region=eu&marketType=american&oddsMarket=h2h&dateFormat=iso&apiKey=%s") % (sport, ODDS_API_KEY)
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "96th-predictions/1.0"})
+        with urllib.request.urlopen(req, timeout=25) as r:
+            data = json.loads(r.read().decode())
+        _EVENTS_CACHE["data"][sport] = data
+        _EVENTS_CACHE["ts"] = now
+        return data
+    except Exception:
+        return _EVENTS_CACHE["data"].get(sport, [])
+
+def auto_results():
+    """Hujaza scores za mechi zilizomalizika kwenye picks bado 'pending' (auto)."""
+    if not ODDS_API_KEY:
+        return
+    sports = {}
+    now_ms = time.time() * 1000
+    with db() as c:
+        for row in c.execute("SELECT id, picks FROM sessions").fetchall():
+            for p in json.loads(row["picks"] or "[]"):
+                if p.get("manual"):
+                    continue
+                if now_ms < (p.get("kickoff") or 0) + 120 * 60000:
+                    continue  # mechi bado hai/ya hivi karibuni
+                sport = sport_for_comp(p.get("comp"))
+                if sport:
+                    sports.setdefault(sport, []).append((row["id"], p))
+    if not sports:
+        return
+    with DBLOCK, db() as c:
+        for sport, items in sports.items():
+            events = _odds_events(sport)
+            for sid, p in items:
+                names = (p.get("match") or "").split(" \u2013 ")
+                if len(names) != 2:
+                    continue
+                for ev in events:
+                    eh, ea = ev.get("home_team"), ev.get("away_team")
+                    if not eh or not ea or ev.get("home_score") is None:
+                        continue
+                    try:
+                        et = int(datetime.datetime.fromisoformat(
+                            ev["commence_time"].replace("Z", "+00:00")).timestamp() * 1000)
+                    except Exception:
+                        continue
+                    if abs(et - (p.get("kickoff") or 0)) > 2 * 86400000:
+                        continue
+                    direct = _same_team(names[0], eh) and _same_team(names[1], ea)
+                    swap = _same_team(names[0], ea) and _same_team(names[1], eh)
+                    if not (direct or swap):
+                        continue
+                    h, a = (ev["home_score"], ev["away_score"]) if direct else (ev["away_score"], ev["home_score"])
+                    c.execute("INSERT OR IGNORE INTO results(session_id, mid, score, updated_at) VALUES(?,?,?,?)",
+                              (sid, p["mid"], "%d-%d" % (h, a), int(now_ms)))
+                    break
 
 # ================= HTTP =================
 class Handler(SimpleHTTPRequestHandler):
@@ -237,9 +346,10 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         p = self.path.split("?")[0]
+        force = "force=1" in self.path
         if p == "/api/picks":
             try:
-                self._json(get_payload())
+                self._json(get_payload(force=force))
             except Exception as e:
                 self._json({"error": str(e)[:200]}, 500)
             return
@@ -251,6 +361,7 @@ class Handler(SimpleHTTPRequestHandler):
                         "db": os.path.basename(DB_PATH)})
             return
         if p == "/api/sessions":
+            auto_results()
             sessions = all_sessions()
             self._json({"ok": True, "sessions": sessions, "global": global_stats(sessions)})
             return
