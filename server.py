@@ -23,9 +23,7 @@ PORT = int(os.environ.get("P96_PORT") or os.environ.get("PORT") or "8030")
 sys.path.insert(0, PIPELINE)
 sys.path.insert(0, BASE)
 
-import analyze_v3 as A          # engine
-import build_app as B           # shaping
-import fetch_sources as FS      # WC + FP fetch/parse
+import analyze_v3 as A          # maths (poisson) kwa live_research
 
 CACHE_TTL = 15 * 60
 CACHE = {"ts": 0.0, "payload": None, "busy": False, "error": None, "counts": {}}
@@ -107,82 +105,23 @@ def global_stats(sessions):
             "rate": (w / (w + l)) if (w + l) else None,
             "sessions": len(sessions), "per_market": per_mkt}
 
-# ================= LIVE DATA =================
-def merge_fresh_fw(base_matches):
-    fw_path = os.path.join(RAW_DATA_DIR, "fw_latest.json")
-    if not os.path.exists(fw_path):
-        return 0
-    try:
-        posts = json.load(open(fw_path, encoding="utf-8"))
-    except Exception:
-        return 0
-    KEYS = {
-        "bham-brentford": ("birmingham", "brentford"), "lask-celtic": ("lask", "celtic"),
-        "forest-leeds": ("forest", "leeds"), "aek-levski": ("aek", "levski"),
-        "bradford-burnley": ("bradford", "burnley"), "celje-slovan": ("celje", "slovan"),
-        "lyon-fenerbahce": ("lyon", "fenerbahce"), "newcastle-westbrom": ("newcastle", "brom"),
-        "preston-everton": ("preston", "everton"), "rapid-hearts": ("rapid", "midlothian"),
-        "realmadrid-sociedad": ("real madrid", "sociedad"), "tottenham-charlton": ("tottenham", "charlton"),
-        "viking-dinamo": ("viking", "dinamo"),
-    }
-    merged = 0
-    for m in base_matches:
-        kh, ka = KEYS.get(m["id"], (m["home"].lower(), m["away"].lower()))
-        for post in posts:
-            h = (post.get("home_guess") or "").lower()
-            a = (post.get("away_guess") or "").lower()
-            if kh in h and ka in a:
-                cs = post.get("cs") or ""
-                mm = re.search(r"(\d+)\s*-\s*(\d+)", cs)
-                tips = [t for t in post.get("tips", []) if t.get("market") in ("result", "over", "under", "btts")]
-                m["fw"] = {"tips": tips, "cs": (mm.group(1) + "-" + mm.group(2)) if mm else None,
-                           "hot_tip": post.get("hot_tip"), "btts": post.get("btts")}
-                merged += 1
-                break
-    return merged
-
+# ================= LIVE DATA (engine v5: live discovery + consensus) =================
 def build_payload():
     t0 = time.time()
-    counts = {}
     try:
-        FS.main()
+        import live_research as LR
+        payload = LR.get_picks(max_age_h=14, max_research=40)
+        counts = {"matches": len(payload.get("matches", [])),
+                  "researched": payload.get("researched"),
+                  "matches_total": payload.get("matches_total"),
+                  "built_in_s": round(time.time() - t0, 1)}
     except Exception as e:
-        counts["wc_fp_error"] = str(e)[:200]
-    try:
-        import scraper_fw
-        scraper_fw.main()
-    except Exception as e:
-        counts["fw_error"] = str(e)[:200]
-
-    raw = json.load(open(os.path.join(RAW_DATA_DIR, "raw.json"), encoding="utf-8"))
-    wc = json.load(open(os.path.join(RAW_DATA_DIR, "wc.json"), encoding="utf-8"))
-    fp = json.load(open(os.path.join(RAW_DATA_DIR, "fp.json"), encoding="utf-8"))
-    try:
-        hist = json.load(open(os.path.join(RAW_DATA_DIR, "history.json"), encoding="utf-8"))
-    except Exception:
-        hist = {}
-    n_fw = merge_fresh_fw(raw["matches"])
-    counts.update({"matches": len(raw["matches"]), "wc": len(wc), "fp": len(fp),
-                   "fw_fresh": n_fw, "built_in_s": round(time.time() - t0, 1)})
-
-    picks, near, failed = A.analyze(raw, wc, fp, hist)
-    bp, bn = {}, {}
-    for p in picks: bp.setdefault(p["mid"], []).append(B.slim(p))
-    for p in near: bn.setdefault(p["mid"], []).append(B.slim(p))
-
-    matches = []
-    for m in raw["matches"]:
-        matches.append({"id": m["id"], "home": m["home"], "away": m["away"], "comp": m["comp"],
-                        "kickoff": B.kickoff_ms(m), "picks": bp.get(m["id"], []), "near": bn.get(m["id"], [])})
-    matches.sort(key=lambda x: x["kickoff"])
-    return {
-        "generated_utc": datetime.datetime.now(datetime.UTC).strftime("%d/%m/%Y %H:%M"),
-        "generated_ms": int(time.time() * 1000),
-        "live": True, "counts": counts,
-        "sources": ["Soko la Bookmakers (30+)", "WinComparator", "Forebet (cached)",
-                    "Whispers", "FootballPredictions"],
-        "matches": matches,
-    }
+        payload = {"generated_ms": int(time.time() * 1000), "live": False, "matches": []}
+        counts = {"error": str(e)[:200], "built_in_s": round(time.time() - t0, 1)}
+    payload["generated_utc"] = datetime.datetime.now(datetime.UTC).strftime("%d/%m/%Y %H:%M")
+    payload["generated_ms"] = int(time.time() * 1000)
+    payload["counts"] = counts
+    return payload
 
 def get_payload(force=False):
     with PLOCK:
