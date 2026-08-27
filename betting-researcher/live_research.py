@@ -910,9 +910,13 @@ def get_picks(max_research=80):
     # sort by confidence desc
     matches_with_picks.sort(key=lambda m: -m["picks"][0]["final"])
     flat = [m["picks"][0] for m in matches_with_picks]
+    all_fixtures = [{"id": m["slug"], "home": m["home"], "away": m["away"],
+                     "comp": m.get("comp", ""), "kickoff": m.get("kickoff_utc_ms")}
+                    for m in matches[:80]]
     return {
         "now": int(time.time() * 1000),
         "date": day_date,
+        "all_fixtures": all_fixtures,
         "day_start_ms": day_start,
         "day_end_ms": day_end,
         "generated_ms": int(time.time() * 1000),

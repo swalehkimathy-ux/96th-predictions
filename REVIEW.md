@@ -175,3 +175,41 @@ Ilikitwa ndani ya `do_GET` bila try/except — kosa lolote lingekuwa 500 kwa req
 - Forebet source: inahitaji raw data ya siku hiyo (browser) — katika live mode huchangia tu
   ikiwa raw.json imepimwa siku ile ile; sources 4 nyingine (Soko/WC/FP/FW) zinaendelea kushika N_MIN=4.
 - Deploy: commit → push → Render auto-deploy (branch inayofuatiwa).
+
+---
+
+# v7.4 — Marekebisho ya UI ya siku + auto results ya client (27/08/2026, jioni)
+
+## Tatizo lililotajwa na user (screenshots)
+
+1. **BET YA LEO ilionyesha fixtures za zamani** (Viking–Dinamo, Real Madrid–Sociedad, Bradford–Burnley,
+   Rapid–Hearts, Tottenham–Charlton) ambazo si za siku ile — session ya localStorage ililokwa
+   "lock" na picks za awali (pamoja na W manual 2), hivyo data mpya ya server haikibadilisha hero.
+2. **History ilionyesha manual input** — auto-results haikujaa sababu DB ya server ilipotea
+   kwenye deploy (Render /tmp ephemeral) na client haikutafuti scores yenyewe.
+3. **"19/NaN" kwenye research bar** — bug: `/` ya ziada baada ya quote ilifanya JS ikiche
+   string ÷ number = NaN: `' <span class="sub2">('/ + d.matches_total` →
+   `' <span class="sub2">(' / (+d.matches_total)` → NaN.
+
+## Marekebisho
+
+- **BET YA LEO = LIVE research** (`DATA.acc`) — si session iliyolokwa. Session ya awali bado
+  iko kwenye HISTORY (snapshot ya "combo iliyotolewa siku hiyo"). Ikiwa tofauti, hero inaonyesha
+  maelezo madogo (ⓘ).
+- **MECHI ZA LEO** — sehemu mpya: fixtures ZOTE za siku zilizochunguzwa (payload `all_fixtures`),
+  za kujibadilisha kiotomatiki siku ikipinduka; mechi zenye pick zina badge.
+- **Auto results ya client**: endpoint mpya `GET /api/score?mid=<wc-slug>` (WC final scores,
+  cache: finished 6h, pending 15min, validation ya slug). Client inaita kwa kila pick
+  (siku hii + zile zamani) iliyopita kickoff+120min na bado pending — **hufanya kazi hata
+   ikiwa DB ya server imetoweka** (deploy). Manual (W/L/V, score) sasa imelemba kama BACKUP.
+- **History**: button ya kufuta siku (cleanup), legs-hit x/y, AUTO/MANUAL tags.
+- **NaN**: imeondolewa (`' <span class="sub2">(' + d.matches_total`).
+
+## Test evidence
+
+- `/api/score`: mechi iliyomalizika → `1-6` finished · slug si sahihi → 400 · mechi ijayo → pending.
+- `/api/picks`: `all_fixtures` 17 (UEL/UECL 27/08, 18:00 UTC) + picks 2, ACC 1.47 min_met=False (onyo dhahiri).
+- Node smoke (scenario ya user: picks ya jana, 1 W manual + 1 pending): **9/9 PASS** —
+  resbar bila NaN, LIVE acc 1.47 + onyo, fixtures 17 + badges, autoScorePicks ilipiga
+  /api/score, score `1-6` imejaa yenyewe (status win, AUTO), manual W imehifadhiwa,
+  history baada ya tab switch: "2/2 LEGS ZIMEITA" + AUTO tag + delete + backup label.

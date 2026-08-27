@@ -420,6 +420,28 @@ class Handler(SimpleHTTPRequestHandler):
         if p == "/api/stats":
             self._json({"ok": True, "stats": global_stats(all_sessions())})
             return
+        if p == "/api/score":
+            # Auto results kwa client: final score ya mechi kutoka WC (hakuna key).
+            # ?mid=<wc-slug>  →  {"ok":true,"mid":..,"score":"1-6","home":1,"away":6,"finished":true}
+            mid = ""
+            q = self.path.split("?", 1)[1] if "?" in self.path else ""
+            for kv in q.split("&"):
+                if kv.startswith("mid="):
+                    mid = kv[4:]
+            if not re.fullmatch(r"[a-z0-9][a-z0-9-]{2,60}", mid or ""):
+                self._json({"ok": False, "error": "bad mid"}, 400); return
+            try:
+                import live_research as LR
+                r = LR.wc_result(mid)
+                if r:
+                    self._json({"ok": True, "mid": mid, "score": "%d-%d" % r,
+                                "home": r[0], "away": r[1], "finished": True})
+                else:
+                    self._json({"ok": True, "mid": mid, "score": None,
+                                "finished": False})
+            except Exception as e:
+                self._json({"ok": False, "mid": mid, "error": str(e)[:150]}, 500)
+            return
         # Static: app ni index.html pekee — zingine zote 404
         # (usalama: /server.py, /betting-researcher/..., /.git/ hasitolewi)
         if p in ("/", "/index.html"):
