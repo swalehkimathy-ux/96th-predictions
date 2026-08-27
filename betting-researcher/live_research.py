@@ -39,6 +39,30 @@ WC_LEAGUES = [
 
 MON = {"January": 1, "February": 2, "March": 3, "April": 4, "May": 5, "June": 6, "July": 7,
        "August": 8, "September": 9, "October": 10, "November": 11, "December": 12}
+MON_ABBR = {"Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
+            "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12}
+
+try:
+    from zoneinfo import ZoneInfo
+    _WC_TZ = ZoneInfo("America/Los_Angeles")  # WC inaonyesha siku za US Pacific
+except Exception:
+    _WC_TZ = None  # fallback: heuristics ya DST hapa chini
+
+
+def _wc_month(s):
+    s = (s or "").strip()
+    if s in MON:
+        return MON[s]
+    return MON_ABBR.get(s[:3].title())
+
+
+def _us_dst_active(year, mo, day):
+    """US DST: Jumapili ya 2 ya Machi → Jumapili ya 1 ya Novemba."""
+    def nth_sunday(y, m, n):
+        d = datetime.date(y, m, 1)
+        offset = (6 - d.weekday()) % 7
+        return d + datetime.timedelta(days=offset + 7 * (n - 1))
+    return nth_sunday(year, 3, 2) <= datetime.date(year, mo, day) < nth_sunday(year, 11, 1)
 
 CACHE_DISC = 3600    # mechi list: 1h
 CACHE_ODDS = 900     # odds kwa match: 15min
@@ -113,18 +137,30 @@ def _parse_wc_league(html):
 
 
 def _wc_to_utc_ms(m):
-    y = datetime.datetime.utcnow().year
-    try:
-        mo = MON[m["month"]]
-    except KeyError:
+    """Saa ya WC = US Pacific local (PDT/PST) → UTC. Inashughulikia DST na mwaka ukizunguka (Dec→Jan)."""
+    mo = _wc_month(m["month"])
+    if not mo:
         return None
-    hh, mm = map(int, m["time"].split(":"))
     try:
-        dt = datetime.datetime(y, mo, m["date"], hh, mm)
-    except ValueError:
+        hh, mm = map(int, m["time"].split(":"))
+    except Exception:
         return None
-    utc = dt + datetime.timedelta(hours=7)  # WC inatoa US Pacific (PDT, UTC-7)
-    return int(utc.replace(tzinfo=datetime.timezone.utc).timestamp() * 1000)
+    now = datetime.datetime.now(datetime.timezone.utc)
+    for year in (now.year, now.year + 1):
+        try:
+            dt = datetime.datetime(year, mo, m["date"], hh, mm)
+        except ValueError:
+            continue
+        if _WC_TZ is not None:
+            utc = dt.replace(tzinfo=_WC_TZ).astimezone(datetime.timezone.utc)
+        else:
+            off = 7 if _us_dst_active(year, mo, m["date"]) else 8
+            utc = (dt + datetime.timedelta(hours=off)).replace(tzinfo=datetime.timezone.utc)
+        ms = int(utc.timestamp() * 1000)
+        # kupokea: mechi iwe ya siku zijao (au iko ndani ya 2 siku zilizopita)
+        if ms > (now - datetime.timedelta(days=2)).timestamp() * 1000:
+            return ms
+    return None
 
 
 def discover_matches(max_age_h=30):
@@ -802,7 +838,7 @@ def get_picks(max_age_h=14, max_research=40):
     flat = [m["picks"][0] for m in matches_with_picks]
     return {
         "now": int(time.time() * 1000),
-        "date": datetime.datetime.utcnow().strftime("%Y-%m-%d"),
+        "date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d"),
         "generated_ms": int(time.time() * 1000),
         "live": True,
         "matches_total": len(matches),

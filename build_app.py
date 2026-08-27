@@ -7,7 +7,7 @@ Kutoka pipeline ya betting-researcher: analyze_v3 (vyanzo 5 + historia engine).
 import json, os, sys, calendar, datetime
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, "/home/user/betting-researcher")
+sys.path.insert(0, os.path.join(BASE, "betting-researcher"))
 import analyze_v3 as A
 
 SHORT = {"MARKET": "Soko (30+ BM)", "WC": "WinComparator", "FB": "Forebet",
@@ -48,7 +48,7 @@ def main():
     for p in near:
         bn.setdefault(p["mid"], []).append(slim(p))
 
-    now = datetime.datetime.utcnow()
+    now = datetime.datetime.now(datetime.timezone.utc)
     matches = []
     for m in raw["matches"]:
         mid = m["id"]

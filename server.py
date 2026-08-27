@@ -14,24 +14,30 @@ Run: python3 server.py   (port 8030)
 Env: P96_PORT, P96_DB_PATH, P96_PIPELINE_DIR
 """
 import json, os, re, sys, time, sqlite3, threading, calendar, datetime
+from contextlib import contextmanager
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-PIPELINE = os.environ.get("P96_PIPELINE_DIR", os.path.normpath(os.path.join(BASE, "..", "betting-researcher")))
+PIPELINE = os.environ.get("P96_PIPELINE_DIR", os.path.join(BASE, "betting-researcher"))
 DB_PATH = os.environ.get("P96_DB_PATH", os.path.join(BASE, "data", "records.db"))
 PORT = int(os.environ.get("P96_PORT") or os.environ.get("PORT") or "8030")
 sys.path.insert(0, PIPELINE)
 sys.path.insert(0, BASE)
 
-import analyze_v3 as A          # maths (poisson) kwa live_research
+try:
+    import analyze_v3 as A  # noqa: F401  (maths/poisson; live_research pia huihitaji)
+except Exception:
+    A = None  # pipeline haipo — server bado huanze, /api/picks itaonyesha error
 
 CACHE_TTL = 15 * 60
 CACHE = {"ts": 0.0, "payload": None, "busy": False, "error": None, "counts": {}}
 PLOCK = threading.Lock()
+PCOND = threading.Condition(PLOCK)
 RAW_DATA_DIR = os.path.join(PIPELINE, "data")
 
 # ================= DATABASE (SQLite) =================
-os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+if os.path.dirname(DB_PATH):
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
 DBLOCK = threading.Lock()
 
 def db():
@@ -39,8 +45,21 @@ def db():
     c.row_factory = sqlite3.Row
     return c
 
+@contextmanager
+def dbx():
+    """SQLite connection inayefungwa kila wakati (commit/rollback + close)."""
+    c = db()
+    try:
+        yield c
+        c.commit()
+    except Exception:
+        c.rollback()
+        raise
+    finally:
+        c.close()
+
 def db_init():
-    with DBLOCK, db() as c:
+    with DBLOCK, dbx() as c:
         c.execute("""CREATE TABLE IF NOT EXISTS sessions(
             id TEXT PRIMARY KEY, started_at INTEGER, cycle TEXT, meta TEXT, picks TEXT)""")
         c.execute("""CREATE TABLE IF NOT EXISTS results(
@@ -60,7 +79,7 @@ def eval_pick(p_type, h, a):
 
 def merged_session(row):
     picks = json.loads(row["picks"] or "[]")
-    with db() as c:
+    with dbx() as c:
         res = {r["mid"]: r["score"] for r in c.execute(
             "SELECT mid, score FROM results WHERE session_id=?", (row["id"],))}
         ovr = {r["pick_key"]: r["status"] for r in c.execute(
@@ -76,8 +95,9 @@ def merged_session(row):
                 p["score"] = res[p["mid"]]
                 if not p.get("manual"):
                     p["status"] = eval_pick(p.get("type"), h, a)
-    w = sum(1 for p in picks if p["status"] == "win")
-    l = sum(1 for p in picks if p["status"] == "loss")
+        p.setdefault("status", "pending")  # pick isha score/override -> pending (bug: ilikuwa KeyError)
+    w = sum(1 for p in picks if p.get("status") == "win")
+    l = sum(1 for p in picks if p.get("status") == "loss")
     s = {
         "id": row["id"], "started_at": row["started_at"], "cycle": row["cycle"] or "FLEXIBLE",
         "meta": json.loads(row["meta"] or "{}"), "picks": picks,
@@ -86,14 +106,14 @@ def merged_session(row):
     return s
 
 def all_sessions():
-    with db() as c:
+    with dbx() as c:
         rows = c.execute("SELECT * FROM sessions ORDER BY started_at DESC").fetchall()
     return [merged_session(r) for r in rows]
 
 def global_stats(sessions):
     w = sum(s["stats"]["w"] for s in sessions)
     l = sum(s["stats"]["l"] for s in sessions)
-    pend = sum(1 for s in sessions for p in s["picks"] if p["status"] == "pending")
+    pend = sum(1 for s in sessions for p in s["picks"] if p.get("status") in (None, "pending"))
     per_mkt = {}
     for s in sessions:
         for p in s["picks"]:
@@ -124,21 +144,29 @@ def build_payload():
     return payload
 
 def get_payload(force=False):
-    with PLOCK:
+    with PCOND:
         if not force and CACHE["payload"] and (time.time() - CACHE["ts"]) < CACHE_TTL:
             return CACHE["payload"]
-        if CACHE["busy"] and CACHE["payload"]:
-            return CACHE["payload"]
+        if CACHE["busy"]:
+            if CACHE["payload"]:
+                return CACHE["payload"]  # build inayoendelea — rudi bila kupinga
+            # payload ya kwanza haijakuja — subiri build hiyo (hadi 60s)
+            PCOND.wait(timeout=60)
+            if CACHE["payload"]:
+                return CACHE["payload"]
+            raise TimeoutError("payload build busy")
         CACHE["busy"] = True
     try:
         payload = build_payload()
-        with PLOCK:
+        with PCOND:
             CACHE.update(payload=payload, ts=time.time(), counts=payload["counts"], error=None, busy=False)
+            PCOND.notify_all()
         auto_results()
         return payload
     except Exception as e:
-        with PLOCK:
+        with PCOND:
             CACHE["error"] = str(e)[:300]; CACHE["busy"] = False
+            PCOND.notify_all()
         if CACHE["payload"]:
             return CACHE["payload"]
         raise
@@ -147,7 +175,20 @@ def get_payload(force=False):
 import urllib.request
 ODDS_API_KEY = os.environ.get("ODDS_API_KEY", "")
 _EVENTS_CACHE = {"ts": 0.0, "data": {}}
+_EVENTS_TTL = 1800  # 30min kwa sport (kuokoa quota ya Odds API free: 500 req/mwezi)
+_AUTORES_MIN_GAP = int(os.environ.get("P96_AUTORES_GAP") or 1800)  # sekunde kati ya auto-results
+_AUTORES_LAST = [0.0]
 _ALIAS = {"hearts": {"midlothian"}, "spurs": {"tottenham"}, "wolves": {"wolverhampton"}}
+
+def _split_match(name):
+    """'A - B' / 'A – B' / 'A vs B' -> ('A','B'). (v7.1: live picks hutumia '-' — bug ya awali ilikuwa '-' pekee.)"""
+    for sep in (" \u2013 ", " - ", " vs "):
+        if sep in name:
+            a, b = name.split(sep, 1)
+            a, b = a.strip(), b.strip()
+            if a and b:
+                return a, b
+    return None, None
 
 def _norm_team(name):
     import unicodedata
@@ -192,7 +233,7 @@ def sport_for_comp(comp):
 
 def _odds_events(sport):
     now = time.time()
-    if now - _EVENTS_CACHE["ts"] < 600 and sport in _EVENTS_CACHE["data"]:
+    if now - _EVENTS_CACHE["ts"] < _EVENTS_TTL and sport in _EVENTS_CACHE["data"]:
         return _EVENTS_CACHE["data"][sport]
     url = ("https://api.the-odds-api.com/v4/sports/%s/events?status=completed"
            "&region=eu&marketType=american&oddsMarket=h2h&dateFormat=iso&apiKey=%s") % (sport, ODDS_API_KEY)
@@ -207,12 +248,23 @@ def _odds_events(sport):
         return _EVENTS_CACHE["data"].get(sport, [])
 
 def auto_results():
-    """Hujaza scores za mechi zilizomalizika kwenye picks bado 'pending' (auto)."""
+    """Hujaza scores za mechi zilizomalizika kwenye picks bado 'pending' (auto).
+    Rate-limited (P96_AUTORES_GAP) ili kuokoa quota ya Odds API free tier.
+    Best-effort: makosa hayaimarisi request ya /api/sessions."""
+    try:
+        _auto_results_inner()
+    except Exception as e:
+        sys.stderr.write("[auto_results] error (imependwa): %s\n" % e)
+
+def _auto_results_inner():
     if not ODDS_API_KEY:
         return
+    now = time.time()
+    if now - _AUTORES_LAST[0] < _AUTORES_MIN_GAP:
+        return
     sports = {}
-    now_ms = time.time() * 1000
-    with db() as c:
+    now_ms = now * 1000
+    with dbx() as c:
         for row in c.execute("SELECT id, picks FROM sessions").fetchall():
             for p in json.loads(row["picks"] or "[]"):
                 if p.get("manual"):
@@ -224,12 +276,13 @@ def auto_results():
                     sports.setdefault(sport, []).append((row["id"], p))
     if not sports:
         return
-    with DBLOCK, db() as c:
+    found = 0
+    with DBLOCK, dbx() as c:
         for sport, items in sports.items():
             events = _odds_events(sport)
             for sid, p in items:
-                names = (p.get("match") or "").split(" \u2013 ")
-                if len(names) != 2:
+                nh, na = _split_match(p.get("match") or "")
+                if not nh or not na:
                     continue
                 for ev in events:
                     eh, ea = ev.get("home_team"), ev.get("away_team")
@@ -242,14 +295,24 @@ def auto_results():
                         continue
                     if abs(et - (p.get("kickoff") or 0)) > 2 * 86400000:
                         continue
-                    direct = _same_team(names[0], eh) and _same_team(names[1], ea)
-                    swap = _same_team(names[0], ea) and _same_team(names[1], eh)
+                    direct = _same_team(nh, eh) and _same_team(na, ea)
+                    swap = _same_team(nh, ea) and _same_team(na, eh)
                     if not (direct or swap):
                         continue
                     h, a = (ev["home_score"], ev["away_score"]) if direct else (ev["away_score"], ev["home_score"])
-                    c.execute("INSERT OR IGNORE INTO results(session_id, mid, score, updated_at) VALUES(?,?,?,?)",
+                    cur = c.execute("SELECT score FROM results WHERE session_id=? AND mid=?",
+                                    (sid, p["mid"])).fetchone()
+                    if cur:
+                        continue  # score tayari imepo (manual au auto)
+                    c.execute("INSERT INTO results(session_id, mid, score, updated_at) VALUES(?,?,?,?)",
                               (sid, p["mid"], "%d-%d" % (h, a), int(now_ms)))
+                    found += 1
                     break
+    if found:
+        _AUTORES_LAST[0] = now
+    else:
+        # hakuna score mpya — punguza gap ili rufu ijayo iwe karibu (bila kupoteza quota sana)
+        _AUTORES_LAST[0] = now - _AUTORES_MIN_GAP / 2
 
 # ================= HTTP =================
 class Handler(SimpleHTTPRequestHandler):
@@ -307,7 +370,11 @@ class Handler(SimpleHTTPRequestHandler):
         if p == "/api/stats":
             self._json({"ok": True, "stats": global_stats(all_sessions())})
             return
-        super().do_GET()
+        # Static: app ni index.html pekee — zingine zote 404
+        # (usalama: /server.py, /betting-researcher/..., /.git/ hasitolewi)
+        if p in ("/", "/index.html"):
+            return super().do_GET()
+        self.send_error(404, "Not Found")
 
     def do_POST(self):
         p = self.path.split("?")[0]
@@ -320,9 +387,14 @@ class Handler(SimpleHTTPRequestHandler):
             s = body.get("session") or {}
             sid = s.get("id") or ("s" + str(now).lower())
             picks = s.get("picks") or []
-            with DBLOCK, db() as c:
+            with DBLOCK, dbx() as c:
+                # started_at daima ms (client hucompute date kutoka hapa)
+                st_at = s.get("started_at")
+                st_at = int(st_at) if st_at else now
+                if st_at < 10**11:  # ikitumika seconds (old data) -> ms
+                    st_at *= 1000
                 c.execute("INSERT OR REPLACE INTO sessions(id, started_at, cycle, meta, picks) VALUES(?,?,?,?,?)",
-                          (sid, int(s.get("started_at") or now / 1000), s.get("cycle") or "FLEXIBLE",
+                          (sid, st_at, s.get("cycle") or "FLEXIBLE",
                            json.dumps(s.get("meta") or {}), json.dumps(picks)))
             self._json({"ok": True, "id": sid})
             return
@@ -334,17 +406,17 @@ class Handler(SimpleHTTPRequestHandler):
             mm = re.match(r"^(\d{1,2})\s*[-:]\s*(\d{1,2})$", score)
             if not mid or not mm:
                 self._json({"ok": False, "error": "mid/score"}, 400); return
-            with DBLOCK, db() as c:
+            with DBLOCK, dbx() as c:
                 c.execute("INSERT OR REPLACE INTO results(session_id, mid, score, updated_at) VALUES(?,?,?,?)",
                           (sid, mid, score, now))
             ev = []
-            with db() as c:
+            with dbx() as c:
                 row = c.execute("SELECT * FROM sessions WHERE id=?", (sid,)).fetchone()
             if row:
                 s = merged_session(row)
                 for pk in s["picks"]:
                     if pk["mid"] == mid and not pk.get("manual"):
-                        ev.append({"pick": pk.get("market"), "status": pk["status"]})
+                        ev.append({"pick": pk.get("market"), "status": pk.get("status")})
             self._json({"ok": True, "evaluated": ev})
             return
         m = re.match(r"^/api/sessions/([A-Za-z0-9_-]+)/override$", p)
@@ -354,7 +426,7 @@ class Handler(SimpleHTTPRequestHandler):
             st = str(body.get("status") or "")
             if st not in ("win", "loss", "void"):
                 self._json({"ok": False, "error": "status"}, 400); return
-            with DBLOCK, db() as c:
+            with DBLOCK, dbx() as c:
                 c.execute("INSERT OR REPLACE INTO overrides(session_id, pick_key, status, updated_at) VALUES(?,?,?,?)",
                           (sid, pk, st, now))
             self._json({"ok": True})
@@ -364,7 +436,7 @@ class Handler(SimpleHTTPRequestHandler):
     def do_DELETE(self):
         m = re.match(r"^/api/sessions/([A-Za-z0-9_-]+)$", self.path.split("?")[0])
         if m:
-            with DBLOCK, db() as c:
+            with DBLOCK, dbx() as c:
                 c.execute("DELETE FROM sessions WHERE id=?", (m.group(1),))
                 c.execute("DELETE FROM results WHERE session_id=?", (m.group(1),))
                 c.execute("DELETE FROM overrides WHERE session_id=?", (m.group(1),))

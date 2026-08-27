@@ -75,3 +75,32 @@ Render **ita-deploy yenyewe** ikiona push mpya (auto-deploy).
 - **502 Bad Gateway** → check Render logs; hakikisha `startCommand` inafanya kazi (python3 server.py)
 - **404 /api/picks** → hakikisha `P96_PIPELINE_DIR` inaelekea folder halisi (repo root: `betting-researcher/`)
 - **App inasema OFFLINE** → URL ya API_URL si sahihi, au cold start ilitokea tena (subiri sekunde 45 na refresh)
+
+## Auto Results (The Odds API)
+
+Ili scores za mechi ziliyomalizika zijaze **kifupi** (bila kukuja score manually),:
+
+1. Fungua akaunti bure kwenye [the-odds-api.com](https://the-odds-api.com) — unapewa **free tier: 500 requests/mwezi**.
+2. Kwenye Render dashboard → API ya `96th-predictions` → **Environment** → ongeza:
+   - key: `ODDS_API_KEY` · value: `kii-yako-hapa`
+3. Re-deploy (au "Generate new API token" itafanya kazi kwa app).
+
+**Jinsi inavyofanya kazi:** app inaitudia Odds API tu ikiwa kuna picks zilizopita kickoff +2h na bado "pending". Ili kuokoa quota ya bure, matumizi yamerustishwa:
+- kati ya mkurugenzi wa auto-results hakuna kuliko **1 kwa dakika 30** (`P96_AUTORES_GAP`, default 1800s)
+- events za sport kila moja hifadhiwa kwa **dakika 30**
+- ikiwa hakuna score mpya, gap inapunguzwa nusu (ili kukita haraka baada ya mechi kumalizika)
+
+**Angalizo:** free tier (500 req/mo) inatosha kwa matumizi ya kawaida (check in siku chache). Ukiwa na sessions nyingi kila siku na unachapisha kwa wakati mrefu, unaweza kupoteza quota — kwenye hiyo hali, tafuta sio kughara kwa siku nyingi, au upgrade.
+
+**Kwa sasa (bila key):** scores huzajika **manual** tu (kwenye app: tab History → score button). Hii ndiyo default imethibitishwa.
+
+## Vilevile (changes in this commit)
+
+- `server.py` — fixed: default `P96_PIPELINE_DIR` path ilipenda `../betting-researcher` (nje ya repo) — sasa inaelekea `betting-researcher/` ndani ya repo, hivyo `python3 server.py` inafanya kazi bila env.
+- `server.py` — auto results: ilianza kucheka split kwa en-dash (`–`) tu; live picks hutumia `-`. Sasa inacheka `-`, `–`, `vs`.
+- `server.py` — SQLite: connections sasa hufungwa kila wakati (hakuna leak).
+- `server.py` — static: `/` na `/index.html` pekee zinapatikana; source/data/.git zimeguzwa (security).
+- `server.py` — `get_payload`: hakuna zaidi ya 1 build wakati mmoja (concurrent requests zinasubiri).
+- `live_research.py` — `_wc_to_utc_ms`: ilikuwa inatumia `+7h` hardcoded (PDT tu). Sasa inatumia `zoneinfo America/Los_Angeles` (DST sahihi) + inaenda kupita mwaka (Dec→Jan) + inakubali month abbreviations (Jan, Aug...).
+- `build_app.py` — ilikuwa inatumia `/home/user/betting-researcher` hardcoded; sasa inatumia relative path.
+- `live_research.py`/`build_app.py` — `datetime.utcnow()` (deprecated) → `datetime.now(UTC)`.

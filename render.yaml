@@ -11,3 +11,7 @@ services:
         value: /opt/render/project/src/betting-researcher
       - key: P96_DB_PATH
         value: /tmp/96th/records.db
+      # ⭐ Auto results: ongeza ODDS_API_KEY kwenye Render dashboard
+      #    (The Odds API free tier = 500 requests/mwezi — app imerustishwa
+      #     kupunguza matumizi: gap 30min + cache 30min. Tafuta "Auto Results"
+      #     kwenye README-RENDER.md)
