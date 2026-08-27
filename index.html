@@ -126,6 +126,10 @@ b{font-weight:700}
 .bpt-s{flex:none;text-align:center;min-width:40px;background:rgba(47,191,113,.10);border:1px solid rgba(47,191,113,.4);border-radius:10px;padding:5px 0}
 .bpt-s b{display:block;font-size:13px;color:var(--grn)}
 .bpt-s span{font-size:7.5px;letter-spacing:.08em;color:var(--dim)}
+.bpt-total{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:linear-gradient(165deg,#13224e 0%,#0d1836 60%);border-top:1px solid rgba(217,168,60,.45);padding:11px 14px}
+.bpt-total .lbl{font-size:9.5px;font-weight:800;letter-spacing:.14em;color:#0d1531;background:linear-gradient(135deg,#f6d87e,var(--gold));border-radius:6px;padding:4px 9px}
+.bpt-total .item{font-size:9px;color:var(--sub);letter-spacing:.08em}
+.bpt-total .item b{display:block;font-size:16px;color:var(--gold2);letter-spacing:0;margin-top:1px}
 .bpt-note{font-size:9.5px;color:var(--dim);letter-spacing:.05em;margin:9px 2px 0;line-height:1.55}
 
 /* others */
@@ -392,6 +396,10 @@ function buildAccumulator(){
 }
 
 /* ============ SESSION (kila siku = combo 1) ============ */
+function picksKey(list){ return (list||[]).map(function(p){ return p.mid + "|" + p.market; }).sort().join(";"); }
+function sessionHasResults(s){
+  return (s.picks||[]).some(function(p){ return p.score || p.manual || (p.status && p.status !== "pending"); });
+}
 function getTodaySession(){
   var rec = loadRecords();
   return rec.sessions.filter(function(s){ return s.date === localDateStr(); })[0] || null;
@@ -412,6 +420,12 @@ function ensureTodaySession(){
     s.picks = acc.legs; s.others = acc.others; s.meta.legs = acc.legs.length; s.meta.total = acc.total;
     saveRecords(rec);
     if(LIVE.state === "live"){ apiPost("/api/sessions",{session:s}).catch(function(){}); }
+  } else if(LIVE.state === "live" && acc.legs.length && !sessionHasResults(s) && picksKey(s.picks) !== picksKey(acc.legs)){
+    /* data mpya ya live → rufunge bet ya siku (session bado haina matoleo yaliyorekodiwa) */
+    s.picks = acc.legs; s.others = acc.others;
+    s.meta = {auto:true, legs:acc.legs.length, total:acc.total, matches:(DATA.matches||[]).length};
+    saveRecords(rec);
+    apiPost("/api/sessions",{session:s}).catch(function(){});
   }
   return s;
 }
@@ -501,6 +515,7 @@ function comboStatusChip(r){
 /* ============ RENDER: BEST PICKS TABLE (table moja ya best picks) ============ */
 function renderBestPicks(){
   var all = allPicks();
+  var acc = buildAccumulator();
   var h = [];
   h.push('<div class="sec-h"><b>BEST PICKS</b><span class="cnt">table moja · vyanzo 4+ · confidence &ge; 70%</span></div>');
   if(!all.length){
@@ -524,6 +539,12 @@ function renderBestPicks(){
     h.push('</div>');
   });
   h.push('</div>');
+  if(all.length && acc.legs.length){
+    h.push('<div class="bpt-total"><span class="lbl">BET YA SIKU</span>' +
+      '<span class="item"><b>' + acc.legs.length + '</b>LEGS</span>' +
+      '<span class="item"><b>' + acc.total.toFixed(2) + '</b>TOTAL ODDS</span>' +
+      '<span class="item"><b>~' + Math.round(acc.hitProb*100) + '%</b>MWEZEKANO</span></div>');
+  }
   h.push('<p class="bpt-note">KILA PICK IMECHUNGUZWA NA VYANZO 4+ (SOKO BOOKMAKERS 30+ · WINCOMPARATOR MODEL · FOOTBALLPREDICTIONS · WHISPERS · FOREBET) · CONSENSUS CONFI &ge; 70% · HAKUNA PICK YA "FEELING"</p>');
   return h;
 }
