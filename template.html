@@ -27,19 +27,17 @@ b{font-weight:700}
 
 /* ============ SPLASH ============ */
 #splash{position:fixed;inset:0;z-index:50;background:radial-gradient(900px 500px at 50% 20%, #101d47 0%, var(--bg1) 45%, var(--bg0) 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
-  transition:opacity .5s ease}
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .5s ease}
 #splash.gone{opacity:0;pointer-events:none}
 .splash-ball{width:118px;height:118px;filter:drop-shadow(0 0 34px rgba(217,168,60,.45));animation:pop .9s ease}
 @keyframes pop{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
 .splash-word{font-size:22px;font-weight:800;letter-spacing:.42em;color:#fff;text-indent:.42em}
-.splash-sub{font-size:11px;letter-spacing:.3em;color:var(--sub)}
 .splash-bar{width:170px;height:3px;background:#182a55;border-radius:3px;overflow:hidden;margin-top:14px}
 .splash-fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2));animation:load 1.9s ease forwards}
 @keyframes load{to{width:100%}}
 
-/* ============ APP SHELL ============ */
-#app{max-width:860px;margin:0 auto;padding:0 0 74px;min-height:100vh}
+/* ============ SHELL ============ */
+#app{max-width:820px;margin:0 auto;padding:0 0 74px;min-height:100vh}
 .topbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:10px;
   padding:12px 16px;background:rgba(5,10,24,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:center;gap:9px}
@@ -48,7 +46,6 @@ b{font-weight:700}
 .brand span{color:var(--gold2);letter-spacing:.26em;font-size:10.5px}
 .top-right{display:flex;gap:7px;align-items:center}
 .chip{display:flex;gap:7px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:11.5px;color:var(--tx)}
-.chip .ic{width:13px;height:13px;color:var(--gold2)}
 .lv{display:inline-flex;gap:7px;align-items:center;font-size:10.5px;font-weight:800;letter-spacing:.1em;padding:6px 12px;border-radius:999px;border:1px solid var(--line);color:var(--sub);background:var(--card);cursor:pointer}
 .lv .dot{width:7px;height:7px;border-radius:50%;background:var(--dim)}
 .lv.gold{color:var(--gold2);border-color:rgba(217,168,60,.55);background:var(--golddim)}
@@ -56,129 +53,106 @@ b{font-weight:700}
 @keyframes pulse{50%{opacity:.4}}
 .iconbtn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--gold2);cursor:pointer}
 .iconbtn .ic{width:15px;height:15px}
-.iconbtn:active{transform:scale(.94)}
 #content{padding:16px 16px 0}
 
 /* ============ TABBAR ============ */
 .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:30;display:flex;
-  background:rgba(8,13,30,.97);backdrop-filter:blur(8px);border-top:1px solid var(--line);
-  max-width:860px;margin:0 auto}
+  background:rgba(8,13,30,.97);backdrop-filter:blur(8px);border-top:1px solid var(--line);max-width:820px;margin:0 auto}
 .tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:11px 0 13px;
   background:none;border:none;color:var(--dim);font-size:10px;font-weight:700;letter-spacing:.12em;cursor:pointer}
 .tabbar button .ic{width:20px;height:20px}
 .tabbar button.active{color:var(--gold2)}
 .tabbar button.active .ic{filter:drop-shadow(0 0 8px rgba(217,168,60,.5))}
 
-/* ============ SECTIONS / CARDS ============ */
-.sec-h{display:flex;align-items:baseline;gap:9px;margin:20px 2px 10px}
+/* ============ SECTIONS ============ */
+.sec-h{display:flex;align-items:baseline;gap:9px;margin:18px 2px 10px}
 .sec-h:first-child{margin-top:4px}
 .sec-h b{font-size:12px;letter-spacing:.16em;color:var(--gold2)}
 .sec-h .cnt{font-size:11px;color:var(--dim)}
-.sec-h .sub2{font-size:10.5px;color:var(--dim);letter-spacing:.04em}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
-.pickgrid{display:grid;grid-template-columns:1fr;gap:12px}
-@media(min-width:640px){.pickgrid{grid-template-columns:1fr 1fr}}
-.pick-top{display:flex;gap:12px;align-items:flex-start}
-.pick-time{flex:none;width:52px;text-align:center;background:var(--card2);border:1px solid var(--line2);border-radius:10px;padding:7px 4px}
-.pick-time b{display:block;font-size:14px;color:var(--gold2)}
-.pick-time span{font-size:9.5px;letter-spacing:.08em;color:var(--dim)}
-.pick-match{flex:1;min-width:0}
-.pick-match b{display:block;font-size:14.5px;line-height:1.25}
-.pick-match span{font-size:11px;color:var(--sub)}
-.pick-odds{flex:none;text-align:right}
-.pick-odds b{display:block;font-size:19px;color:var(--gold2)}
-.pick-odds span{font-size:8.5px;letter-spacing:.18em;color:var(--dim)}
-.pick-mkt{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:11px}
-.mktchip{background:var(--golddim);border:1px solid rgba(217,168,60,.4);color:var(--gold2);font-size:11px;font-weight:700;letter-spacing:.05em;border-radius:8px;padding:4px 9px}
-.mktsub{font-size:11.5px;color:var(--sub)}
 .sub2{font-size:10px;color:var(--dim);letter-spacing:.06em}
-.pick-conf{display:flex;align-items:center;gap:9px;margin-top:11px}
-.bar{width:96px;height:7px;background:#182a55;border-radius:4px;overflow:hidden;flex:none}
-.fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
-.pick-conf b{font-size:13px}
-.pick-src{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:9px}
-.srcchip{font-size:9.5px;border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub);background:var(--card2);white-space:nowrap}
-.pick-hist{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px}
-.fok{font-size:9.5px;font-weight:800;letter-spacing:.06em;color:var(--grn)}
-.fmid{font-size:9.5px;font-weight:800;letter-spacing:.06em;color:var(--amb)}
-.fwarn{font-size:9.5px;font-weight:800;letter-spacing:.06em;color:var(--red)}
 
-/* status */
-.st{display:inline-flex;gap:5px;align-items:center;font-size:10px;font-weight:800;letter-spacing:.08em;border-radius:7px;padding:3px 8px;margin-left:auto}
-.st .ic{width:12px;height:12px}
-.st.win{color:var(--grn);background:rgba(47,191,113,.12);border:1px solid rgba(47,191,113,.4)}
-.st.loss{color:var(--red);background:rgba(224,96,79,.12);border:1px solid rgba(224,96,79,.4)}
-.st.pend{color:var(--amb);background:rgba(229,181,74,.1);border:1px solid rgba(229,181,74,.35)}
-.st.void{color:var(--dim);background:rgba(91,106,143,.14);border:1px solid rgba(91,106,143,.4)}
+/* ============ COMBO HERO ============ */
+.hero{background:linear-gradient(165deg,#13224e 0%,#0d1836 60%);border:1px solid rgba(217,168,60,.5);border-radius:20px;padding:18px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-40px;right:-40px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(217,168,60,.16),transparent 70%)}
+.hero-tag{display:inline-flex;gap:7px;align-items:center;font-size:10px;font-weight:800;letter-spacing:.12em;color:#0d1531;background:linear-gradient(135deg,#f6d87e,var(--gold));border-radius:7px;padding:5px 11px;margin-bottom:15px}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;position:relative}
+.hg{background:rgba(8,13,30,.5);border:1px solid var(--line2);border-radius:13px;padding:12px}
+.hg .l{font-size:9.5px;letter-spacing:.12em;color:var(--dim)}
+.hg .v{font-size:26px;font-weight:800;color:var(--gold2);margin-top:3px}
+.hg .v.pct{color:var(--tx)}
+.hg .bar{width:100%;height:6px;background:#182a55;border-radius:4px;overflow:hidden;margin-top:8px}
+.hg .fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.legs{margin-top:15px;position:relative}
+.leg{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line2)}
+.leg:last-child{border-bottom:none}
+.leg .ln{flex:none;width:20px;height:20px;border-radius:6px;background:var(--golddim);border:1px solid rgba(217,168,60,.4);color:var(--gold2);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.leg .li{flex:1;min-width:0}
+.leg .li b{display:block;font-size:13px;line-height:1.25}
+.leg .li span{font-size:11px;color:var(--sub)}
+.leg .lo{flex:none;text-align:right}
+.leg .lo .o{font-size:15px;font-weight:800;color:var(--gold2)}
+.leg .lo .c{font-size:10px;color:var(--dim)}
+.hero-status{display:flex;justify-content:space-between;align-items:center;margin-top:15px;position:relative}
+.hero-src{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px}
+.srcchip{font-size:10px;border:1px solid var(--line);border-radius:6px;padding:3px 8px;color:var(--sub);background:rgba(8,13,30,.5);white-space:nowrap}
 
-/* slip */
-.slip{background:linear-gradient(160deg,#111e44,#0c1531);border:1px solid rgba(217,168,60,.45)}
-.slip-leg{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:8px 0;border-bottom:1px dashed var(--line2);font-size:12.5px}
-.slip-leg:last-of-type{border-bottom:none}
-.slip-leg .mk{color:var(--sub);font-size:11px}
-.slip-leg b{font-size:12.5px}
-.slip-total{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:11px;padding-top:11px;border-top:1px solid rgba(217,168,60,.4)}
-.slip-total .tot{font-size:22px;font-weight:800;color:var(--gold2)}
-.copybtn{display:inline-flex;gap:7px;align-items:center;background:linear-gradient(135deg,#f6d87e,var(--gold) 60%,#c8922b);border:none;border-radius:9px;padding:9px 16px;font-size:11.5px;font-weight:800;letter-spacing:.06em;color:#0d1531;cursor:pointer}
-.copybtn .ic{width:13px;height:13px}
+.st{display:inline-flex;gap:5px;align-items:center;font-size:10.5px;font-weight:800;letter-spacing:.08em;border-radius:8px;padding:5px 11px}
+.st .ic{width:13px;height:13px}
+.st.win{color:var(--grn);background:rgba(47,191,113,.14);border:1px solid rgba(47,191,113,.45)}
+.st.loss{color:var(--red);background:rgba(224,96,79,.14);border:1px solid rgba(224,96,79,.45)}
+.st.pend{color:var(--amb);background:rgba(229,181,74,.12);border:1px solid rgba(229,181,74,.4)}
+.st.void{color:var(--dim);background:rgba(91,106,143,.16);border:1px solid rgba(91,106,143,.45)}
 
-/* details */
+/* others */
 details.dtl{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:4px 14px;margin-top:12px}
-details.dtl summary{cursor:pointer;display:flex;gap:9px;align-items:center;padding:10px 0;font-size:11.5px;font-weight:700;letter-spacing:.1em;color:var(--sub);list-style:none}
+details.dtl summary{cursor:pointer;display:flex;gap:9px;align-items:center;padding:11px 0;font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--sub);list-style:none}
 details.dtl summary::-webkit-details-marker{display:none}
 details.dtl summary .ic{width:14px;height:14px;color:var(--dim)}
-.dtl-row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line2);font-size:12px}
+.dtl-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line2);font-size:12px}
 .dtl-row:last-child{border-bottom:none}
-.dtl-row .why{color:var(--dim);font-size:11px;white-space:nowrap}
-.empty{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:26px 16px;text-align:center;color:var(--sub);font-size:12.5px}
-.nochips{display:flex;flex-wrap:wrap;gap:8px}
-.nochip{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:11.5px;color:var(--sub)}
-.nochip b{color:var(--tx);font-weight:600}
+.dtl-row .po{font-weight:800;color:var(--gold2);white-space:nowrap}
+.dtl-row .pc{color:var(--dim);font-size:11px;white-space:nowrap}
 
-/* stats */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px}
-.stat .v{font-size:21px;font-weight:800}
-.stat .v.gold{color:var(--gold2)} .stat .v.grn{color:var(--grn)} .stat .v.red{color:var(--red)} .stat .v.amb{color:var(--amb)}
-.stat .l{font-size:9.5px;color:var(--dim);letter-spacing:.1em;margin-top:3px}
-.mktstats{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.mktstat{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:10.5px;color:var(--sub)}
-.mktstat b{color:var(--tx);font-size:11px}
+/* ============ WIN RATE ============ */
+.wr-hero{background:linear-gradient(165deg,#13224e 0%,#0d1836 60%);border:1px solid var(--line);border-radius:20px;padding:20px;text-align:center}
+.wr-hero .big{font-size:52px;font-weight:800;color:var(--gold2);line-height:1}
+.wr-hero .lbl{font-size:11px;letter-spacing:.2em;color:var(--sub);margin-top:6px}
+.wr-hero .subnote{font-size:11px;color:var(--dim);margin-top:10px}
+.wr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(84px,1fr));gap:10px;margin-top:14px}
+.wr-cell{background:rgba(8,13,30,.5);border:1px solid var(--line2);border-radius:12px;padding:11px;text-align:center}
+.wr-cell .v{font-size:19px;font-weight:800}
+.wr-cell .v.grn{color:var(--grn)} .wr-cell .v.red{color:var(--red)} .wr-cell .v.amb{color:var(--amb)} .wr-cell .v.gold{color:var(--gold2)}
+.wr-cell .l{font-size:8.5px;letter-spacing:.08em;color:var(--dim);margin-top:3px}
 
-/* history sessions */
-.sess{margin-top:12px;padding:0}
-.sess summary{cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 14px;list-style:none}
-.sess summary::-webkit-details-marker{display:none}
-.sess-date b{display:block;font-size:13px}
-.sess-date span{font-size:10.5px;color:var(--dim);letter-spacing:.06em}
-.sess-wl{font-size:12px;font-weight:800;white-space:nowrap}
-.sess-wl.grn{color:var(--grn)} .sess-wl.red{color:var(--red)} .sess-wl.amb{color:var(--amb)}
-.sess-body{padding:0 14px 14px;border-top:1px solid var(--line2)}
-.matchrow{padding:11px 0;border-bottom:1px solid var(--line2)}
-.matchrow:last-child{border-bottom:none}
-.matchrow-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.matchrow-head b{font-size:12.5px}
-.matchrow-head .sub2{display:block;margin-top:2px}
-.scorein{display:flex;gap:6px;align-items:center}
-.scorein input{width:64px;background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--tx);padding:6px 8px;font-size:12px;text-align:center}
-.scorein input.bad{border-color:var(--red)}
-.scorein button{background:var(--golddim);border:1px solid rgba(217,168,60,.4);color:var(--gold2);border-radius:8px;padding:6px 11px;font-size:10.5px;font-weight:800;cursor:pointer}
-.prow{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 0;font-size:12px;border-bottom:1px dashed var(--line2)}
-.prow:last-child{border-bottom:none}
-.prow .pm{font-weight:600}
-.prow .ps{color:var(--sub);font-size:11px}
-.prow .po{font-weight:800;color:var(--gold2)}
+/* day list */
+.day{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-top:11px;overflow:hidden}
+.day-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 14px;cursor:pointer}
+.day-h .d{flex:1;min-width:0}
+.day-h .d b{display:block;font-size:13px}
+.day-h .d span{font-size:10.5px;color:var(--dim);letter-spacing:.04em;display:block;margin-top:2px}
+.day-b{padding:0 14px 14px;border-top:1px solid var(--line2)}
+.legrow{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:9px 0;border-bottom:1px dashed var(--line2);font-size:12px}
+.legrow:last-child{border-bottom:none}
+.legrow .pm{font-weight:600}
+.legrow .ps{color:var(--sub);font-size:11px}
+.legrow .po{font-weight:800;color:var(--gold2)}
+.legrow .sc{color:var(--gold2);font-weight:700}
 .ovr{display:inline-flex;gap:4px}
 .ovr button{width:26px;height:24px;border-radius:6px;border:1px solid var(--line);background:var(--card2);color:var(--sub);font-size:10px;font-weight:800;cursor:pointer}
 .ovr button.on-w{background:rgba(47,191,113,.18);border-color:var(--grn);color:var(--grn)}
 .ovr button.on-l{background:rgba(224,96,79,.18);border-color:var(--red);color:var(--red)}
 .ovr button.on-v{background:rgba(91,106,143,.25);border-color:var(--dim);color:var(--sub)}
+.scorein{display:flex;gap:6px;align-items:center}
+.scorein input{width:64px;background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--tx);padding:6px 8px;font-size:12px;text-align:center}
+.scorein input.bad{border-color:var(--red)}
+.scorein button{background:var(--golddim);border:1px solid rgba(217,168,60,.4);color:var(--gold2);border-radius:8px;padding:6px 11px;font-size:10.5px;font-weight:800;cursor:pointer}
 .auto-tag{font-size:8.5px;font-weight:800;letter-spacing:.08em;color:var(--gold2);background:var(--golddim);border:1px solid rgba(217,168,60,.4);border-radius:5px;padding:1.5px 5px;margin-left:6px}
+.empty{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:28px 16px;text-align:center;color:var(--sub);font-size:12.5px}
+.foot{margin:24px 2px 0;color:var(--dim);font-size:10px;line-height:1.7;letter-spacing:.04em}
 
-/* toast */
 #toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f6d87e,var(--gold));color:#0d1531;font-weight:800;font-size:12px;padding:11px 22px;border-radius:11px;box-shadow:0 14px 40px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:60;max-width:90vw;text-align:center}
 #toast.show{opacity:1}
-.foot{margin:26px 2px 0;color:var(--dim);font-size:10px;line-height:1.7;letter-spacing:.04em}
 </style>
 </head>
 <body>
@@ -192,11 +166,10 @@ details.dtl summary .ic{width:14px;height:14px;color:var(--dim)}
 <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M7.5 13.5h3M13.5 13.5h3M7.5 17h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-hist" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 1 2.2 5.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4.5 21v-4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8v4.5l2.8 1.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M20 3v4h-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-<symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V6a2 2 0 0 1 2-2h9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m8 12.5 2.7 2.7L16.5 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m9 9 6 6M15 9l-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
-<symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19L12 3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1.1" fill="currentColor"/></symbol>
-<symbol id="i-slip" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-2-1.4-2 1.4-2-1.4-2 1.4-2-1.4-2 1.4v-17z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 8h6M9 12h6M9 16h3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3 2 8.5 12 14 22 8.5 12 3z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M2 13.5 12 19l10-5.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
 </defs></svg>
 
 <!-- SPLASH -->
@@ -228,7 +201,7 @@ details.dtl summary .ic{width:14px;height:14px;color:var(--dim)}
     <section id="tab-history" class="hidden"></section>
   </main>
   <nav class="tabbar">
-    <button id="tb-today" class="active"><svg class="ic"><use href="#i-cal"/></svg><span>MECHI ZA LEO</span></button>
+    <button id="tb-today" class="active"><svg class="ic"><use href="#i-layers"/></svg><span>BET YA LEO</span></button>
     <button id="tb-history"><svg class="ic"><use href="#i-hist"/></svg><span>HISTORIA</span></button>
   </nav>
 </div>
@@ -240,14 +213,14 @@ details.dtl summary .ic{width:14px;height:14px;color:var(--dim)}
 (function(){
 "use strict";
 var DATA = JSON.parse(document.getElementById("app-data").textContent);
-/* URL ya server (badilika pale ipobadilishwa) */
 var API_URL = "https://nine6th-predictions.onrender.com";
 var API_BASE = "";
 var LIVE = {state:"checking", at:null, err:null};
 var curTab = "today";
-var RKEY = "p96.records.v2";
+var RKEY = "p96.records.v4";
+var ODDS_CAP = 3.0;   /* total odds ya combo ya siku: <= 3.0 */
 
-/* ============ STORE (local — records hazipotei) ============ */
+/* ============ STORE ============ */
 var store = (function(){
   try{
     var t="__p96_t__"; window.localStorage.setItem(t,"1"); window.localStorage.removeItem(t);
@@ -304,12 +277,7 @@ function apiPost(path, obj){
 function fetchLive(){
   return new Promise(function(res){
     var done = false, lastErr = "";
-    function fin(d, err){
-      if(done) return; done = true;
-      LIVE.err = err || null;
-      if(d){ DATA = d; }
-      res(d || null);
-    }
+    function fin(d, err){ if(done) return; done = true; LIVE.err = err || null; if(d){ DATA = d; } res(d || null); }
     function attempt(n){
       apiFetch("/api/picks", {cache:"no-store"}).then(function(r){ return r.json(); })
         .then(function(d){
@@ -331,7 +299,7 @@ function setLiveFrom(d){
   renderLiveChip();
 }
 
-/* ============ TIME / FMT ============ */
+/* ============ FMT ============ */
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 function fmtT(ms){ return new Date(ms).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}); }
@@ -349,28 +317,56 @@ function sessDateLabel(s){
   if(s.date === t) return "Leo";
   var y = new Date(); y.setDate(y.getDate() - 1);
   if(s.date === localDateStrOf(y)) return "Jana";
-  return s.date.slice(8,10)+"/"+s.date.slice(5,7)+"/"+s.date.slice(2,4);
+  return s.date.slice(8,10)+"/"+s.date.slice(5,7);
 }
 function toast(msg){
   var t = $("toast"); t.textContent = msg; t.classList.add("show");
   clearTimeout(t._t); t._t = setTimeout(function(){ t.classList.remove("show"); }, 2200);
 }
 
-/* ============ SESSION (kila siku = record 1, kiotomatiki) ============ */
-function picksFromData(){
+/* ============ PICKS (odds cap, sorted by confidence) ============ */
+function pickObj(m, p){
+  return {
+    mid:m.id, match:m.home + " – " + m.away, comp:m.comp, kickoff:m.kickoff,
+    type:p.type, market:p.market, selection:p.selection, odds:p.odds, final:p.final,
+    n:p.n, src:p.src || [], flag:p.flag, form:p.form, h2h:p.h2h,
+    score:null, status:"pending", manual:false, auto:false
+  };
+}
+function allPicks(){
   var out = [];
   (DATA.matches || []).forEach(function(m){
     (m.picks || []).forEach(function(p){
-      out.push({
-        mid:m.id, match:m.home + " – " + m.away, comp:m.comp, kickoff:m.kickoff,
-        type:p.type, market:p.market, selection:p.selection, odds:p.odds, final:p.final,
-        n:p.n, src:p.src || [], flag:p.flag, form:p.form, h2h:p.h2h,
-        score:null, status:"pending", manual:false, auto:false
-      });
+      if(p.odds > ODDS_CAP) return;
+      out.push(pickObj(m, p));
     });
   });
+  out.sort(function(a,b){ return b.final - a.final; });
   return out;
 }
+
+/* ============ ACCUMULATOR (bet ya siku) ============ */
+/* Greedy kwa confidence, 1 leg kwa mechi, total <= ODDS_CAP */
+function buildAccumulator(){
+  var all = allPicks();
+  if(!all.length) return {legs:[], total:1, hitProb:0, others:[]};
+  var now = Date.now();
+  var up = all.filter(function(p){ return p.kickoff + 30*60000 > now; });
+  var pool = up.length ? up : all;
+  var legs = [], tot = 1, used = {};
+  pool.forEach(function(p){
+    if(used[p.mid]) return;
+    if(tot * p.odds <= ODDS_CAP){
+      legs.push(p); tot *= p.odds; used[p.mid] = 1;
+    }
+  });
+  var hitProb = 1;
+  legs.forEach(function(l){ hitProb *= l.final; });
+  var others = all.filter(function(p){ return !used[p.mid]; });
+  return {legs:legs, total:tot, hitProb:hitProb, others:others};
+}
+
+/* ============ SESSION (kila siku = combo 1) ============ */
 function getTodaySession(){
   var rec = loadRecords();
   return rec.sessions.filter(function(s){ return s.date === localDateStr(); })[0] || null;
@@ -379,14 +375,18 @@ function ensureTodaySession(){
   var rec = loadRecords();
   var today = localDateStr();
   var s = rec.sessions.filter(function(x){ return x.date === today; })[0];
-  var picks = picksFromData();
+  var acc = buildAccumulator();
   if(!s){
-    s = {id:"d-"+today, date:today, started_at:Date.now(), picks:picks, meta:{matches:(DATA.matches||[]).length, auto:true}};
+    s = {id:"d-"+today, date:today, started_at:Date.now(),
+         picks: acc.legs, others: acc.others,
+         meta:{auto:true, legs:acc.legs.length, total:acc.total, matches:(DATA.matches||[]).length}};
     rec.sessions.push(s);
     saveRecords(rec);
-    if(LIVE.state === "live"){ apiPost("/api/sessions", {session:s}).catch(function(){}); }
-  } else if(!s.picks.length && picks.length){
-    s.picks = picks; saveRecords(rec);
+    if(LIVE.state === "live"){ apiPost("/api/sessions",{session:s}).catch(function(){}); }
+  } else if(!s.picks.length && acc.legs.length){
+    s.picks = acc.legs; s.others = acc.others; s.meta.legs = acc.legs.length; s.meta.total = acc.total;
+    saveRecords(rec);
+    if(LIVE.state === "live"){ apiPost("/api/sessions",{session:s}).catch(function(){}); }
   }
   return s;
 }
@@ -398,9 +398,7 @@ function mergeServerResults(serverSessions){
     (ss.picks || []).forEach(function(sp){
       var lp = loc.picks.filter(function(p){ return p.mid === sp.mid && p.market === sp.market; })[0];
       if(!lp) return;
-      if(sp.manual && sp.status && sp.status !== "pending" && !lp.manual){
-        lp.manual = true; lp.status = sp.status; changed = true;
-      }
+      if(sp.manual && sp.status && sp.status !== "pending" && !lp.manual){ lp.manual = true; lp.status = sp.status; changed = true; }
       if(sp.score && !lp.manual && lp.status === "pending"){
         var m = String(sp.score).match(/(\d+)\s*[-:]\s*(\d+)/);
         if(m){ lp.score = sp.score; lp.status = evalPick(lp.type, +m[1], +m[2]); lp.auto = true; changed = true; }
@@ -419,41 +417,47 @@ function evalPick(t, h, a){
   return "pending";
 }
 
-/* ============ STATS ============ */
-function computeStats(sessions){
-  var w = 0, l = 0, pend = 0, perMkt = {};
-  (sessions || []).forEach(function(s){
-    (s.picks || []).forEach(function(p){
-      if(p.status === "win"){ w++; (perMkt[p.market] = perMkt[p.market] || {w:0,l:0}).w++; }
-      else if(p.status === "loss"){ l++; (perMkt[p.market] = perMkt[p.market] || {w:0,l:0}).l++; }
-      else if(p.status === "pending") pend++;
-    });
+/* ============ COMBO RESULT (accumulator: zote lazima zikite) ============ */
+function dayResult(picks){
+  var legs = (picks || []).filter(function(p){ return p.status !== "void"; });
+  if(!legs.length) return "void";
+  var hasLoss = false, allWin = true;
+  legs.forEach(function(p){
+    if(p.status === "loss") hasLoss = true;
+    if(p.status !== "win") allWin = false;
   });
-  return {w:w, l:l, pend:pend, rate:(w+l) ? w/(w+l) : null, perMkt:perMkt, sessions:(sessions||[]).length};
-}
-function sessStats(s){ return computeStats([s]); }
-
-/* ============ SLIP (cap 3.0) ============ */
-function buildSlip(picks){
-  var ps = (picks || []).slice().sort(function(a,b){ return b.final - a.final; });
-  var legs = [], tot = 1, used = {};
-  ps.forEach(function(p){
-    if(used[p.mid]) return;
-    if(tot * p.odds <= 3.0){ legs.push(p); tot *= p.odds; used[p.mid] = 1; }
-  });
-  return {legs:legs, total:tot};
-}
-function slipText(s){
-  var b = buildSlip(s.picks);
-  var L = ["96TH PREDICTIONS — BET SLIP", s.date, ""];
-  b.legs.forEach(function(p, i){ L.push((i+1) + ". " + p.match + " | " + p.market + " | " + p.selection + " | @" + p.odds.toFixed(2)); });
-  L.push("", "TOTAL ODDS: " + b.total.toFixed(2));
-  return L.join("\n");
+  if(hasLoss) return "loss";
+  if(allWin) return "win";
+  return "pending";
 }
 
-/* ============ RENDER: TOP ============ */
+/* ============ WIN RATE (day-based, accumulator) ============ */
+function dayBets(rec){
+  return rec.sessions.map(function(s){ return (s.picks && s.picks.length) ? {date:s.date, started_at:s.started_at, picks:s.picks, total:(s.meta&&s.meta.total)||0} : null; })
+    .filter(Boolean).sort(function(a,b){ return (b.started_at||0)-(a.started_at||0); });
+}
+function winRate(rec){
+  var bets = dayBets(rec);
+  var w=0,l=0,pend=0, legsSum=0, totSum=0;
+  bets.forEach(function(x){
+    var r = dayResult(x.picks);
+    if(r==="win") w++; else if(r==="loss") l++; else if(r==="pending") pend++;
+    legsSum += x.picks.length; totSum += (x.total || 0);
+  });
+  var streak=0, stype=null;
+  bets.forEach(function(x){
+    var r = dayResult(x.picks);
+    if(r==="win"){ if(stype!=="loss") streak++; stype="win"; }
+    else if(r==="loss"){ if(stype!=="win") streak++; stype="loss"; }
+  });
+  return {w:w,l:l,pend:pend,rate:(w+l)?w/(w+l):null,streak:streak,streakType:stype,days:bets.length,
+          avgLegs:bets.length?legsSum/bets.length:0, avgTotal:bets.length?totSum/bets.length:0};
+}
+
+/* ============ RENDER TOP ============ */
 function renderTopbar(){
-  $("datechip").textContent = localDateStr().slice(8,10)+"/"+localDateStr().slice(5,7)+"/"+localDateStr().slice(2,4);
+  var d = localDateStr();
+  $("datechip").textContent = d.slice(8,10)+"/"+d.slice(5,7)+"/"+d.slice(2,4);
 }
 function renderLiveChip(){
   var el = $("livechip"), tx = $("livetx");
@@ -461,179 +465,115 @@ function renderLiveChip(){
   else if(LIVE.state === "offline"){ el.className = "lv"; tx.textContent = "OFFLINE"; }
   else { el.className = "lv"; tx.textContent = "INAFUNGA"; }
 }
+function comboStatusChip(r){
+  if(r === "win") return '<span class="st win"><svg class="ic"><use href="#i-check"/></svg>COMBO WIN</span>';
+  if(r === "loss") return '<span class="st loss"><svg class="ic"><use href="#i-x"/></svg>COMBO LOSS</span>';
+  if(r === "void") return '<span class="st void">VOID</span>';
+  return '<span class="st pend">INAPOKELA</span>';
+}
 
-/* ============ RENDER: TODAY ============ */
-function statusChip(p){
-  if(p.status === "win") return '<span class="st win"><svg class="ic"><use href="#i-check"/></svg>WIN</span>';
-  if(p.status === "loss") return '<span class="st loss"><svg class="ic"><use href="#i-x"/></svg>LOSS</span>';
-  if(p.kickoff < Date.now() - 90*60000) return '<span class="st pend">INAPOKELA</span>';
-  return "";
-}
-function flagTag(p){
-  if(p.flag === "ok") return '<span class="fok">HISTORIA INATHIBITISHA</span>';
-  if(p.flag === "warn") return '<span class="fwarn">HISTORIA INAPINGANA</span>';
-  return '<span class="fmid">HISTORIA SAWA</span>';
-}
-function pickCard(p){
-  return '<div class="pick card">' +
-    '<div class="pick-top">' +
-      '<div class="pick-time"><b>' + fmtT(p.kickoff) + '</b><span>' + dayLabel(p.kickoff) + '</span></div>' +
-      '<div class="pick-match"><b>' + esc(p.match) + '</b><span>' + esc(p.comp) + '</span></div>' +
-      '<div class="pick-odds"><b>' + p.odds.toFixed(2) + '</b><span>ODDS</span></div>' +
-    '</div>' +
-    '<div class="pick-mkt"><span class="mktchip">' + esc(p.market) + '</span><span class="mktsub">' + esc(p.selection) + '</span>' + statusChip(p) + '</div>' +
-    '<div class="pick-conf"><div class="bar"><div class="fill" style="width:' + Math.round(p.final*100) + '%"></div></div><b>' + Math.round(p.final*100) + '%</b><span class="sub2">UHAKIKA</span></div>' +
-    '<div class="pick-src">' + (p.src||[]).map(function(s){ return '<span class="srcchip">' + esc(s) + '</span>'; }).join("") + '</div>' +
-    '<div class="pick-hist">' + flagTag(p) + (p.h2h ? '<span class="sub2">H2H: ' + esc(p.h2h) + '</span>' : '') + '</div>' +
-  '</div>';
-}
+/* ============ RENDER: TODAY (combo) ============ */
 function renderToday(){
   var s = getTodaySession() || ensureTodaySession();
-  var now = Date.now();
   var h = [];
-  var upcoming = s.picks.filter(function(p){ return p.kickoff + 30*60000 > now; });
-  h.push('<div class="sec-h"><b>PICKS ZA LEO</b><span class="cnt">' + s.picks.length + ' · vyanzo 4+ · uhakika 70%+</span></div>');
-  if(!s.picks.length){
-    h.push('<div class="empty">Hakuna picks zilizopita kiwango kwa siku hii.</div>');
+  var legs = s.picks || [];
+  var total = (s.meta && s.meta.total) || legs.reduce(function(a,p){ return a*p.odds; }, 1);
+  var hitProb = legs.reduce(function(a,p){ return a*p.final; }, 1);
+  var res = dayResult(legs);
+  h.push('<div class="sec-h"><b>BET YA LEO</b><span class="cnt">accumulator ya siku · total odds &le; ' + ODDS_CAP.toFixed(1) + '</span></div>');
+  if(!legs.length){
+    h.push('<div class="empty">Hakuna picks zilizopita kiwango kwa siku hii.<br><span class="sub2">consensus 4+ vyanzo · uhakika 70%+ · odds &le; ' + ODDS_CAP.toFixed(1) + '</span></div>');
   } else {
-    h.push('<div class="pickgrid">' + s.picks.map(pickCard).join("") + '</div>');
-  }
-  /* slip */
-  if(upcoming.length){
-    var b = buildSlip(upcoming);
-    if(b.legs.length){
-      h.push('<div class="sec-h"><b>BET SLIP</b><span class="cnt">total odds ' + b.total.toFixed(2) + ' · cap 3.0 · leg 1 kwa mechi</span></div>');
-      h.push('<div class="card slip">');
-      b.legs.forEach(function(p, i){
-        h.push('<div class="slip-leg"><div><b>' + (i+1) + '. ' + esc(p.match) + '</b><div class="mk">' + esc(p.market) + '</div></div><b class="po">' + p.odds.toFixed(2) + '</b></div>');
-      });
-      h.push('<div class="slip-total"><div><span class="sub2">TOTAL ODDS (' + b.legs.length + ' LEGS)</span><div class="tot">' + b.total.toFixed(2) + '</div></div>' +
-        '<div style="text-align:right"><span class="sub2">STAKE 10,000 TZS</span><div style="font-weight:800;font-size:14px">≈ ' + Math.round(10000*b.total).toLocaleString() + ' TZS</div></div>' +
-        '<button class="copybtn" id="btn-copyslip"><svg class="ic"><use href="#i-copy"/></svg>COPY SLIP</button></div></div>');
-    }
-  }
-  /* near (3 sources) — kutoka DATA */
-  var near = [];
-  (DATA.matches || []).forEach(function(m){
-    if((m.picks||[]).length) return;
-    (m.near||[]).forEach(function(p){
-      near.push({m:m, p:p});
+    h.push('<div class="hero">');
+    h.push('<span class="hero-tag"><svg class="ic"><use href="#i-zap"/></svg>ACCUMULATOR · ' + legs.length + ' LEGS · 1/MECHI</span>');
+    h.push('<div class="hero-grid">' +
+      '<div class="hg"><div class="l">TOTAL ODDS</div><div class="v">' + total.toFixed(2) + '</div><div class="sub2" style="margin-top:6px">KAP: ' + ODDS_CAP.toFixed(1) + '</div></div>' +
+      '<div class="hg"><div class="l">MWEZEKANO WA KUKITA (makadirio)</div><div class="v pct">' + Math.round(hitProb*100) + '%</div>' +
+      '<div class="bar"><div class="fill" style="width:' + Math.round(hitProb*100) + '%"></div></div></div></div>');
+    h.push('<div class="legs">');
+    legs.forEach(function(p, i){
+      h.push('<div class="leg"><span class="ln">' + (i+1) + '</span>' +
+        '<div class="li"><b>' + esc(p.match) + '</b><span>' + esc(p.market) + ' — ' + esc(p.selection) + '</span></div>' +
+        '<div class="lo"><div class="o">' + p.odds.toFixed(2) + '</div><div class="c">' + Math.round(p.final*100) + '% · ' + p.n + ' vyanzo</div></div></div>');
     });
-  });
-  near.sort(function(a,b){ return b.p.final - a.p.final; });
-  if(near.length){
-    h.push('<details class="dtl"><summary><svg class="ic"><use href="#i-cal"/></svg>PICKS ZA WAHISIBI 3 (HAKUPIPI KIWANGO CHA 4)</summary>');
-    near.forEach(function(r){
-      h.push('<div class="dtl-row"><span><b>' + esc(r.m.home + " – " + r.m.away) + '</b> · ' + esc(r.p.market) + ' <span class="sub2">@' + r.p.odds.toFixed(2) + ' · ' + Math.round(r.p.final*100) + '%</span></span></div>');
-    });
-    h.push('</details>');
+    h.push('</div>');
+    /* sources ya combo */
+    var srcs = {};
+    legs.forEach(function(p){ (p.src||[]).forEach(function(x){ srcs[x]=1; }); });
+    h.push('<div class="hero-src">' + Object.keys(srcs).map(function(x){ return '<span class="srcchip">' + esc(x) + '</span>'; }).join("") + '</div>');
+    h.push('<div class="hero-status"><span class="sub2">ZOTE LAZIMA ZIKITE · MATOKEO YANAHIFADHIWA KWA SIKU IKIPINDUKA</span>' + comboStatusChip(res) + '</div>');
+    h.push('</div>');
   }
-  /* matches bila pick */
-  var noPick = (DATA.matches||[]).filter(function(m){ return !(m.picks||[]).length && !(m.near||[]).length; });
-  if(noPick.length){
-    h.push('<details class="dtl"><summary><svg class="ic"><use href="#i-cal"/></svg>MECHI ISIKO NAO PICK YA SIKU HIYI</summary>');
-    h.push('<div class="nochips">' + noPick.map(function(m){
-      return '<span class="nochip"><b>' + esc(m.home + " – " + m.away) + '</b> · ' + dayLabel(m.kickoff) + ' ' + fmtT(m.kickoff) + '</span>';
-    }).join("") + '</div></details>');
-  }
-  /* zimezuiliwa kwa muda */
-  var gone = (DATA.matches||[]).filter(function(m){ return m.kickoff + 30*60000 <= now; });
-  if(gone.length){
-    h.push('<details class="dtl"><summary><svg class="ic"><use href="#i-x"/></svg>ZIMEANZA / ZIMECHEZWA (SMART TIME FILTER) — ' + gone.length + '</summary>');
-    gone.forEach(function(m){
-      var why = m.kickoff < now - 90*60000 ? "Imecheza" : (m.kickoff < now ? "Imeanza" : "Inachezwa / inaanza");
-      h.push('<div class="dtl-row"><span><b>' + esc(m.home + " – " + m.away) + '</b> · ' + fmtT(m.kickoff) + '</span><span class="why">' + why + '</span></div>');
+  /* others */
+  var others = (s.others || []);
+  if(others.length){
+    h.push('<details class="dtl"><summary><svg class="ic"><use href="#i-layers"/></svg>PICKS NYINGINE ZILIZOPITA KIWANGO (ZILIZOACHWA) — ' + others.length + '</summary>');
+    others.forEach(function(p){
+      h.push('<div class="dtl-row"><span><b>' + esc(p.match) + '</b> <span class="sub2">' + esc(p.market) + '</span></span>' +
+        '<span style="display:flex;gap:9px;align-items:center"><span class="pc">' + Math.round(p.final*100) + '%</span><span class="po">' + p.odds.toFixed(2) + '</span></span></div>');
     });
     h.push('</details>');
   }
   h.push('<p class="foot">DATA: ' + (LIVE.state === "live" ? "LIVE · " + (LIVE.at||"sasa") : "OFFLINE · EMBEDDED") +
-    ' · VYANZO: ' + esc((DATA.sources||[]).join(" · ")) +
-    ' · ODDS ZA DC / O1.5 / U3.5 NI MAKADIRIO · UCHEZE KWA UHAKIKA</p>');
+    ' · RESEARCH: CONSENSUS 5 VYANZO + FORM + H2H + QUALITY · 1 ACCUMULATOR KWA SIKU · UCHEZE KWA UHAKIKA</p>');
   $("tab-today").innerHTML = h.join("");
-  var cs = $("btn-copyslip");
-  if(cs) cs.addEventListener("click", function(){ copyText(slipText(s)); });
 }
 
-/* ============ RENDER: HISTORY ============ */
+/* ============ RENDER: HISTORY (win rate) ============ */
 function renderHistory(){
   var rec = loadRecords();
-  var st = computeStats(rec.sessions);
+  var st = winRate(rec);
   var h = [];
-  h.push('<div class="sec-h"><b>HISTORIA</b><span class="cnt">records zote · zinajijaza yenyewe</span></div>');
-  h.push('<div class="stats">');
-  h.push('<div class="stat"><div class="v gold">' + (st.rate != null ? Math.round(st.rate*100) + "%" : "—") + '</div><div class="l">WIN RATE</div></div>');
-  h.push('<div class="stat"><div class="v grn">' + st.w + '</div><div class="l">WINS</div></div>');
-  h.push('<div class="stat"><div class="v red">' + st.l + '</div><div class="l">LOSSES</div></div>');
-  h.push('<div class="stat"><div class="v amb">' + st.pend + '</div><div class="l">ZINAPOKELA</div></div>');
-  h.push('<div class="stat"><div class="v">' + st.sessions + '</div><div class="l">RECORDS</div></div>');
-  h.push('</div>');
-  var mkt = Object.keys(st.perMkt);
-  if(mkt.length){
-    h.push('<div class="mktstats">' + mkt.map(function(k){
-      var v = st.perMkt[k], d = v.w + v.l;
-      return '<span class="mktstat"><b>' + esc(k) + '</b> · ' + (d ? Math.round(v.w/d*100) + "% (" + v.w + "W-" + v.l + "L)" : "haija timua") + '</span>';
-    }).join("") + '</div>');
+  h.push('<div class="sec-h"><b>WIN RATE ANALYSIS</b><span class="cnt">1 accumulator kwa siku · zote zikite = WIN</span></div>');
+  h.push('<div class="wr-hero">');
+  h.push('<div class="big">' + (st.rate != null ? Math.round(st.rate*100) + "%" : "—") + '</div>');
+  h.push('<div class="lbl">WINNING RATE</div>');
+  if(st.streak) h.push('<div class="subnote">Streak sasa: ' + st.streak + ' ' + (st.streakType === "win" ? "WINS" : "LOSSES") + '</div>');
+  else h.push('<div class="subnote">' + st.days + ' siku zilizorekodiwa</div>');
+  h.push('<div class="wr-grid">');
+  h.push('<div class="wr-cell"><div class="v grn">' + st.w + '</div><div class="l">WINS</div></div>');
+  h.push('<div class="wr-cell"><div class="v red">' + st.l + '</div><div class="l">LOSSES</div></div>');
+  h.push('<div class="wr-cell"><div class="v amb">' + st.pend + '</div><div class="l">ZINAPOKELA</div></div>');
+  h.push('<div class="wr-cell"><div class="v gold">' + st.days + '</div><div class="l">RECORDS</div></div>');
+  h.push('<div class="wr-cell"><div class="v">' + (st.avgLegs ? st.avgLegs.toFixed(1) : "—") + '</div><div class="l">AVG LEGS</div></div>');
+  h.push('<div class="wr-cell"><div class="v">' + (st.avgTotal ? st.avgTotal.toFixed(2) : "—") + '</div><div class="l">AVG ODDS</div></div>');
+  h.push('</div></div>');
+  var days = dayBets(rec);
+  if(!days.length){
+    h.push('<div class="empty" style="margin-top:14px">Hakuna records bado. Siku ya kwanza itajengwa kiotomatiki.</div>');
   }
-  var ss = rec.sessions.slice().sort(function(a,b){ return (b.started_at||0) - (a.started_at||0); });
-  if(!ss.length){
-    h.push('<div class="empty" style="margin-top:14px">Hakuna records bado.</div>');
-  }
-  ss.forEach(function(s, idx){
-    var s2 = sessStats(s);
-    var cls = s2.rate == null ? "amb" : (s2.rate >= 0.5 ? "grn" : "red");
-    h.push('<details class="card sess" ' + (idx === 0 ? "open" : "") + ' data-sid="' + esc(s.id) + '">');
-    h.push('<summary><div class="sess-date"><b>' + sessDateLabel(s) + ' · ' + fmtT(s.started_at) + '</b><span>' + s.picks.length + ' PICKS · ' + esc(s.date) + '</span></div>' +
-      '<div class="sess-wl ' + cls + '">' + s2.w + 'W · ' + s2.l + 'L' + (s2.pend ? ' · ' + s2.pend + 'P' : '') + '</div></summary>');
-    h.push('<div class="sess-body">');
-    var byMid = {}; var order = [];
-    s.picks.forEach(function(p){
-      if(!byMid[p.mid]){ byMid[p.mid] = {match:p.match, comp:p.comp, kickoff:p.kickoff, score:p.score, picks:[]}; order.push(p.mid); }
-      byMid[p.mid].picks.push(p);
+  days.forEach(function(x, idx){
+    var r = dayResult(x.picks);
+    var rchip = r === "win" ? '<span class="st win"><svg class="ic"><use href="#i-check"/></svg>WIN</span>'
+      : r === "loss" ? '<span class="st loss"><svg class="ic"><use href="#i-x"/></svg>LOSS</span>'
+      : r === "void" ? '<span class="st void">VOID</span>'
+      : '<span class="st pend">INAPOKELA</span>';
+    h.push('<div class="day">');
+    h.push('<div class="day-h" data-open="' + idx + '"><div class="d"><b>' + x.picks.length + ' LEGS · TOTAL ' + (x.total ? x.total.toFixed(2) : "—") + '</b>' +
+      '<span>' + sessDateLabel({date:x.date}) + ' · ' + (x.picks[0] ? esc(x.picks[0].match) : "") + (x.picks.length>1 ? ' +' + (x.picks.length-1) : '') + '</span></div>' + rchip + '</div>');
+    h.push('<div class="day-b" style="display:' + (idx===0?'block':'none') + '" data-body="' + idx + '">');
+    x.picks.forEach(function(p){
+      var pkey = p.mid + "|" + p.market;
+      h.push('<div class="legrow"><span style="flex:1;min-width:0"><span class="pm">' + esc(p.match) + '</span><br>' +
+        '<span class="ps">' + esc(p.market) + (p.score ? ' · <span class="sc">' + esc(p.score) + '</span>' : '') + (p.auto ? ' <span class="auto-tag">AUTO</span>' : '') + '</span></span>' +
+        '<span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">' +
+        '<span class="po">' + p.odds.toFixed(2) + '</span> ' +
+        '<span class="ovr">' +
+          '<button class="ov" data-mode="w" data-date="' + esc(x.date) + '" data-p="' + esc(pkey) + '"' + (p.status==="win"?' class="on-w"':'') + '>W</button>' +
+          '<button class="ov" data-mode="l" data-date="' + esc(x.date) + '" data-p="' + esc(pkey) + '"' + (p.status==="loss"?' class="on-l"':'') + '>L</button>' +
+          '<button class="ov" data-mode="v" data-date="' + esc(x.date) + '" data-p="' + esc(pkey) + '"' + (p.status==="void"?' class="on-v"':'') + '>V</button>' +
+        '</span></span></div>');
+      /* score input per leg */
+      h.push('<div class="scorein" style="margin-top:8px"><input data-date="' + esc(x.date) + '" data-mid="' + esc(p.mid) + '" data-mkt="' + esc(p.market) + '" value="' + esc(p.score||"") + '" placeholder="score h-a" inputmode="numeric">' +
+        '<button class="scorebtn" data-date="' + esc(x.date) + '" data-mid="' + esc(p.mid) + '" data-mkt="' + esc(p.market) + '">FUNGA</button></div>');
     });
-    order.forEach(function(mid){
-      var g = byMid[mid];
-      h.push('<div class="matchrow">');
-      h.push('<div class="matchrow-head"><div><b>' + esc(g.match) + '</b><span class="sub2">' + esc(g.comp) + ' · ' + fmtT(g.kickoff) + '</span></div>' +
-        '<div class="scorein"><input data-sid="' + esc(s.id) + '" data-mid="' + esc(mid) + '" value="' + esc(g.score || "") + '" placeholder="h-a" inputmode="numeric">' +
-        '<button class="scorebtn" data-sid="' + esc(s.id) + '" data-mid="' + esc(mid) + '">FUNGA</button></div></div>');
-      g.picks.forEach(function(p){
-        var pkey = mid + "|" + p.market;
-        h.push('<div class="prow"><span><span class="pm">' + esc(p.market) + '</span> <span class="ps">— ' + esc(p.selection) + '</span></span>' +
-          '<span style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
-          (p.auto ? '<span class="auto-tag">AUTO</span>' : '') +
-          statusChip(p) +
-          '<span class="po">' + p.odds.toFixed(2) + '</span>' +
-          '<span class="ovr">' +
-            '<button class="ov" data-mode="w" data-sid="' + esc(s.id) + '" data-p="' + esc(pkey) + '"' + (p.status==="win"?' class="on-w"':'') + '>W</button>' +
-            '<button class="ov" data-mode="l" data-sid="' + esc(s.id) + '" data-p="' + esc(pkey) + '"' + (p.status==="loss"?' class="on-l"':'') + '>L</button>' +
-            '<button class="ov" data-mode="v" data-sid="' + esc(s.id) + '" data-p="' + esc(pkey) + '"' + (p.status==="void"?' class="on-v"':'') + '>V</button>' +
-          '</span></span></div>');
-      });
-      h.push('</div>');
-    });
-    h.push('</div></details>');
+    h.push('</div></div></div>');
   });
-  h.push('<p class="foot">RECORDS ZIMEHIFADHIWA KENYE KIFAA HII + SERVER (BACKUP) · SCORING: ODDS YA WAKATI WA RUN · UCHEZE KWA UHAKIKA</p>');
+  h.push('<p class="foot">RECORDS: KENYE KIFAA HII + SERVER (BACKUP) · KILA SIKU = ACCUMULATOR 1 · MATOKEO YANAHIFADHIWA WAHISIBI KWA SIKU IKIPINDUKA · UCHEZE KWA UHAKIKA</p>');
   $("tab-history").innerHTML = h.join("");
 }
 
 function renderAll(){ renderTopbar(); renderLiveChip(); renderToday(); renderHistory(); }
-
-/* ============ COPY ============ */
-function copyText(txt){
-  function done(){ toast("SLIP IMENAKILIWA"); }
-  function fallback(){
-    var ta = document.createElement("textarea");
-    ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
-    document.body.appendChild(ta); ta.select();
-    try{ document.execCommand("copy"); done(); }catch(e){ prompt("Nakili manually:", txt); }
-    document.body.removeChild(ta);
-  }
-  try{
-    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done, fallback); }
-    else fallback();
-  }catch(e){ fallback(); }
-}
 
 /* ============ AUTO-SYNC ============ */
 var lastPicksPoll = 0;
@@ -653,14 +593,13 @@ function autoSync(){
     fetchLive().then(function(d){
       if(d && !document.hidden){
         ensureTodaySession();
-        if(curTab === "today") renderToday();
+        if(curTab === "today") renderToday(); else renderHistory();
       }
     });
   }
 }
 function startAutoSync(){ setInterval(autoSync, 60000); }
 
-/* ============ REFRESH ============ */
 function refreshAll(){
   toast("INARUDISHA DATA...");
   fetchLive().then(function(d){
@@ -687,21 +626,18 @@ function wire(){
   $("tb-history").addEventListener("click", function(){ switchTab("history"); });
   $("btn-refresh").addEventListener("click", refreshAll);
   $("livechip").addEventListener("click", function(){ if(LIVE.state === "offline") refreshAll(); });
-  /* history: overrides + score inputs (event delegation) */
   $("tab-history").addEventListener("click", function(ev){
     var ov = ev.target.closest("button.ov");
     if(ov){
-      var sid = ov.getAttribute("data-sid"), pkey = ov.getAttribute("data-p"), mode = ov.getAttribute("data-mode");
+      var date = ov.getAttribute("data-date"), pkey = ov.getAttribute("data-p"), mode = ov.getAttribute("data-mode");
       var rec = loadRecords();
-      var s = rec.sessions.filter(function(x){ return x.id === sid; })[0];
+      var s = rec.sessions.filter(function(x){ return x.date === date; })[0];
       if(s){
         var p = s.picks.filter(function(x){ return (x.mid + "|" + x.market) === pkey; })[0];
         if(p){
-          p.manual = true;
-          p.status = mode === "w" ? "win" : (mode === "l" ? "loss" : "void");
-          p.auto = false;
+          p.manual = true; p.status = mode === "w" ? "win" : (mode === "l" ? "loss" : "void"); p.auto = false;
           saveRecords(rec);
-          if(LIVE.state === "live"){ apiPost("/api/sessions/" + sid + "/override", {pickKey:pkey, status:p.status}).catch(function(){}); }
+          if(LIVE.state === "live"){ apiPost("/api/sessions/" + s.id + "/override",{pickKey:pkey, status:p.status}).catch(function(){}); }
           renderHistory();
         }
       }
@@ -709,62 +645,56 @@ function wire(){
     }
     var sb = ev.target.closest("button.scorebtn");
     if(sb){
-      var sid2 = sb.getAttribute("data-sid"), mid = sb.getAttribute("data-mid");
-      var inp = document.querySelector('input[data-sid="' + sid2 + '"][data-mid="' + mid + '"]');
+      var date2 = sb.getAttribute("data-date"), mid = sb.getAttribute("data-mid"), mkt = sb.getAttribute("data-mkt");
+      var inp = document.querySelector('input[data-date="' + date2 + '"][data-mid="' + mid + '"][data-mkt="' + mkt + '"]');
       var v = (inp.value || "").trim();
       var mm = v.match(/^(\d{1,2})\s*[-:]\s*(\d{1,2})$/);
       if(!mm){ inp.classList.add("bad"); return; }
       inp.classList.remove("bad");
       var rec2 = loadRecords();
-      var s2 = rec2.sessions.filter(function(x){ return x.id === sid2; })[0];
+      var s2 = rec2.sessions.filter(function(x){ return x.date === date2; })[0];
       if(s2){
         s2.picks.forEach(function(p){
-          if(p.mid === mid){
-            p.score = v;
-            if(!p.manual){ p.status = evalPick(p.type, +mm[1], +mm[2]); p.auto = false; }
-          }
+          if(p.mid === mid && p.market === mkt){ p.score = v; if(!p.manual){ p.status = evalPick(p.type, +mm[1], +mm[2]); p.auto = false; } }
         });
         saveRecords(rec2);
-        if(LIVE.state === "live"){ apiPost("/api/sessions/" + sid2 + "/score", {mid:mid, score:v}).catch(function(){}); }
+        if(LIVE.state === "live"){ apiPost("/api/sessions/" + s2.id + "/score",{mid:mid, score:v}).catch(function(){}); }
         renderHistory();
         toast("SCORE " + v + " IMEFUNGWA");
       }
+      return;
+    }
+    var dh = ev.target.closest(".day-h");
+    if(dh){
+      var idx = dh.getAttribute("data-open");
+      var body = document.querySelector('[data-body="' + idx + '"]');
+      if(body) body.style.display = (body.style.display === "none" || body.style.display === "") ? "block" : "none";
     }
   });
 }
 
 /* ============ BOOT ============ */
+function enterApp(){
+  if(enterApp._done) return;
+  enterApp._done = true;
+  $("splash").classList.add("gone");
+  setTimeout(function(){ $("splash").classList.add("hidden"); }, 550);
+  $("app").classList.remove("hidden");
+  ensureTodaySession();
+  renderAll();
+  wire();
+  lastPicksPoll = Date.now();
+  startAutoSync();
+}
 function boot(){
   renderTopbar();
   var t0 = Date.now();
   fetchLive().then(function(d){
     setLiveFrom(d);
     var wait = Math.max(0, 1900 - (Date.now() - t0));
-    setTimeout(function(){
-      $("splash").classList.add("gone");
-      setTimeout(function(){ $("splash").classList.add("hidden"); }, 550);
-      $("app").classList.remove("hidden");
-      ensureTodaySession();
-      renderAll();
-      wire();
-      lastPicksPoll = Date.now();
-      startAutoSync();
-    }, wait);
+    setTimeout(enterApp, wait);
   });
-  /* fallback: kama fetch itokaa (kifaa hakuna net) — splash ipote baada ya 6s */
-  setTimeout(function(){
-    if(!$("splash").classList.contains("gone")){
-      setLiveFrom(null);
-      $("splash").classList.add("gone");
-      setTimeout(function(){ $("splash").classList.add("hidden"); }, 550);
-      $("app").classList.remove("hidden");
-      ensureTodaySession();
-      renderAll();
-      wire();
-      lastPicksPoll = Date.now();
-      startAutoSync();
-    }
-  }, 6000);
+  setTimeout(function(){ setLiveFrom(null); enterApp(); }, 6000);
 }
 boot();
 })();
