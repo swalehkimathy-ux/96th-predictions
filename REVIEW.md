@@ -213,3 +213,59 @@ Ilikitwa ndani ya `do_GET` bila try/except — kosa lolote lingekuwa 500 kwa req
   resbar bila NaN, LIVE acc 1.47 + onyo, fixtures 17 + badges, autoScorePicks ilipiga
   /api/score, score `1-6` imejaa yenyewe (status win, AUTO), manual W imehifadhiwa,
   history baada ya tab switch: "2/2 LEGS ZIMEITA" + AUTO tag + delete + backup label.
+
+---
+
+# v7.5 — Fixtures ndani ya gold table + SAFISHA HISTORY + kickoff UTC (27/08/2026, usiku)
+
+## Requests za user (screenshot + ujumbe)
+
+1. **Fixtures list iende NDANI ya gold table (BET YA LEO)** — kila mechi ionyeshe total odds
+   + **suggested betting tip** (market @ odds + confidence) ya mechi hiyo.
+2. **History: safisha entries zote** — user aliona mechi za 25/08 (zilizobaki) — pata button
+   ya "SAFISHA ZOTE". Tafsiri ya user: tips za leo ziwe kwenye Today, zisoge kwenye History
+   siku ikipinduka, kesho ije na list mpya.
+3. **(Discovered) Kickoff times zilikuwa "12:00 AM"** — bug ya timezone.
+
+## Root cause — kickoff "12:00 AM"
+
+`_parse_wc_league` ilipokea **display time** ya page ya WinComparator (mfano "27 August - 11:00").
+Hii ni saa **kwa TZ ya viewer** (sandbox ilipata PDT, production/Render ilipata EDT) — hivyo
+`_wc_to_utc_ms` (offset imara) ilikuwa sahihi kwa TZ moja tu. Production ilipokea 14:00 (EDT)
+badala ya 11:00 (PDT) → kickoff ilikuwa 21:00 UTC → kwa user TZ+3 ilionekana "12:00 AM".
+
+**Fix:** WC inapakia **schema.org JSON-LD** (SportsEvent) kwenye kila league page ambayo ina
+`startDate` **UTC** (sifa halisi), slug canonical, na homeTeam/awayTeam. Parser sasa unatumia
+JSON-LD kwanza (`_parse_wc_league_jsonld`), display time ni fallback tu. Kickoff iko UTC
+kamili — hushukumiwi na TZ ya viewer. ESPN scoreboard (403 kwa datacenter IPs) haikutumika.
+
+## Marekebisho
+
+- **Backend** `live_research.py`:
+  - `_parse_wc_league_jsonld()` — schema.org SportsEvent: slug + `startDate` (UTC ISO) + names rasmi.
+  - `_parse_wc_league()` — JSON-LD kwanza, display fallback.
+  - `discover_matches()` — hai-override kickoff uliopewa (JSON-LD tayari umeleta UTC).
+- **Frontend** `template.html`:
+  - **Fixtures ZINDANI ya gold table** — `renderFixturesInner()` inatoa HTML inayoingizwa ndani
+    ya `.hero` (na pia katika empty-state). Kila mechi: saa, home–away, league, + **tip**
+    (`market @ odds` + `conf%`) ikiwa iko kwenye picks, au "hakuna tip" kikiwa si leg.
+  - **COMBO YA LEO footer** (`.fx-total`) — total odds ya combo + n legs + kanuni 1.6–3.0.
+  - **SAFISHA ZOTE** button (`.clear-hist`) kwenye tab ya History — confirm → DELETE kila
+    session (best-effort kwa server) + wipe localStorage + `renderToday()` (leo inajirekodiwa
+    upya kutoka combo hai) + `renderHistory()`.
+  - **`loadRecords()` normalization** — picks za zamani (era ya mock) zinaweza kupungua fields
+    (`odds`, `match`, `meta`) — zinafill-up default kwa kuwa na `renderHistory`/`renderToday`
+    zisikose crash (bug iliyoungwa: `p.odds.toFixed` kwa pick isiyo na odds → TypeError).
+  - Imeondolewa: fixtures block salama (`renderFixtures()` / `.fx-wrap` details).
+
+## Test evidence
+
+- **Parser (fresh process):** UEL/UECL/LaLiga kickoff UTC kamili (18:00, 18:30, 19:00 UTC).
+  JSON-LD ina startDate UTC — inalingana na display 11:00 PDT / 14:00 EDT → 18:00 UTC.
+- `/api/picks` (fresh, 27/08 usiku): all_fixtures 11, kickoffs 18:30/18:45/19:00 UTC, ACC 1.27.
+- **Node smoke (TZ=Africa/Dar_es_Salaam)** `smoke75.js` **13/13 PASS**: gold hero, fixtures
+  section ndani ya gold card, kila mechi na tip chip (market @ odds + conf%), "hakuna tip"
+  x10 dimmed, COMBO footer na total 1.27, block ya zamani imeondolewa, SAFISHA button,
+  fixture ya kwanza inionekana **09:30 PM** (TZ+3) — si 12:00 AM, autoScorePicks calls==due.
+- **Clear-all** `clear75.js` **6/6 PASS**: stale 25/08 zimeondolewa, leo inajirekodiwa upya
+  (1 session), DELETE zimepelekwa (stale 2 + leo), today + history zime-render tena.

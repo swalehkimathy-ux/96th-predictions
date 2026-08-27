@@ -142,7 +142,47 @@ def _teams_match(home, away, post_home, post_away):
 
 
 # ---------------- WC discovery ----------------
-def _parse_wc_league(html):
+def _parse_wc_league_jsonld(html):
+    """schema.org SportsEvent (JSON-LD): slug canonical + startDate UTC + names rasmi.
+    Hii ndiyo source ya kweli — display time ya page inaweza kuwa kwa TZ ya viewer."""
+    out = []
+    seen = set()
+    for m in re.finditer(r'<script[^>]*application/ld\+json[^>]*>(.*?)</script>', html, re.S):
+        try:
+            data = json.loads(m.group(1).strip())
+        except Exception:
+            continue
+        events = data if isinstance(data, list) else [data]
+        for ev in events:
+            if not isinstance(ev, dict) or ev.get("@type") != "SportsEvent":
+                continue
+            um = re.search(r"/predictions/([a-z0-9-]+-\d+)/?$", ev.get("url", ""))
+            if not um:
+                continue
+            slug = um.group(1)
+            if slug in seen:
+                continue
+            try:
+                t = datetime.datetime.fromisoformat(ev["startDate"])
+                k = int(t.timestamp() * 1000)
+            except Exception:
+                continue
+            home = ((ev.get("homeTeam") or {}).get("name") or "").strip()
+            away = ((ev.get("awayTeam") or {}).get("name") or "").strip()
+            if not home or not away:
+                nm = ev.get("name", "")
+                if " vs " in nm:
+                    a, b = nm.split(" vs ", 1)
+                    home, away = a.strip(), b.strip()
+            if not home or not away:
+                continue
+            seen.add(slug)
+            out.append({"month": "Jan", "date": 1, "time": "0:00",
+                        "home": home, "away": away, "slug": slug,
+                        "kickoff_utc_ms": k})
+    return out
+
+def _parse_wc_league_display(html):
     out = []
     idxs = [m.start() for m in re.finditer(r'data-navigation-url-value="(/predictions/[a-z0-9-]+-\d+/)"', html)]
     for i, ix in enumerate(idxs):
@@ -160,6 +200,12 @@ def _parse_wc_league(html):
                         "time": dm.group(3) + ":" + dm.group(4),
                         "home": names[0].strip(), "away": names[1].strip(), "slug": slug})
     return out
+
+def _parse_wc_league(html):
+    out = _parse_wc_league_jsonld(html)
+    if out:
+        return out
+    return _parse_wc_league_display(html)
 
 
 def _wc_to_utc_ms(m):
@@ -218,7 +264,8 @@ def discover_matches(day_end_ms=None):
                 ms += res
         seen = {}
         for m in ms:
-            m["kickoff_utc_ms"] = _wc_to_utc_ms(m)
+            if not m.get("kickoff_utc_ms"):  # JSON-LD tayari ilitoa UTC — usiibadilishe
+                m["kickoff_utc_ms"] = _wc_to_utc_ms(m)
             if m["kickoff_utc_ms"] and m["slug"] not in seen:
                 seen[m["slug"]] = m
         ms = list(seen.values())

@@ -153,17 +153,25 @@ b{font-weight:700}
 .bpt-total .item b{display:block;font-size:16px;color:var(--gold2);letter-spacing:0;margin-top:1px}
 .bpt-note{font-size:9.5px;color:var(--dim);letter-spacing:.05em;margin:9px 2px 0;line-height:1.55}
 
-/* fixtures za leo */
-.fx-wrap{margin-top:14px}
-.fxrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line2);font-size:12px}
-.fxrow:last-child{border-bottom:none}
-.fx-t{flex:none;font-size:10.5px;color:var(--gold2);font-weight:700;background:var(--golddim);border-radius:6px;padding:3px 7px;letter-spacing:.03em}
+/* fixtures za leo — NDANI ya gold table */
+.fx-sec{display:flex;gap:8px;align-items:center;margin-top:15px;padding-top:12px;border-top:1px solid rgba(217,168,60,.35);
+  font-size:10px;font-weight:800;letter-spacing:.12em;color:var(--gold2)}
+.fx-sec .ic{width:14px;height:14px}
+.fx-sec-note{font-weight:500;letter-spacing:.02em;color:var(--dim);font-size:9px}
+.fxrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line2);font-size:12px}
+.fx-t{flex:none;font-size:10.5px;color:var(--gold2);font-weight:700;background:var(--golddim);border:1px solid rgba(217,168,60,.35);border-radius:6px;padding:3px 7px;letter-spacing:.03em}
 .fx-m{flex:1;min-width:0}
 .fx-m b{display:block;font-size:12px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fx-m .sub2{font-size:9.5px}
-.fx-pick{flex:none;font-size:10px;color:var(--grn);border:1px solid rgba(47,191,113,.4);background:rgba(47,191,113,.10);border-radius:7px;padding:3px 8px;white-space:nowrap}
+.fx-pick{flex:none;display:flex;gap:6px;align-items:center;font-size:10px;color:var(--grn);border:1px solid rgba(47,191,113,.4);background:rgba(47,191,113,.10);border-radius:7px;padding:3px 8px;white-space:nowrap}
 .fx-pick b{color:var(--grn)}
-.fx-none{flex:none;color:var(--line);font-size:10px}
+.fx-cf{color:var(--dim);font-size:9px}
+.fx-none{flex:none;color:var(--dim);font-size:10px;font-style:italic}
+.fx-total{display:flex;gap:10px;align-items:center;margin-top:12px;background:linear-gradient(135deg,rgba(246,216,126,.16),rgba(217,168,60,.08));
+  border:1px solid rgba(217,168,60,.5);border-radius:11px;padding:9px 13px}
+.fx-total span{font-size:9.5px;font-weight:800;letter-spacing:.12em;color:var(--gold2)}
+.fx-total b{font-size:22px;font-weight:800;color:var(--gold2)}
+.fx-total .sub2{margin-left:auto;text-align:right}
 .manual-tag{font-size:8px;color:var(--dim);letter-spacing:.06em;margin-left:5px}
 
 /* others */
@@ -199,6 +207,9 @@ details.dtl summary .ic{width:14px;height:14px;color:var(--dim)}
 .day-del{flex:none;width:26px;height:26px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center}
 .day-del:hover{color:var(--red);border-color:var(--red)}
 .day-del .ic{width:13px;height:13px}
+.clear-hist{margin-left:10px;flex:none;font-size:8.5px;font-weight:700;letter-spacing:.08em;color:var(--red);
+  background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.35);border-radius:6px;padding:4px 9px;cursor:pointer}
+.clear-hist:active{background:rgba(231,76,60,.18)}
 .day-h .d{flex:1;min-width:0}
 .day-h .d b{display:block;font-size:13px}
 .day-h .d span{font-size:10.5px;color:var(--dim);letter-spacing:.04em;display:block;margin-top:2px}
@@ -316,6 +327,19 @@ function loadRecords(){
       var d = new Date(s.started_at || Date.now());
       s.date = d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
     }
+    /* normalize picks za zamani (era ya mock inaweza kupungua fields) — kila renderer salama */
+    s.picks = (s.picks || []).map(function(p){
+      return {
+        mid: p.mid || "", match: p.match || (p.home ? p.home + " – " + p.away : "Mechi ya zamani"),
+        comp: p.comp || "", kickoff: p.kickoff || 0, type: p.type || "",
+        market: p.market || "—", selection: p.selection || "—",
+        odds: (typeof p.odds === "number" && isFinite(p.odds)) ? p.odds : 0,
+        final: (typeof p.final === "number" && isFinite(p.final)) ? p.final : 0,
+        n: p.n || 0, src: p.src || [], score: p.score || null,
+        status: p.status || "pending", manual: !!p.manual, auto: !!p.auto
+      };
+    });
+    if(!s.meta){ s.meta = { total: 0 }; }
   });
   return r;
 }
@@ -634,23 +658,26 @@ function renderBestPicks(){
   h.push('<p class="bpt-note">KILA PICK IMECHUNGUZWA NA VYANZO 4+ (SOKO 30+ · WC MODEL · FOOTBALLPREDICTIONS · WHISPERS · FOREBET) · CONSENSUS &ge; 70% · PICKS ZA ' + Math.round(ACC_CONF*100) + '%+ NDIO ZINAZOINGIA KUMBO</p>');
   return h;
 }
-/* Fixtures za siku (zote zilizochunguzwa) — zinabadilika kiotomatiki siku ikipinduka */
-function renderFixtures(){
+/* Fixtures za siku (zote zilizochunguzwa) — zinabadilika kiotomatiki siku ikipinduka.
+   Inatoa HTML ya ndani (inarushwa ndani ya gold table ya BET YA LEO). */
+function renderFixturesInner(){
   var fx = (DATA && DATA.all_fixtures) || [];
   if(!fx.length) return "";
   var pickMids = {};
   (DATA.matches || []).forEach(function(m){
-    (m.picks || []).forEach(function(p){ pickMids[m.id] = p; });
+    (m.picks || []).forEach(function(p){ if(!pickMids[m.id]) pickMids[m.id] = p; });
   });
-  var h = ['<details class="dtl fx-wrap" open><summary><svg class="ic"><use href="#i-layers" xlink:href="#i-layers"/></svg>MECHI ZA LEO — ZIMECHUNGUZWA ' + fx.length + '</summary>'];
+  fx.sort(function(a,b){ return (a.kickoff||0) - (b.kickoff||0); });
+  var h = [];
+  h.push('<div class="fx-sec"><svg class="ic"><use href="#i-layers" xlink:href="#i-layers"/></svg>MECHI ZA LEO — ZIMECHUNGUZWA ' + fx.length +
+    '<span class="fx-sec-note">tips zinapatikana kwenye mechi zilizopita vyanzo 4+</span></div>');
   fx.forEach(function(f){
     var pk = pickMids[f.id];
     h.push('<div class="fxrow"><span class="fx-t">' + fmtT(f.kickoff) + '</span>' +
       '<span class="fx-m"><b>' + esc(f.home) + ' – ' + esc(f.away) + '</b><span class="sub2">' + esc(f.comp || "") + '</span></span>' +
-      (pk ? '<span class="fx-pick">' + esc(pk.market) + ' <b>@ ' + pk.odds.toFixed(2) + '</b></span>' : '<span class="fx-none">—</span>') +
+      (pk ? '<span class="fx-pick">' + esc(pk.market) + ' <b>@ ' + pk.odds.toFixed(2) + '</b><span class="fx-cf">' + Math.round(pk.final*100) + '%</span></span>' : '<span class="fx-none">hakuna tip</span>') +
       '</div>');
   });
-  h.push('</details>');
   return h.join("");
 }
 function renderToday(){
@@ -677,9 +704,10 @@ function renderToday(){
   });
   var res = dayResult(view);
   if(!legs.length){
-    h.push('<div class="empty"><b>HAKUNA COMBO LEIO</b>' +
-      'Hakuna picks nyingi za conf &ge; ' + Math.round(ACC_CONF*100) + '% zinazofikia total ' + ODDS_MIN.toFixed(1) + '–' + ODDS_MAX.toFixed(1) + '.<br>' +
-      'Siku nyingi za mid-week huzua combo ndogo — hii ni kanuni, si hatua. Subiri siku inayofuata.</div>');
+    h.push('<div class="hero" style="border-color:var(--line)"><span class="hero-tag" style="background:var(--card);color:var(--sub)">HAKUNA COMBO LEIO</span>' +
+      '<div class="sub2" style="line-height:1.6">Hakuna picks nyingi za conf &ge; ' + Math.round(ACC_CONF*100) + '% zinazofikia total ' + ODDS_MIN.toFixed(1) + '–' + ODDS_MAX.toFixed(1) + '. Siku nyingi za mid-week huzua combo ndogo — hii ni kanuni, si hatua. Tips za kila mechi bado zinaonekana hapa chini.</div>' +
+      renderFixturesInner() +
+      '</div>');
   } else {
     h.push('<div class="hero">');
     h.push('<span class="hero-tag"><svg class="ic"><use href="#i-zap" xlink:href="#i-zap"/></svg>ACCUMULATOR · ' + legs.length + ' LEGS · SIKU ' + dateSw(s.date) + '</span>');
@@ -699,6 +727,9 @@ function renderToday(){
         '<div class="lo"><div class="o">' + p.odds.toFixed(2) + '</div><div class="c">' + Math.round(p.final*100) + '% · ' + p.n + ' vyanzo</div></div>' + st + '</div>');
     });
     h.push('</div>');
+    /* Fixtures za leo ZINDANI ya gold table + total odds ya combo */
+    h.push(renderFixturesInner());
+    h.push('<div class="fx-total"><span>COMBO YA LEO</span><b>' + total.toFixed(2) + '</b><span class="sub2">' + legs.length + ' LEGS · KANUNI ' + ODDS_MIN.toFixed(1) + '–' + ODDS_MAX.toFixed(1) + '</span></div>');
     var srcs = {};
     legs.forEach(function(p){ (p.src||[]).forEach(function(x){ srcs[x]=1; }); });
     h.push('<div class="hero-src">' + Object.keys(srcs).map(function(x){ return '<span class="srcchip">' + esc(x) + '</span>'; }).join("") + '</div>');
@@ -709,7 +740,6 @@ function renderToday(){
     h.push('<div class="hero-status"><span class="sub2">ZOTE LAZIMA ZIKITE · MATOKEO YANAJAA YENYewe (WINCOMPARATOR)</span>' + comboStatusChip(res, false) + '</div>');
     h.push('</div>');
   }
-  h.push(renderFixtures());
   var others = live.others;
   if(others.length){
     h.push('<details class="dtl"><summary><svg class="ic"><use href="#i-layers" xlink:href="#i-layers"/></svg>PICKS ZILIZOACHWA (HAKUZIINGIA KUMBO) — ' + others.length + '</summary>');
@@ -776,7 +806,8 @@ function renderHistory(){
   var rec = loadRecords();
   var st = winRate(rec);
   var h = [];
-  h.push('<div class="sec-h"><b>WIN RATE</b><span class="cnt">1 accumulator kwa siku · zote zikite = WIN</span></div>');
+  h.push('<div class="sec-h"><b>WIN RATE</b><span class="cnt">1 accumulator kwa siku · zote zikite = WIN</span>' +
+    '<button class="clear-hist" id="btn-clear-hist" title="Futa records zote">SAFISHA ZOTE</button></div>');
   h.push('<div class="wr-hero">');
   h.push('<div class="big">' + (st.rate != null ? Math.round(st.rate*100) + "%" : "—") + '</div>');
   h.push('<div class="lbl">WINNING RATE (COMBO)</div>');
@@ -951,6 +982,21 @@ function wire(){
         renderHistory();
         toast("SCORE " + v + " IMEFUNGWA");
       }
+      return;
+    }
+    if(ev.target.closest("#btn-clear-hist")){
+      if(!confirm("SAFISHA HISTORY YOTE?\n\nRecords zote za combos (pamoja na zile za siku za zamani) zitafutwa. Hakurudiki.")) return;
+      var recClear = loadRecords();
+      if(LIVE.state === "live"){
+        (recClear.sessions||[]).forEach(function(s){
+          try{ apiFetch("/api/sessions/" + s.id, {method:"DELETE"}).catch(function(){}); }catch(e){}
+        });
+      }
+      recClear.sessions = [];
+      saveRecords(recClear);
+      renderToday();   /* leo itarekodiwa upya kutoka combo hai */
+      renderHistory();
+      toast("HISTORY IMESAFISHWA");
       return;
     }
     var dd = ev.target.closest("button.day-del");
