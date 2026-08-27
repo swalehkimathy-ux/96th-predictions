@@ -53,6 +53,8 @@ b{font-weight:700}
 @keyframes pulse{50%{opacity:.4}}
 .iconbtn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--gold2);cursor:pointer}
 .iconbtn .ic{width:15px;height:15px}
+.iconbtn.spin .ic{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 #content{padding:16px 16px 0}
 
 /* ============ TABBAR ============ */
@@ -157,7 +159,7 @@ details.dtl summary .ic{width:14px;height:14px;color:var(--dim)}
 </head>
 <body>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<svg width="0" height="0" xmlns:xlink="http://www.w3.org/1999/xlink" style="position:absolute" aria-hidden="true"><defs>
 <symbol id="i-ball" viewBox="0 0 48 48">
   <circle cx="24" cy="24" r="21.5" fill="none" stroke="currentColor" stroke-width="2.4"/>
   <polygon points="24,13.5 33.9,20.7 30.1,32.3 17.9,32.3 14.1,20.7" fill="none" stroke="currentColor" stroke-width="1.9"/>
@@ -176,7 +178,7 @@ details.dtl summary .ic{width:14px;height:14px;color:var(--dim)}
 <div id="splash">
   <svg class="splash-ball" viewBox="0 0 48 48" style="color:#e8c25a">
     <circle cx="24" cy="24" r="22.5" fill="rgba(217,168,60,.08)"/>
-    <use href="#i-ball"/>
+    <use href="#i-ball" xlink:href="#i-ball"/>
     <text x="24" y="27.8" text-anchor="middle" font-size="10.5" font-weight="800" fill="#f6d87e" font-family="inherit" letter-spacing=".5">96th</text>
   </svg>
   <div class="splash-word">PREDICTIONS</div>
@@ -187,13 +189,14 @@ details.dtl summary .ic{width:14px;height:14px;color:var(--dim)}
 <div id="app" class="hidden">
   <header class="topbar">
     <div class="brand">
-      <svg class="ball" viewBox="0 0 48 48" style="color:#e8c25a"><use href="#i-ball"/></svg>
+      <svg class="ball" viewBox="0 0 48 48" style="color:#e8c25a"><use href="#i-ball" xlink:href="#i-ball"/></svg>
       <b>96TH</b><span>PREDICTIONS</span>
     </div>
     <div class="top-right">
+      <span class="chip"><svg class="ic"><use href="#i-cal" xlink:href="#i-cal"/></svg><span id="synctxt">—</span></span>
       <span class="chip" id="datechip"></span>
       <span class="lv" id="livechip"><span class="dot"></span><span id="livetx">INAFUNGA</span></span>
-      <button class="iconbtn" id="btn-refresh" title="Rudisha data"><svg class="ic"><use href="#i-refresh"/></svg></button>
+      <button class="iconbtn" id="btn-refresh" title="Rudisha data"><svg class="ic"><use href="#i-refresh" xlink:href="#i-refresh"/></svg></button>
     </div>
   </header>
   <main id="content">
@@ -201,14 +204,14 @@ details.dtl summary .ic{width:14px;height:14px;color:var(--dim)}
     <section id="tab-history" class="hidden"></section>
   </main>
   <nav class="tabbar">
-    <button id="tb-today" class="active"><svg class="ic"><use href="#i-layers"/></svg><span>BET YA LEO</span></button>
-    <button id="tb-history"><svg class="ic"><use href="#i-hist"/></svg><span>HISTORIA</span></button>
+    <button id="tb-today" class="active"><svg class="ic"><use href="#i-layers" xlink:href="#i-layers"/></svg><span>BET YA LEO</span></button>
+    <button id="tb-history"><svg class="ic"><use href="#i-hist" xlink:href="#i-hist"/></svg><span>HISTORIA</span></button>
   </nav>
 </div>
 
 <div id="toast"></div>
 
-<script id="app-data" type="application/json">{"generated_utc": "27/08/2026 09:00", "generated_ms": 1787821223000, "sources": ["Soko la Bookmakers (30+)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "matches": [{"id": "bham-brentford", "home": "Birmingham City", "away": "Brentford", "comp": "England EFL Cup", "kickoff": 1787691600000, "picks": [{"market": "Double Chance (away au draw)", "selection": "Brentford au draw", "type": "DCX2", "odds": 1.36, "final": 0.736, "avg": 0.748, "hist": 0.714, "n": 5, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 11/15 · A 5/15", "h2h": "4 of last 6 H2H meetings ended in draws"}], "near": [{"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.24, "final": 0.808, "avg": 0.726, "hist": 0.96, "n": 3, "src": ["Soko (30+ BM)", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 11/15 · A 5/15", "h2h": "4 of last 6 H2H meetings ended in draws"}]}, {"id": "lask-celtic", "home": "LASK Linz", "away": "Celtic", "comp": "UCL Qualifying", "kickoff": 1787691600000, "picks": [], "near": []}, {"id": "forest-leeds", "home": "Nottingham Forest", "away": "Leeds United", "comp": "England EFL Cup", "kickoff": 1787691600000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Nottingham Forest au draw", "type": "DC1X", "odds": 1.41, "final": 0.709, "avg": 0.712, "hist": 0.703, "n": 4, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "FootballPredictions"], "flag": "ok", "form": "H — · A —", "h2h": "—"}], "near": [{"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.36, "final": 0.734, "avg": 0.753, "hist": 0.698, "n": 3, "src": ["Soko (30+ BM)", "Forebet", "FootballPredictions"], "flag": "mid", "form": "H — · A —", "h2h": "—"}]}, {"id": "rapid-hearts", "home": "Rapid Wien", "away": "Hearts", "comp": "UECL Qualifying", "kickoff": 1787769900000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Rapid Wien au draw", "type": "DC1X", "odds": 1.27, "final": 0.79, "avg": 0.824, "hist": 0.728, "n": 4, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers"], "flag": "mid", "form": "H 15/15 · A 7/15", "h2h": "—"}], "near": []}, {"id": "newcastle-westbrom", "home": "Newcastle", "away": "West Brom", "comp": "England EFL Cup", "kickoff": 1787773500000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Newcastle au draw", "type": "DC1X", "odds": 1.35, "final": 0.742, "avg": 0.764, "hist": 0.703, "n": 4, "src": ["Soko (30+ BM)", "WinComparator", "Whispers", "FootballPredictions"], "flag": "mid", "form": "H — · A —", "h2h": "First meeting since a 0-0 Premier League draw in 2021"}], "near": []}, {"id": "bradford-burnley", "home": "Bradford City", "away": "Burnley", "comp": "England EFL Cup", "kickoff": 1787777100000, "picks": [{"market": "Under 3.5 goals", "selection": "Magoli 3- pekee", "type": "U35", "odds": 1.26, "final": 0.792, "avg": 0.792, "hist": 0.791, "n": 4, "src": ["Soko (30+ BM)", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H — · A —", "h2h": "—"}], "near": []}, {"id": "tottenham-charlton", "home": "Tottenham", "away": "Charlton", "comp": "England EFL Cup", "kickoff": 1787777100000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Tottenham au draw", "type": "DC1X", "odds": 1.3, "final": 0.768, "avg": 0.787, "hist": 0.733, "n": 5, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "flag": "mid", "form": "H — · A —", "h2h": "Spurs won the previous 5 H2Hs — but the last was in 2011 (stale)"}], "near": [{"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.16, "final": 0.861, "avg": 0.897, "hist": 0.796, "n": 3, "src": ["Soko (30+ BM)", "Forebet", "FootballPredictions"], "flag": "mid", "form": "H — · A —", "h2h": "Spurs won the previous 5 H2Hs — but the last was in 2011 (stale)"}]}, {"id": "aek-levski", "home": "AEK Athens", "away": "Levski Sofia", "comp": "UCL Qualifying", "kickoff": 1787778000000, "picks": [], "near": [{"market": "Under 3.5 goals", "selection": "Magoli 3- pekee", "type": "U35", "odds": 1.29, "final": 0.776, "avg": 0.714, "hist": 0.891, "n": 3, "src": ["Soko (30+ BM)", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 11/15 · A 13/15", "h2h": "No previous meetings (new tie)"}, {"market": "Double Chance (home au draw)", "selection": "AEK Athens au draw", "type": "DC1X", "odds": 1.37, "final": 0.732, "avg": 0.768, "hist": 0.664, "n": 3, "src": ["Soko (30+ BM)", "WinComparator", "Forebet"], "flag": "mid", "form": "H 11/15 · A 13/15", "h2h": "No previous meetings (new tie)"}]}, {"id": "celje-slovan", "home": "Celje", "away": "Slovan Bratislava", "comp": "UECL Qualifying", "kickoff": 1787778000000, "picks": [], "near": []}, {"id": "lyon-fenerbahce", "home": "Lyon", "away": "Fenerbahce", "comp": "UCL Qualifying", "kickoff": 1787778000000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Lyon au draw", "type": "DC1X", "odds": 1.37, "final": 0.732, "avg": 0.753, "hist": 0.694, "n": 5, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "flag": "mid", "form": "H 6/15 · A 11/15", "h2h": "1st leg 1-1; Lyon superior in overall European H2H record (per Whispers)"}], "near": [{"market": "Under 3.5 goals", "selection": "Magoli 3- pekee", "type": "U35", "odds": 1.18, "final": 0.849, "avg": 0.811, "hist": 0.918, "n": 3, "src": ["Soko (30+ BM)", "Forebet", "FootballPredictions"], "flag": "ok", "form": "H 6/15 · A 11/15", "h2h": "1st leg 1-1; Lyon superior in overall European H2H record (per Whispers)"}]}, {"id": "preston-everton", "home": "Preston North End", "away": "Everton", "comp": "England EFL Cup", "kickoff": 1787778000000, "picks": [{"market": "Double Chance (away au draw)", "selection": "Everton au draw", "type": "DCX2", "odds": 1.37, "final": 0.731, "avg": 0.766, "hist": 0.665, "n": 4, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers"], "flag": "mid", "form": "H 4/15 · A 2/15", "h2h": "—"}], "near": []}, {"id": "realmadrid-sociedad", "home": "Real Madrid", "away": "Real Sociedad", "comp": "Spain La Liga", "kickoff": 1787778000000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Real Madrid au draw", "type": "DC1X", "odds": 1.23, "final": 0.813, "avg": 0.824, "hist": 0.794, "n": 5, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 12/15 · A 3/15", "h2h": "Real Madrid won last 3 H2Hs; 7 wins in last 8 H2Hs"}, {"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.29, "final": 0.778, "avg": 0.783, "hist": 0.767, "n": 4, "src": ["Soko (30+ BM)", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 12/15 · A 3/15", "h2h": "Real Madrid won last 3 H2Hs; 7 wins in last 8 H2Hs"}], "near": []}, {"id": "viking-dinamo", "home": "Viking FK", "away": "Dinamo Zagreb", "comp": "UCL Qualifying", "kickoff": 1787778000000, "picks": [{"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.15, "final": 0.87, "avg": 0.847, "hist": 0.912, "n": 4, "src": ["Soko (30+ BM)", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H — · A 13/15", "h2h": "First meeting between the sides"}], "near": []}]}</script>
+<script id="app-data" type="application/json">{"generated_utc": "27/08/2026 09:36", "generated_ms": 1787823407000, "sources": ["Soko la Bookmakers (30+)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "matches": [{"id": "bham-brentford", "home": "Birmingham City", "away": "Brentford", "comp": "England EFL Cup", "kickoff": 1787691600000, "picks": [{"market": "Double Chance (away au draw)", "selection": "Brentford au draw", "type": "DCX2", "odds": 1.36, "final": 0.736, "avg": 0.748, "hist": 0.714, "n": 5, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 11/15 · A 5/15", "h2h": "4 of last 6 H2H meetings ended in draws"}], "near": [{"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.24, "final": 0.808, "avg": 0.726, "hist": 0.96, "n": 3, "src": ["Soko (30+ BM)", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 11/15 · A 5/15", "h2h": "4 of last 6 H2H meetings ended in draws"}]}, {"id": "lask-celtic", "home": "LASK Linz", "away": "Celtic", "comp": "UCL Qualifying", "kickoff": 1787691600000, "picks": [], "near": []}, {"id": "forest-leeds", "home": "Nottingham Forest", "away": "Leeds United", "comp": "England EFL Cup", "kickoff": 1787691600000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Nottingham Forest au draw", "type": "DC1X", "odds": 1.41, "final": 0.709, "avg": 0.712, "hist": 0.703, "n": 4, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "FootballPredictions"], "flag": "ok", "form": "H — · A —", "h2h": "—"}], "near": [{"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.36, "final": 0.734, "avg": 0.753, "hist": 0.698, "n": 3, "src": ["Soko (30+ BM)", "Forebet", "FootballPredictions"], "flag": "mid", "form": "H — · A —", "h2h": "—"}]}, {"id": "rapid-hearts", "home": "Rapid Wien", "away": "Hearts", "comp": "UECL Qualifying", "kickoff": 1787769900000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Rapid Wien au draw", "type": "DC1X", "odds": 1.27, "final": 0.79, "avg": 0.824, "hist": 0.728, "n": 4, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers"], "flag": "mid", "form": "H 15/15 · A 7/15", "h2h": "—"}], "near": []}, {"id": "newcastle-westbrom", "home": "Newcastle", "away": "West Brom", "comp": "England EFL Cup", "kickoff": 1787773500000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Newcastle au draw", "type": "DC1X", "odds": 1.35, "final": 0.742, "avg": 0.764, "hist": 0.703, "n": 4, "src": ["Soko (30+ BM)", "WinComparator", "Whispers", "FootballPredictions"], "flag": "mid", "form": "H — · A —", "h2h": "First meeting since a 0-0 Premier League draw in 2021"}], "near": []}, {"id": "bradford-burnley", "home": "Bradford City", "away": "Burnley", "comp": "England EFL Cup", "kickoff": 1787777100000, "picks": [{"market": "Under 3.5 goals", "selection": "Magoli 3- pekee", "type": "U35", "odds": 1.26, "final": 0.792, "avg": 0.792, "hist": 0.791, "n": 4, "src": ["Soko (30+ BM)", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H — · A —", "h2h": "—"}], "near": []}, {"id": "tottenham-charlton", "home": "Tottenham", "away": "Charlton", "comp": "England EFL Cup", "kickoff": 1787777100000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Tottenham au draw", "type": "DC1X", "odds": 1.3, "final": 0.768, "avg": 0.787, "hist": 0.733, "n": 5, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "flag": "mid", "form": "H — · A —", "h2h": "Spurs won the previous 5 H2Hs — but the last was in 2011 (stale)"}], "near": [{"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.16, "final": 0.861, "avg": 0.897, "hist": 0.796, "n": 3, "src": ["Soko (30+ BM)", "Forebet", "FootballPredictions"], "flag": "mid", "form": "H — · A —", "h2h": "Spurs won the previous 5 H2Hs — but the last was in 2011 (stale)"}]}, {"id": "aek-levski", "home": "AEK Athens", "away": "Levski Sofia", "comp": "UCL Qualifying", "kickoff": 1787778000000, "picks": [], "near": [{"market": "Under 3.5 goals", "selection": "Magoli 3- pekee", "type": "U35", "odds": 1.29, "final": 0.776, "avg": 0.714, "hist": 0.891, "n": 3, "src": ["Soko (30+ BM)", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 11/15 · A 13/15", "h2h": "No previous meetings (new tie)"}, {"market": "Double Chance (home au draw)", "selection": "AEK Athens au draw", "type": "DC1X", "odds": 1.37, "final": 0.732, "avg": 0.768, "hist": 0.664, "n": 3, "src": ["Soko (30+ BM)", "WinComparator", "Forebet"], "flag": "mid", "form": "H 11/15 · A 13/15", "h2h": "No previous meetings (new tie)"}]}, {"id": "celje-slovan", "home": "Celje", "away": "Slovan Bratislava", "comp": "UECL Qualifying", "kickoff": 1787778000000, "picks": [], "near": []}, {"id": "lyon-fenerbahce", "home": "Lyon", "away": "Fenerbahce", "comp": "UCL Qualifying", "kickoff": 1787778000000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Lyon au draw", "type": "DC1X", "odds": 1.37, "final": 0.732, "avg": 0.753, "hist": 0.694, "n": 5, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "flag": "mid", "form": "H 6/15 · A 11/15", "h2h": "1st leg 1-1; Lyon superior in overall European H2H record (per Whispers)"}], "near": [{"market": "Under 3.5 goals", "selection": "Magoli 3- pekee", "type": "U35", "odds": 1.18, "final": 0.849, "avg": 0.811, "hist": 0.918, "n": 3, "src": ["Soko (30+ BM)", "Forebet", "FootballPredictions"], "flag": "ok", "form": "H 6/15 · A 11/15", "h2h": "1st leg 1-1; Lyon superior in overall European H2H record (per Whispers)"}]}, {"id": "preston-everton", "home": "Preston North End", "away": "Everton", "comp": "England EFL Cup", "kickoff": 1787778000000, "picks": [{"market": "Double Chance (away au draw)", "selection": "Everton au draw", "type": "DCX2", "odds": 1.37, "final": 0.731, "avg": 0.766, "hist": 0.665, "n": 4, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers"], "flag": "mid", "form": "H 4/15 · A 2/15", "h2h": "—"}], "near": []}, {"id": "realmadrid-sociedad", "home": "Real Madrid", "away": "Real Sociedad", "comp": "Spain La Liga", "kickoff": 1787778000000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Real Madrid au draw", "type": "DC1X", "odds": 1.23, "final": 0.813, "avg": 0.824, "hist": 0.794, "n": 5, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 12/15 · A 3/15", "h2h": "Real Madrid won last 3 H2Hs; 7 wins in last 8 H2Hs"}, {"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.29, "final": 0.778, "avg": 0.783, "hist": 0.767, "n": 4, "src": ["Soko (30+ BM)", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 12/15 · A 3/15", "h2h": "Real Madrid won last 3 H2Hs; 7 wins in last 8 H2Hs"}], "near": []}, {"id": "viking-dinamo", "home": "Viking FK", "away": "Dinamo Zagreb", "comp": "UCL Qualifying", "kickoff": 1787778000000, "picks": [{"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.15, "final": 0.87, "avg": 0.847, "hist": 0.912, "n": 4, "src": ["Soko (30+ BM)", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H — · A 13/15", "h2h": "First meeting between the sides"}], "near": []}]}</script>
 <script>
 (function(){
 "use strict";
@@ -466,8 +469,8 @@ function renderLiveChip(){
   else { el.className = "lv"; tx.textContent = "INAFUNGA"; }
 }
 function comboStatusChip(r){
-  if(r === "win") return '<span class="st win"><svg class="ic"><use href="#i-check"/></svg>COMBO WIN</span>';
-  if(r === "loss") return '<span class="st loss"><svg class="ic"><use href="#i-x"/></svg>COMBO LOSS</span>';
+  if(r === "win") return '<span class="st win"><svg class="ic"><use href="#i-check" xlink:href="#i-check"/></svg>COMBO WIN</span>';
+  if(r === "loss") return '<span class="st loss"><svg class="ic"><use href="#i-x" xlink:href="#i-x"/></svg>COMBO LOSS</span>';
   if(r === "void") return '<span class="st void">VOID</span>';
   return '<span class="st pend">INAPOKELA</span>';
 }
@@ -481,11 +484,15 @@ function renderToday(){
   var hitProb = legs.reduce(function(a,p){ return a*p.final; }, 1);
   var res = dayResult(legs);
   h.push('<div class="sec-h"><b>BET YA LEO</b><span class="cnt">accumulator ya siku · total odds &le; ' + ODDS_CAP.toFixed(1) + '</span></div>');
+  if(LIVE.state !== "live"){
+    h.push('<div class="empty" style="padding:14px;font-size:12px">SERVER ' + (LIVE.state === "checking" ? "INAFUNGIWA... (inafanya kazi yenyewe)" : "HAIPATIKANI — inajaribu tena yenyewe") + ' · data ya chini ni ya offline</div>');
+  }
   if(!legs.length){
-    h.push('<div class="empty">Hakuna picks zilizopita kiwango kwa siku hii.<br><span class="sub2">consensus 4+ vyanzo · uhakika 70%+ · odds &le; ' + ODDS_CAP.toFixed(1) + '</span></div>');
+    h.push('<div class="empty"><b style="font-size:14px;display:block;margin-bottom:8px">HAKUNA MATCH INAYOWEZA KUBEKIWA SASA</b>' +
+      '<span class="sub2">mechi zote za data hii zimecheza / zimeanza · bet ya siku mpya itajengwa ikipatikana mechi mpya<br>server inarudishwa kila min 2 yenyewe</span></div>');
   } else {
     h.push('<div class="hero">');
-    h.push('<span class="hero-tag"><svg class="ic"><use href="#i-zap"/></svg>ACCUMULATOR · ' + legs.length + ' LEGS · 1/MECHI</span>');
+    h.push('<span class="hero-tag"><svg class="ic"><use href="#i-zap" xlink:href="#i-zap"/></svg>ACCUMULATOR · ' + legs.length + ' LEGS · 1/MECHI</span>');
     h.push('<div class="hero-grid">' +
       '<div class="hg"><div class="l">TOTAL ODDS</div><div class="v">' + total.toFixed(2) + '</div><div class="sub2" style="margin-top:6px">KAP: ' + ODDS_CAP.toFixed(1) + '</div></div>' +
       '<div class="hg"><div class="l">MWEZEKANO WA KUKITA (makadirio)</div><div class="v pct">' + Math.round(hitProb*100) + '%</div>' +
@@ -507,7 +514,7 @@ function renderToday(){
   /* others */
   var others = (s.others || []);
   if(others.length){
-    h.push('<details class="dtl"><summary><svg class="ic"><use href="#i-layers"/></svg>PICKS NYINGINE ZILIZOPITA KIWANGO (ZILIZOACHWA) — ' + others.length + '</summary>');
+    h.push('<details class="dtl"><summary><svg class="ic"><use href="#i-layers" xlink:href="#i-layers"/></svg>PICKS NYINGINE ZILIZOPITA KIWANGO (ZILIZOACHWA) — ' + others.length + '</summary>');
     others.forEach(function(p){
       h.push('<div class="dtl-row"><span><b>' + esc(p.match) + '</b> <span class="sub2">' + esc(p.market) + '</span></span>' +
         '<span style="display:flex;gap:9px;align-items:center"><span class="pc">' + Math.round(p.final*100) + '%</span><span class="po">' + p.odds.toFixed(2) + '</span></span></div>');
@@ -544,8 +551,8 @@ function renderHistory(){
   }
   days.forEach(function(x, idx){
     var r = dayResult(x.picks);
-    var rchip = r === "win" ? '<span class="st win"><svg class="ic"><use href="#i-check"/></svg>WIN</span>'
-      : r === "loss" ? '<span class="st loss"><svg class="ic"><use href="#i-x"/></svg>LOSS</span>'
+    var rchip = r === "win" ? '<span class="st win"><svg class="ic"><use href="#i-check" xlink:href="#i-check"/></svg>WIN</span>'
+      : r === "loss" ? '<span class="st loss"><svg class="ic"><use href="#i-x" xlink:href="#i-x"/></svg>LOSS</span>'
       : r === "void" ? '<span class="st void">VOID</span>'
       : '<span class="st pend">INAPOKELA</span>';
     h.push('<div class="day">');
@@ -577,22 +584,38 @@ function renderAll(){ renderTopbar(); renderLiveChip(); renderToday(); renderHis
 
 /* ============ AUTO-SYNC ============ */
 var lastPicksPoll = 0;
+var lastSync = 0;
+function markSync(){
+  lastSync = Date.now();
+  var el = $("synctxt");
+  if(el) el.textContent = new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit", second:"2-digit"});
+  var rb = $("btn-refresh");
+  if(rb) rb.classList.remove("spin");
+}
+function setSyncing(on){
+  var rb = $("btn-refresh");
+  if(rb) rb.classList.toggle("spin", !!on);
+}
 function autoSync(){
   if(document.hidden) return;
   var now = Date.now();
   if(LIVE.state === "live"){
+    setSyncing(true);
     apiGet("/api/sessions").then(function(d){
       if(d && d.ok){
         var ch = mergeServerResults(d.sessions);
         if(ch){ if(curTab === "history") renderHistory(); else renderToday(); }
+        markSync();
       }
-    }).catch(function(){});
+    }).catch(function(){}).then(function(){ setSyncing(false); });
   }
-  if(now - lastPicksPoll > 5 * 60000){
+  if(now - lastPicksPoll > 2 * 60000){
     lastPicksPoll = now;
     fetchLive().then(function(d){
       if(d && !document.hidden){
+        setLiveFrom(d);
         ensureTodaySession();
+        markSync();
         if(curTab === "today") renderToday(); else renderHistory();
       }
     });
