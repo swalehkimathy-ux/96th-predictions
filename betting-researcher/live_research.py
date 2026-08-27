@@ -200,14 +200,18 @@ def discover_matches(day_end_ms=None):
 
         def fetch_league(item):
             slug, name = item
-            try:
-                html = get(f"{WC_BASE}/{slug}/", timeout=25)
-                r = _parse_wc_league(html)
-                for m in r:
-                    m["comp"] = name
-                return r
-            except Exception:
-                return []
+            for attempt in range(2):  # retry 1: cold-start/timeout hazopotezi league nzima
+                try:
+                    html = get(f"{WC_BASE}/{slug}/", timeout=20)
+                    r = _parse_wc_league(html)
+                    for m in r:
+                        m["comp"] = name
+                    return r
+                except Exception:
+                    if attempt == 1:
+                        return []
+                    time.sleep(1.5)
+            return []
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=6) as ex:
             for res in ex.map(fetch_league, WC_LEAGUES):

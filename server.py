@@ -158,8 +158,8 @@ def get_payload(force=False):
         if CACHE["busy"]:
             if CACHE["payload"]:
                 return CACHE["payload"]  # build inayoendelea — rudi bila kupinga
-            # payload ya kwanza haijakuja — subiri build hiyo (hadi 90s; research ya siku inachukua muda)
-            PCOND.wait(timeout=90)
+            # payload ya kwanza haijakuja — subiri build hiyo (hadi 150s; cold start + retry za leagues)
+            PCOND.wait(timeout=150)
             if CACHE["payload"]:
                 return CACHE["payload"]
             raise TimeoutError("payload build busy")

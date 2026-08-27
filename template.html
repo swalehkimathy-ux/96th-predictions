@@ -333,7 +333,7 @@ function apiFetch(path, opts){
   function attempt(i){
     if(i >= attempts.length) return Promise.reject(new Error("api unavailable"));
     var u = attempts[i];
-    return fetchT(u, opts, 100000).then(function(r){
+    return fetchT(u, opts, 160000).then(function(r){
       if(!r.ok) throw new Error("http " + r.status);
       var ct = (r.headers.get("content-type") || "").toLowerCase();
       if(ct && ct.indexOf("json") < 0) throw new Error("si-json");
