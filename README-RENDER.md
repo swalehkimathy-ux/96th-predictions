@@ -76,25 +76,40 @@ Render **ita-deploy yenyewe** ikiona push mpya (auto-deploy).
 - **404 /api/picks** → hakikisha `P96_PIPELINE_DIR` inaelekea folder halisi (repo root: `betting-researcher/`)
 - **App inasema OFFLINE** → URL ya API_URL si sahihi, au cold start ilitokea tena (subiri sekunde 45 na refresh)
 
-## Auto Results (The Odds API)
+## Auto Results — v7.3: BILA API KEY (WinComparator final scores)
 
-Ili scores za mechi ziliyomalizika zijaze **kifupi** (bila kukuja score manually),:
+**Habari njema: hakuna key tena inayohitajika.** Scores za mechi ziliyomalizika sasa huzajika **kifupi**
+kutoka **page ya mechi ya WinComparator** (nchi inayotumika tayari kwa research — data halisi, bure, bila quota).
 
-1. Fungua akaunti bure kwenye [the-odds-api.com](https://the-odds-api.com) — unapewa **free tier: 500 requests/mwezi**.
-2. Kwenye Render dashboard → API ya `96th-predictions` → **Environment** → ongeza:
-   - key: `ODDS_API_KEY` · value: `kii-yako-hapa`
-3. Re-deploy (au "Generate new API token" itafanya kazi kwa app).
+**Jinsi inavyofanya kazi:**
+1. Pick yoyote inapopita `kickoff + 120 min` na bado iwe "pending", server huenda kwenye
+   page ya mechi hiyo (`mid` = slug ya WC) na kuangalia final score.
+2. Ikiwa mechi imeendelea (`End` marker + score block), score inahifadhiwa (`1-6`) na
+   status hupimwa yenyewe (win/loss) — **History tab inajaa yenyewe baada ya siku kupinduka**.
+3. Limits (kuokoa CPU/bandwidth): max 15 scores kwa kurutubishwa moja · kurutubishwa kimoja
+   kila **dakika 15** (`P96_AUTORES_GAP`, default 900s) · score iliyothibitishwa hifadhiwa kwa masaa 6 ·
+   mechi isiyomalizika huchekwa tena baada ya 15 min.
 
-**Jinsi inavyofanya kazi:** app inaitudia Odds API tu ikiwa kuna picks zilizopita kickoff +2h na bado "pending". Ili kuokoa quota ya bure, matumizi yamerustishwa:
-- kati ya mkurugenzi wa auto-results hakuna kuliko **1 kwa dakika 30** (`P96_AUTORES_GAP`, default 1800s)
-- events za sport kila moja hifadhiwa kwa **dakika 30**
-- ikiwa hakuna score mpya, gap inapunguzwa nusu (ili kukita haraka baada ya mechi kumalizika)
+**The Odds API sasa ni FALLBACK tu (hiari):** ikiwa umeweka `ODDS_API_KEY` kwenye Render
+(Environment), picks ambazo slug ya WC haifanyi kazi zitatibiwa kupitia Odds API
+(free tier: 500 req/mwezi, events cached kwa dakika 30). Bila key — **kila kitu bado kinafanya kazi**.
 
-**Angalizo:** free tier (500 req/mo) inatosha kwa matumizi ya kawaida (check in siku chache). Ukiwa na sessions nyingi kila siku na unachapisha kwa wakati mrefu, unaweza kupoteza quota — kwenye hiyo hali, tafuta sio kughara kwa siku nyingi, au upgrade.
+## v7.3 — Daily mode + UI + Auto results bila key
 
-**Kwa sasa (bila key):** scores huzajika **manual** tu (kwenye app: tab History → score button). Hii ndiyo default imethibitishwa.
+**Kanuni mpya ya bet (kwa user):**
+- **Siku kamili, si saa 14:** mechi ZOTE za siku (GMT+3) ambazo bado hazianza huchunguzwa kila siku —
+  siku ipipindukia, research mpya huanza kiotomatiki (cache inakunjika kwa tarehe).
+- **Accumulator:** legs makuu = picks zenye **conf ≥ 80%**; total odds lazima iwe **1.6 – 3.0**;
+  legs ≤ 10. Ikiwa 80%+ hazitoshi kufikia 1.6, inajumlisha picks 70–80% (inakiuka 1.6 →
+  app huonyesha onyo dhahiri, hakuficha).
+- **UI:** research bar (siku, mechi zilizochunguzwa, picks), total-odds gauge (green zone 1.6–3.0),
+  status ya kila leg, History inayojaa yenyewe (legs x/y, per-market W/L, streak).
+- **Hakuna mock/demo data:** embedded payload ni tupu — app inaonyesha tu real data (au inasema
+  OFFLINE na kutorudi tena).
+- **Auto results bila key** (angalia sehemu hapo juu): WC final scores → History inajaa yenyewe
+  ndani ya ~15 min baada ya mechi kumalizika.
 
-## Vilevile (changes in this commit)
+## Vilevile (changes in v7.2)
 
 - `server.py` — fixed: default `P96_PIPELINE_DIR` path ilipenda `../betting-researcher` (nje ya repo) — sasa inaelekea `betting-researcher/` ndani ya repo, hivyo `python3 server.py` inafanya kazi bila env.
 - `server.py` — auto results: ilianza kucheka split kwa en-dash (`–`) tu; live picks hutumia `-`. Sasa inacheka `-`, `–`, `vs`.

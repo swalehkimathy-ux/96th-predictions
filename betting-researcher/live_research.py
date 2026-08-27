@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-live_research.py — v5: Time-aware match discovery + multi-source research.
+live_research.py — v6: DAILY research (siku kamili) + multi-source + auto scores.
 
-Mechi zinajua kwa LIVE (si hardcoded) kutoka WinComparator league pages,
-kisha kila mechi inachunguzwa na vyanzo 5:
+Mechi zinajua kwa LIVE (si hardcoded) kutoka WinComparator league pages:
+ZOTE za siku husika (GMT+3) ambazo bado hazianza, kisha kila mechi
+inachunguzwa na vyanzo 5:
 
   1. Soko (Bookmakers 30+)  — aggregated market odds (1X2, O/U, BTTS)
   2. WinComparator (Model)  — model yake ya maendeleo (p1x2 / pou / pbtts)
@@ -15,6 +16,15 @@ kisha kila mechi inachunguzwa na vyanzo 5:
 Kanuni ya pick (kwa user): pick inafanya kazi IPELE
   - imevotiwa na vyanzo 4+ (n >= 4)
   - na consensus confidence >= 70% (conf = avg + 0.03*(n-1), cap 0.97)
+
+ACCUMULATOR (bet ya siku):
+  - legs makuu: picks zenye conf >= 80%
+  - ikiwa total < 1.6: jumlisha picks 70–80% hadi >= 1.6
+  - total odds lazima iwe 1.6 – 3.0, hadi legs 10
+  - inakiuka 1.6 → flag min_met=false (UI itaonyesha onyo)
+
+AUTO SCORES: wc_result(slug) — final score kutoka page ya mechi ya WC
+(hakuna API key — data halisi; hupatikana tu baada ya "End").
 """
 import json, os, re, time, datetime, urllib.request, concurrent.futures, html as H
 from analyze_v3 import over_prob, lam_from_over, lam_from_under, pois_cdf
@@ -79,6 +89,22 @@ ALL_SOURCES = [SOKO, WCM, FPS, FWS, FBS]
 
 N_MIN = 4        # vyanzo vichache vya kupitisha pick
 CONF_MIN = 0.70  # confidence vichache (70%)
+
+# ---------------- DAILY MODE (siku kamili, GMT+3 Tanzania) ----------------
+DAY_TZ = datetime.timezone(datetime.timedelta(hours=3))
+ACC_CONF = 0.80          # legs makuu za accumulator: conf >= 80%
+ACC_FALLBACK_CONF = 0.70 # zidisha hadi 1.6: picks 70–80%
+ACC_MIN_TOTAL = 1.6      # total odds ya accumulator: chini ya hapa = haina maana
+ACC_MAX_TOTAL = 3.0      # juu ya hapa = hatari
+ACC_MAX_LEGS = 10
+
+def day_ms_range(now=None):
+    """(start_ms, end_ms, 'YYYY-MM-DD') ya siku sasa GMT+3."""
+    now = now or datetime.datetime.now(DAY_TZ)
+    start = datetime.datetime(now.year, now.month, now.day, tzinfo=DAY_TZ)
+    return (int(start.timestamp() * 1000),
+            int((start + datetime.timedelta(days=1)).timestamp() * 1000),
+            now.strftime("%Y-%m-%d"))
 
 
 def get(url, timeout=25):
@@ -163,7 +189,9 @@ def _wc_to_utc_ms(m):
     return None
 
 
-def discover_matches(max_age_h=30):
+def discover_matches(day_end_ms=None):
+    """Mechi ZOTE za siku (GMT+3) ambazo bado hazianza.
+    day_end_ms = mpaka wa siku (ikiwa iko wazi, inatumika badala ya end_of_day ya sasa)."""
     now = time.time()
     if now - _CACHE["disc"][0] < CACHE_DISC and _CACHE["disc"][1]:
         ms = _CACHE["disc"][1]
@@ -191,10 +219,10 @@ def discover_matches(max_age_h=30):
                 seen[m["slug"]] = m
         ms = list(seen.values())
         _CACHE["disc"] = (now, ms)
-    now_ms = int(time.time() * 1000)
-    cutoff = now_ms + max_age_h * 3600 * 1000
+    now_ms = int(now * 1000)
+    end = day_end_ms if day_end_ms else day_ms_range(now)[1]
     up = [m for m in _CACHE["disc"][1]
-          if m.get("kickoff_utc_ms") and m["kickoff_utc_ms"] > now_ms and m["kickoff_utc_ms"] <= cutoff]
+          if m.get("kickoff_utc_ms") and now_ms < m["kickoff_utc_ms"] <= end]
     up.sort(key=lambda m: m["kickoff_utc_ms"])
     return up
 
@@ -286,6 +314,33 @@ def wc_odds(slug):
         d["error"] = str(e)
     _CACHE["odds"][slug] = (now, d)
     return d
+
+
+# ---------------- WC final scores (auto results, bila API key) ----------------
+_WC_RES = {}  # slug -> (checked_at, (h,a) au None, ttl_s)
+
+def wc_result(slug, _now=None):
+    """Final score kutoka page ya mechi ya WinComparator — DATA HALISI, hakuna key.
+    Rudisha (home_score, away_score) ikiwa mechi IMEMALIZIKA ('End');
+    None ikiwa bado hai, haijachezwa, au page haikupokeka."""
+    now = _now if _now is not None else time.time()
+    c = _WC_RES.get(slug or "")
+    if c and now - c[0] < c[2]:
+        return c[1]
+    score = None
+    try:
+        html = get(f"{WC_MATCH_BASE}/{slug}/", timeout=25)
+        i = html.find("match.event.over")  # status marker 'End' (FT)
+        if i >= 0:
+            seg = html[i:i + 3000]
+            m = re.search(r"<div>\s*(\d{1,2})\s*-\s*(\d{1,2})\s*</div>", seg)
+            if m:
+                score = (int(m.group(1)), int(m.group(2)))
+    except Exception:
+        score = None
+    # result iliyothibitishwa: cache 6h (haiwezi kubadilika) · siyo: recheck kila 15min
+    _WC_RES[slug or ""] = (now, score, 21600 if score else 900)
+    return score
 
 
 # ---------------- FootballPredictions (live) ----------------
@@ -813,22 +868,41 @@ def build_picks(matches, researched):
     return out
 
 
-def build_accumulator(picks, cap=3.0, max_legs=8):
-    legs, tot, used = [], 1.0, set()
+def build_accumulator(picks):
+    """Bet ya siku: conf >= 80% pekee kwanza; total lazima iwe 1.6–3.0 (legs <= 10).
+    Ikiwa 80%+ pekee hazijafikia 1.6 → jumlisha picks 70–80% (zilizopita kiwango cha pick)."""
+    seen, uniq = set(), []
     for p in picks:
-        if len(legs) >= max_legs:
-            break
-        if p["mid"] in used:
-            continue
-        if tot * p["odds"] <= cap:
-            legs.append(p)
-            tot *= p["odds"]
-            used.add(p["mid"])
-    return {"legs": legs, "total": round(tot, 2)}
+        if p.get("mid") and p["mid"] not in seen:
+            seen.add(p["mid"])
+            uniq.append(p)
+    primary = [p for p in uniq if p.get("final", 0) >= ACC_CONF]
+    secondary = [p for p in uniq if ACC_FALLBACK_CONF <= p.get("final", 0) < ACC_CONF]
+    legs, tot = [], 1.0
+
+    def fill(pool):
+        nonlocal tot
+        for p in pool:
+            if len(legs) >= ACC_MAX_LEGS:
+                return
+            if tot * p["odds"] <= ACC_MAX_TOTAL + 1e-9:
+                legs.append(p)
+                tot *= p["odds"]
+    fill(primary)
+    if tot < ACC_MIN_TOTAL - 1e-9:
+        fill(secondary)
+    min_met = tot >= ACC_MIN_TOTAL - 1e-9
+    if not legs:
+        return {"legs": [], "total": 1.0, "min_met": False, "min": ACC_MIN_TOTAL,
+                "max": ACC_MAX_TOTAL, "max_legs": ACC_MAX_LEGS, "conf_min": ACC_CONF}
+    return {"legs": legs, "total": round(tot, 2), "min_met": min_met, "min": ACC_MIN_TOTAL,
+            "max": ACC_MAX_TOTAL, "max_legs": ACC_MAX_LEGS, "conf_min": ACC_CONF}
 
 
-def get_picks(max_age_h=14, max_research=40):
-    matches = discover_matches(max_age_h=max_age_h)
+def get_picks(max_research=80):
+    """DAILY: mechi zote za siku (GMT+3) zilizobaki → research → picks + accumulator."""
+    day_start, day_end, day_date = day_ms_range()
+    matches = discover_matches(day_end_ms=day_end)
     research_matches = matches[:max_research]
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
         researched = list(ex.map(build_match_picks, research_matches))
@@ -838,13 +912,16 @@ def get_picks(max_age_h=14, max_research=40):
     flat = [m["picks"][0] for m in matches_with_picks]
     return {
         "now": int(time.time() * 1000),
-        "date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d"),
+        "date": day_date,
+        "day_start_ms": day_start,
+        "day_end_ms": day_end,
         "generated_ms": int(time.time() * 1000),
         "live": True,
         "matches_total": len(matches),
         "researched": len(research_matches),
         "sources": ALL_SOURCES,
-        "rule": f"pick inapatikana ipele imevotiwa na vyanzo {N_MIN}+ na confidence >= {int(CONF_MIN*100)}%",
+        "rule": (f"siku kamili ({day_date}) · pick: vyanzo {N_MIN}+ na conf >= {int(CONF_MIN*100)}% · "
+                 f"accumulator: conf >= {int(ACC_CONF*100)}%, total odds {ACC_MIN_TOTAL}–{ACC_MAX_TOTAL}"),
         "acc": build_accumulator(flat),
         "matches": matches_with_picks,
     }

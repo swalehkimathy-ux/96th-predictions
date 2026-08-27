@@ -32,6 +32,7 @@ b{font-weight:700}
 .splash-ball{width:118px;height:118px;filter:drop-shadow(0 0 34px rgba(217,168,60,.45));animation:pop .9s ease}
 @keyframes pop{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
 .splash-word{font-size:22px;font-weight:800;letter-spacing:.42em;color:#fff;text-indent:.42em}
+.splash-sub{font-size:10.5px;color:var(--sub);letter-spacing:.14em;margin-top:-8px}
 .splash-bar{width:170px;height:3px;background:#182a55;border-radius:3px;overflow:hidden;margin-top:14px}
 .splash-fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2));animation:load 1.9s ease forwards}
 @keyframes load{to{width:100%}}
@@ -74,6 +75,13 @@ b{font-weight:700}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
 .sub2{font-size:10px;color:var(--dim);letter-spacing:.06em}
 
+/* ============ RESEARCH BAR ============ */
+.resbar{display:flex;align-items:center;gap:9px;background:linear-gradient(165deg,#0f1e46 0%,#0c1530 100%);
+  border:1px solid var(--line);border-radius:13px;padding:10px 13px;font-size:10.5px;color:var(--sub);letter-spacing:.04em;flex-wrap:wrap}
+.resbar .ic{width:14px;height:14px;color:var(--gold2)}
+.resbar b{color:var(--tx)}
+.resbar .sep{color:var(--line);margin:0 2px}
+
 /* ============ COMBO HERO ============ */
 .hero{background:linear-gradient(165deg,#13224e 0%,#0d1836 60%);border:1px solid rgba(217,168,60,.5);border-radius:20px;padding:18px;position:relative;overflow:hidden}
 .hero::before{content:"";position:absolute;top:-40px;right:-40px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(217,168,60,.16),transparent 70%)}
@@ -95,7 +103,7 @@ b{font-weight:700}
 .leg .lo{flex:none;text-align:right}
 .leg .lo .o{font-size:15px;font-weight:800;color:var(--gold2)}
 .leg .lo .c{font-size:10px;color:var(--dim)}
-.hero-status{display:flex;justify-content:space-between;align-items:center;margin-top:15px;position:relative}
+.hero-status{display:flex;justify-content:space-between;align-items:center;margin-top:15px;position:relative;gap:8px;flex-wrap:wrap}
 .hero-src{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px}
 .srcchip{font-size:10px;border:1px solid var(--line);border-radius:6px;padding:3px 8px;color:var(--sub);background:rgba(8,13,30,.5);white-space:nowrap}
 
@@ -105,6 +113,19 @@ b{font-weight:700}
 .st.loss{color:var(--red);background:rgba(224,96,79,.14);border:1px solid rgba(224,96,79,.45)}
 .st.pend{color:var(--amb);background:rgba(229,181,74,.12);border:1px solid rgba(229,181,74,.4)}
 .st.void{color:var(--dim);background:rgba(91,106,143,.16);border:1px solid rgba(91,106,143,.45)}
+.st.sm{padding:3px 8px;font-size:9px;border-radius:6px}
+.st.sm .ic{width:11px;height:11px}
+
+/* ============ ODDS GAUGE (1.6–3.0) ============ */
+.gauge{position:relative;height:8px;background:#182a55;border-radius:5px;margin-top:10px;overflow:visible}
+.gauge-zone{position:absolute;top:0;bottom:0;background:rgba(47,191,113,.30);border-left:1px solid rgba(47,191,113,.7);border-right:1px solid rgba(47,191,113,.7)}
+.gauge-pin{position:absolute;top:-4px;width:3px;height:16px;background:var(--gold2);border-radius:2px;box-shadow:0 0 8px rgba(240,205,110,.9)}
+.gauge-ticks{position:relative;height:12px;margin-top:3px;font-size:8.5px;color:var(--dim);letter-spacing:.05em}
+.gauge-ticks span{position:absolute;transform:translateX(-50%)}
+
+/* warn */
+.warnbox{margin-top:12px;background:rgba(229,181,74,.08);border:1px solid rgba(229,181,74,.4);border-radius:11px;padding:10px 12px;font-size:11px;color:#f0d9a0;line-height:1.55;position:relative}
+.warnbox b{color:#ffe3a1}
 
 /* ============ BEST PICKS TABLE ============ */
 .bpt{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
@@ -152,6 +173,12 @@ details.dtl summary .ic{width:14px;height:14px;color:var(--dim)}
 .wr-cell .v{font-size:19px;font-weight:800}
 .wr-cell .v.grn{color:var(--grn)} .wr-cell .v.red{color:var(--red)} .wr-cell .v.amb{color:var(--amb)} .wr-cell .v.gold{color:var(--gold2)}
 .wr-cell .l{font-size:8.5px;letter-spacing:.08em;color:var(--dim);margin-top:3px}
+.mktstats{margin-top:12px}
+.mktrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line2);font-size:11.5px}
+.mktrow:last-child{border-bottom:none}
+.mktrow .mn{color:var(--sub)}
+.mktrow .mv{font-weight:800;color:var(--tx);white-space:nowrap}
+.mktrow .mv em{font-style:normal;color:var(--dim);font-weight:600;font-size:10px}
 
 /* day list */
 .day{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-top:11px;overflow:hidden}
@@ -177,6 +204,7 @@ details.dtl summary .ic{width:14px;height:14px;color:var(--dim)}
 .scorein button{background:var(--golddim);border:1px solid rgba(217,168,60,.4);color:var(--gold2);border-radius:8px;padding:6px 11px;font-size:10.5px;font-weight:800;cursor:pointer}
 .auto-tag{font-size:8.5px;font-weight:800;letter-spacing:.08em;color:var(--gold2);background:var(--golddim);border:1px solid rgba(217,168,60,.4);border-radius:5px;padding:1.5px 5px;margin-left:6px}
 .empty{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:28px 16px;text-align:center;color:var(--sub);font-size:12.5px}
+.empty b{display:block;margin-bottom:8px;color:var(--tx)}
 .foot{margin:24px 2px 0;color:var(--dim);font-size:10px;line-height:1.7;letter-spacing:.04em}
 
 #toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f6d87e,var(--gold));color:#0d1531;font-weight:800;font-size:12px;padding:11px 22px;border-radius:11px;box-shadow:0 14px 40px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:60;max-width:90vw;text-align:center}
@@ -195,7 +223,7 @@ details.dtl summary .ic{width:14px;height:14px;color:var(--dim)}
 <symbol id="i-hist" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 1 2.2 5.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4.5 21v-4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8v4.5l2.8 1.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M20 3v4h-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m8 12.5 2.7 2.7L16.5 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-<symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m9 9 6 6M15 9l-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m9 9 6 6M15 9l-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
 <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3 2 8.5 12 14 22 8.5 12 3z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M2 13.5 12 19l10-5.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
 </defs></svg>
@@ -208,6 +236,7 @@ details.dtl summary .ic{width:14px;height:14px;color:var(--dim)}
     <text x="24" y="27.8" text-anchor="middle" font-size="10.5" font-weight="800" fill="#f6d87e" font-family="inherit" letter-spacing=".5">96th</text>
   </svg>
   <div class="splash-word">PREDICTIONS</div>
+  <div class="splash-sub">DAILY RESEARCH · 5 VYANZO · REAL DATA</div>
   <div class="splash-bar"><div class="splash-fill"></div></div>
 </div>
 
@@ -237,17 +266,20 @@ details.dtl summary .ic{width:14px;height:14px;color:var(--dim)}
 
 <div id="toast"></div>
 
-<script id="app-data" type="application/json">{"generated_utc": "27/08/2026 09:36", "generated_ms": 1787823407000, "sources": ["Soko la Bookmakers (30+)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "matches": [{"id": "bham-brentford", "home": "Birmingham City", "away": "Brentford", "comp": "England EFL Cup", "kickoff": 1787691600000, "picks": [{"market": "Double Chance (away au draw)", "selection": "Brentford au draw", "type": "DCX2", "odds": 1.36, "final": 0.736, "avg": 0.748, "hist": 0.714, "n": 5, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 11/15 · A 5/15", "h2h": "4 of last 6 H2H meetings ended in draws"}], "near": [{"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.24, "final": 0.808, "avg": 0.726, "hist": 0.96, "n": 3, "src": ["Soko (30+ BM)", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 11/15 · A 5/15", "h2h": "4 of last 6 H2H meetings ended in draws"}]}, {"id": "lask-celtic", "home": "LASK Linz", "away": "Celtic", "comp": "UCL Qualifying", "kickoff": 1787691600000, "picks": [], "near": []}, {"id": "forest-leeds", "home": "Nottingham Forest", "away": "Leeds United", "comp": "England EFL Cup", "kickoff": 1787691600000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Nottingham Forest au draw", "type": "DC1X", "odds": 1.41, "final": 0.709, "avg": 0.712, "hist": 0.703, "n": 4, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "FootballPredictions"], "flag": "ok", "form": "H — · A —", "h2h": "—"}], "near": [{"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.36, "final": 0.734, "avg": 0.753, "hist": 0.698, "n": 3, "src": ["Soko (30+ BM)", "Forebet", "FootballPredictions"], "flag": "mid", "form": "H — · A —", "h2h": "—"}]}, {"id": "rapid-hearts", "home": "Rapid Wien", "away": "Hearts", "comp": "UECL Qualifying", "kickoff": 1787769900000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Rapid Wien au draw", "type": "DC1X", "odds": 1.27, "final": 0.79, "avg": 0.824, "hist": 0.728, "n": 4, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers"], "flag": "mid", "form": "H 15/15 · A 7/15", "h2h": "—"}], "near": []}, {"id": "newcastle-westbrom", "home": "Newcastle", "away": "West Brom", "comp": "England EFL Cup", "kickoff": 1787773500000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Newcastle au draw", "type": "DC1X", "odds": 1.35, "final": 0.742, "avg": 0.764, "hist": 0.703, "n": 4, "src": ["Soko (30+ BM)", "WinComparator", "Whispers", "FootballPredictions"], "flag": "mid", "form": "H — · A —", "h2h": "First meeting since a 0-0 Premier League draw in 2021"}], "near": []}, {"id": "bradford-burnley", "home": "Bradford City", "away": "Burnley", "comp": "England EFL Cup", "kickoff": 1787777100000, "picks": [{"market": "Under 3.5 goals", "selection": "Magoli 3- pekee", "type": "U35", "odds": 1.26, "final": 0.792, "avg": 0.792, "hist": 0.791, "n": 4, "src": ["Soko (30+ BM)", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H — · A —", "h2h": "—"}], "near": []}, {"id": "tottenham-charlton", "home": "Tottenham", "away": "Charlton", "comp": "England EFL Cup", "kickoff": 1787777100000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Tottenham au draw", "type": "DC1X", "odds": 1.3, "final": 0.768, "avg": 0.787, "hist": 0.733, "n": 5, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "flag": "mid", "form": "H — · A —", "h2h": "Spurs won the previous 5 H2Hs — but the last was in 2011 (stale)"}], "near": [{"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.16, "final": 0.861, "avg": 0.897, "hist": 0.796, "n": 3, "src": ["Soko (30+ BM)", "Forebet", "FootballPredictions"], "flag": "mid", "form": "H — · A —", "h2h": "Spurs won the previous 5 H2Hs — but the last was in 2011 (stale)"}]}, {"id": "aek-levski", "home": "AEK Athens", "away": "Levski Sofia", "comp": "UCL Qualifying", "kickoff": 1787778000000, "picks": [], "near": [{"market": "Under 3.5 goals", "selection": "Magoli 3- pekee", "type": "U35", "odds": 1.29, "final": 0.776, "avg": 0.714, "hist": 0.891, "n": 3, "src": ["Soko (30+ BM)", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 11/15 · A 13/15", "h2h": "No previous meetings (new tie)"}, {"market": "Double Chance (home au draw)", "selection": "AEK Athens au draw", "type": "DC1X", "odds": 1.37, "final": 0.732, "avg": 0.768, "hist": 0.664, "n": 3, "src": ["Soko (30+ BM)", "WinComparator", "Forebet"], "flag": "mid", "form": "H 11/15 · A 13/15", "h2h": "No previous meetings (new tie)"}]}, {"id": "celje-slovan", "home": "Celje", "away": "Slovan Bratislava", "comp": "UECL Qualifying", "kickoff": 1787778000000, "picks": [], "near": []}, {"id": "lyon-fenerbahce", "home": "Lyon", "away": "Fenerbahce", "comp": "UCL Qualifying", "kickoff": 1787778000000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Lyon au draw", "type": "DC1X", "odds": 1.37, "final": 0.732, "avg": 0.753, "hist": 0.694, "n": 5, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "flag": "mid", "form": "H 6/15 · A 11/15", "h2h": "1st leg 1-1; Lyon superior in overall European H2H record (per Whispers)"}], "near": [{"market": "Under 3.5 goals", "selection": "Magoli 3- pekee", "type": "U35", "odds": 1.18, "final": 0.849, "avg": 0.811, "hist": 0.918, "n": 3, "src": ["Soko (30+ BM)", "Forebet", "FootballPredictions"], "flag": "ok", "form": "H 6/15 · A 11/15", "h2h": "1st leg 1-1; Lyon superior in overall European H2H record (per Whispers)"}]}, {"id": "preston-everton", "home": "Preston North End", "away": "Everton", "comp": "England EFL Cup", "kickoff": 1787778000000, "picks": [{"market": "Double Chance (away au draw)", "selection": "Everton au draw", "type": "DCX2", "odds": 1.37, "final": 0.731, "avg": 0.766, "hist": 0.665, "n": 4, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers"], "flag": "mid", "form": "H 4/15 · A 2/15", "h2h": "—"}], "near": []}, {"id": "realmadrid-sociedad", "home": "Real Madrid", "away": "Real Sociedad", "comp": "Spain La Liga", "kickoff": 1787778000000, "picks": [{"market": "Double Chance (home au draw)", "selection": "Real Madrid au draw", "type": "DC1X", "odds": 1.23, "final": 0.813, "avg": 0.824, "hist": 0.794, "n": 5, "src": ["Soko (30+ BM)", "WinComparator", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 12/15 · A 3/15", "h2h": "Real Madrid won last 3 H2Hs; 7 wins in last 8 H2Hs"}, {"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.29, "final": 0.778, "avg": 0.783, "hist": 0.767, "n": 4, "src": ["Soko (30+ BM)", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H 12/15 · A 3/15", "h2h": "Real Madrid won last 3 H2Hs; 7 wins in last 8 H2Hs"}], "near": []}, {"id": "viking-dinamo", "home": "Viking FK", "away": "Dinamo Zagreb", "comp": "UCL Qualifying", "kickoff": 1787778000000, "picks": [{"market": "Over 1.5 goals", "selection": "Magoli 2+ kwenye mechi", "type": "O15", "odds": 1.15, "final": 0.87, "avg": 0.847, "hist": 0.912, "n": 4, "src": ["Soko (30+ BM)", "Forebet", "Whispers", "FootballPredictions"], "flag": "ok", "form": "H — · A 13/15", "h2h": "First meeting between the sides"}], "near": []}]}</script>
+<script id="app-data" type="application/json">{"live":false,"generated_ms":0,"date":"","matches":[],"acc":{"legs":[],"total":1,"min_met":false,"min":1.6,"max":3.0,"max_legs":10,"conf_min":0.8}}</script>
 <script>
 (function(){
 "use strict";
+/* Real data pekee: embedded payload ni tupu — data huja LIVE kutoka server. */
 var DATA = JSON.parse(document.getElementById("app-data").textContent);
 var API_URL = "https://nine6th-predictions.onrender.com";
 var API_BASE = "";
 var LIVE = {state:"checking", at:null, err:null};
 var curTab = "today";
 var RKEY = "p96.records.v4";
-var ODDS_CAP = 3.0;   /* total odds ya combo ya siku: <= 3.0 */
+var ODDS_MIN = 1.6, ODDS_MAX = 3.0, ACC_CONF = 0.8, ACC_MAX_LEGS = 10;
+var lastDataDate = "";
+var lastPicksPoll = 0;
 
 /* ============ STORE ============ */
 var store = (function(){
@@ -303,14 +335,15 @@ function apiGet(path){ return apiFetch(path, {cache:"no-store"}).then(function(r
 function apiPost(path, obj){
   return apiFetch(path, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(obj)}).then(function(r){ return r.json(); });
 }
-function fetchLive(){
+function fetchLive(force){
   return new Promise(function(res){
     var done = false, lastErr = "";
-    function fin(d, err){ if(done) return; done = true; LIVE.err = err || null; if(d){ DATA = d; } res(d || null); }
+    function fin(d, err){ if(done) return; done = true; LIVE.err = err || null; if(d){ DATA = d; lastDataDate = d.date || ""; } res(d || null); }
     function attempt(n){
-      apiFetch("/api/picks", {cache:"no-store"}).then(function(r){ return r.json(); })
+      apiFetch("/api/picks" + (force ? "?force=1" : ""), {cache:"no-store"}).then(function(r){ return r.json(); })
         .then(function(d){
-          if(d && d.matches && d.matches.length) fin(d);
+          /* payload halisi = live:true (hata picks 0 — siku ya kimya si "data incomplete") */
+          if(d && d.live === true && d.generated_ms) fin(d);
           else { lastErr = "data incomplete"; if(n < 2) setTimeout(function(){ attempt(n+1); }, 4000); else fin(null, lastErr); }
         })
         .catch(function(e){
@@ -334,39 +367,39 @@ function esc(s){ return String(s == null ? "" : s).replace(/&/g,"&amp;").replace
 function fmtT(ms){ return new Date(ms).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}); }
 function localDateStrOf(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 function localDateStr(){ return localDateStrOf(new Date()); }
-function dayLabel(ms){
-  var d = new Date(ms), t = new Date(); t.setHours(0,0,0,0);
-  var diff = Math.floor((d - t) / 864e5);
-  if(diff <= 0) return "Leo";
-  if(diff === 1) return "Kesho";
-  return "Baadaye";
-}
+function dateSw(dstr){ return dstr ? dstr.slice(8,10)+"/"+dstr.slice(5,7)+"/"+dstr.slice(2,4) : "—"; }
 function sessDateLabel(s){
   var t = localDateStr();
   if(s.date === t) return "Leo";
   var y = new Date(); y.setDate(y.getDate() - 1);
   if(s.date === localDateStrOf(y)) return "Jana";
-  return s.date.slice(8,10)+"/"+s.date.slice(5,7);
+  return dateSw(s.date);
 }
 function toast(msg){
   var t = $("toast"); t.textContent = msg; t.classList.add("show");
   clearTimeout(t._t); t._t = setTimeout(function(){ t.classList.remove("show"); }, 2200);
 }
 
-/* ============ PICKS (odds cap, sorted by confidence) ============ */
+/* ============ PICKS (sorted by confidence) ============ */
 function pickObj(m, p){
   return {
     mid:m.id, match:m.home + " – " + m.away, comp:m.comp, kickoff:m.kickoff,
     type:p.type, market:p.market, selection:p.selection, odds:p.odds, final:p.final,
-    n:p.n, src:p.src || [], flag:p.flag, form:p.form, h2h:p.h2h,
-    score:null, status:"pending", manual:false, auto:false
+    n:p.n, src:p.src || [], flag:p.flag, score:null, status:"pending", manual:false, auto:false
+  };
+}
+function srvPick(p){
+  return {
+    mid:p.mid, match:p.match, comp:p.comp || "", kickoff:p.kickoff || 0,
+    type:p.type, market:p.market, selection:p.selection, odds:p.odds, final:p.final,
+    n:p.n || 0, src:p.src || [], flag:"ok", score:null, status:"pending", manual:false, auto:false
   };
 }
 function allPicks(){
   var out = [];
   (DATA.matches || []).forEach(function(m){
     (m.picks || []).forEach(function(p){
-      if(p.odds > ODDS_CAP) return;
+      if(!p.odds) return;
       out.push(pickObj(m, p));
     });
   });
@@ -374,25 +407,41 @@ function allPicks(){
   return out;
 }
 
-/* ============ ACCUMULATOR (bet ya siku) ============ */
-/* Greedy kwa confidence, 1 leg kwa mechi, total <= ODDS_CAP */
+/* ============ ACCUMULATOR (bet ya siku) ============
+   Kanuni (server ndiyo source ya kweli):
+   - legs makuu: conf >= 80%
+   - total lazima iwe 1.6–3.0 · legs <= 10
+   - 80%+ hazijafikia 1.6 → jumlisha picks 70–80% */
 function buildAccumulator(){
   var all = allPicks();
-  if(!all.length) return {legs:[], total:1, hitProb:0, others:[]};
+  if(DATA && DATA.acc && Array.isArray(DATA.acc.legs) && DATA.acc.legs.length){
+    var legs = DATA.acc.legs.map(srvPick);
+    var used = {}; legs.forEach(function(l){ used[l.mid] = 1; });
+    var hitProb = 1; legs.forEach(function(l){ hitProb *= l.final; });
+    return {legs:legs, total:DATA.acc.total || 1, min_met:!!DATA.acc.min_met,
+            hitProb:hitProb, others:all.filter(function(p){ return !used[p.mid]; }), server:true};
+  }
+  if(!all.length) return {legs:[], total:1, min_met:false, hitProb:0, others:[], server:false};
   var now = Date.now();
   var up = all.filter(function(p){ return p.kickoff + 30*60000 > now; });
   var pool = up.length ? up : all;
-  var legs = [], tot = 1, used = {};
-  pool.forEach(function(p){
-    if(used[p.mid]) return;
-    if(tot * p.odds <= ODDS_CAP){
-      legs.push(p); tot *= p.odds; used[p.mid] = 1;
-    }
-  });
-  var hitProb = 1;
-  legs.forEach(function(l){ hitProb *= l.final; });
-  var others = all.filter(function(p){ return !used[p.mid]; });
-  return {legs:legs, total:tot, hitProb:hitProb, others:others};
+  var seen = {}, uniq = [];
+  pool.forEach(function(p){ if(!seen[p.mid]){ seen[p.mid] = 1; uniq.push(p); } });
+  var primary = uniq.filter(function(p){ return p.final >= ACC_CONF; });
+  var secondary = uniq.filter(function(p){ return p.final < ACC_CONF; });
+  var legs2 = [], tot = 1;
+  function fill(pool2){
+    pool2.forEach(function(p){
+      if(legs2.length >= ACC_MAX_LEGS) return;
+      if(tot * p.odds <= ODDS_MAX + 1e-9){ legs2.push(p); tot *= p.odds; }
+    });
+  }
+  fill(primary);
+  if(tot < ODDS_MIN - 1e-9) fill(secondary);
+  var hit2 = 1; legs2.forEach(function(l){ hit2 *= l.final; });
+  var used2 = {}; legs2.forEach(function(l){ used2[l.mid] = 1; });
+  return {legs:legs2, total:tot, min_met:tot >= ODDS_MIN - 1e-9, hitProb:hit2,
+          others:uniq.filter(function(p){ return !used2[p.mid]; }), server:false};
 }
 
 /* ============ SESSION (kila siku = combo 1) ============ */
@@ -412,18 +461,18 @@ function ensureTodaySession(){
   if(!s){
     s = {id:"d-"+today, date:today, started_at:Date.now(),
          picks: acc.legs, others: acc.others,
-         meta:{auto:true, legs:acc.legs.length, total:acc.total, matches:(DATA.matches||[]).length}};
+         meta:{auto:true, legs:acc.legs.length, total:acc.total, min_met:acc.min_met, matches:(DATA.matches||[]).length}};
     rec.sessions.push(s);
     saveRecords(rec);
     if(LIVE.state === "live"){ apiPost("/api/sessions",{session:s}).catch(function(){}); }
   } else if(!s.picks.length && acc.legs.length){
-    s.picks = acc.legs; s.others = acc.others; s.meta.legs = acc.legs.length; s.meta.total = acc.total;
+    s.picks = acc.legs; s.others = acc.others; s.meta.legs = acc.legs.length; s.meta.total = acc.total; s.meta.min_met = acc.min_met;
     saveRecords(rec);
     if(LIVE.state === "live"){ apiPost("/api/sessions",{session:s}).catch(function(){}); }
   } else if(LIVE.state === "live" && acc.legs.length && !sessionHasResults(s) && picksKey(s.picks) !== picksKey(acc.legs)){
     /* data mpya ya live → rufunge bet ya siku (session bado haina matoleo yaliyorekodiwa) */
     s.picks = acc.legs; s.others = acc.others;
-    s.meta = {auto:true, legs:acc.legs.length, total:acc.total, matches:(DATA.matches||[]).length};
+    s.meta = {auto:true, legs:acc.legs.length, total:acc.total, min_met:acc.min_met, matches:(DATA.matches||[]).length};
     saveRecords(rec);
     apiPost("/api/sessions",{session:s}).catch(function(){});
   }
@@ -439,7 +488,7 @@ function mergeServerResults(serverSessions){
       if(!lp) return;
       if(sp.manual && sp.status && sp.status !== "pending" && !lp.manual){ lp.manual = true; lp.status = sp.status; changed = true; }
       if(sp.score && !lp.manual && lp.status === "pending"){
-        var m = String(sp.score).match(/(\d+)\s*[-:]\s*(\d+)/);
+        var m = String(sp.score).match(/(\d+)\s*[-:]?\s*(\d+)/);
         if(m){ lp.score = sp.score; lp.status = evalPick(lp.type, +m[1], +m[2]); lp.auto = true; changed = true; }
       }
     });
@@ -477,11 +526,12 @@ function dayBets(rec){
 }
 function winRate(rec){
   var bets = dayBets(rec);
-  var w=0,l=0,pend=0, legsSum=0, totSum=0;
+  var w=0,l=0,pend=0, legsSum=0, totSum=0, winsLegs=0;
   bets.forEach(function(x){
     var r = dayResult(x.picks);
     if(r==="win") w++; else if(r==="loss") l++; else if(r==="pending") pend++;
     legsSum += x.picks.length; totSum += (x.total || 0);
+    winsLegs += x.picks.filter(function(p){ return p.status === "win"; }).length;
   });
   var streak=0, stype=null;
   bets.forEach(function(x){
@@ -490,13 +540,25 @@ function winRate(rec){
     else if(r==="loss"){ if(stype!=="win") streak++; stype="loss"; }
   });
   return {w:w,l:l,pend:pend,rate:(w+l)?w/(w+l):null,streak:streak,streakType:stype,days:bets.length,
-          avgLegs:bets.length?legsSum/bets.length:0, avgTotal:bets.length?totSum/bets.length:0};
+          avgLegs:bets.length?legsSum/bets.length:0, avgTotal:bets.length?totSum/bets.length:0,
+          legsSum:legsSum, winsLegs:winsLegs};
+}
+function marketStats(rec){
+  var mkt = {};
+  rec.sessions.forEach(function(s){
+    (s.picks||[]).forEach(function(p){
+      var k = p.market || "—";
+      mkt[k] = mkt[k] || {w:0,l:0};
+      if(p.status === "win") mkt[k].w++;
+      else if(p.status === "loss") mkt[k].l++;
+    });
+  });
+  return mkt;
 }
 
 /* ============ RENDER TOP ============ */
 function renderTopbar(){
-  var d = localDateStr();
-  $("datechip").textContent = d.slice(8,10)+"/"+d.slice(5,7)+"/"+d.slice(2,4);
+  $("datechip").textContent = dateSw(localDateStr());
 }
 function renderLiveChip(){
   var el = $("livechip"), tx = $("livetx");
@@ -504,124 +566,153 @@ function renderLiveChip(){
   else if(LIVE.state === "offline"){ el.className = "lv"; tx.textContent = "OFFLINE"; }
   else { el.className = "lv"; tx.textContent = "INAFUNGA"; }
 }
-function comboStatusChip(r){
-  if(r === "win") return '<span class="st win"><svg class="ic"><use href="#i-check" xlink:href="#i-check"/></svg>COMBO WIN</span>';
-  if(r === "loss") return '<span class="st loss"><svg class="ic"><use href="#i-x" xlink:href="#i-x"/></svg>COMBO LOSS</span>';
-  if(r === "void") return '<span class="st void">VOID</span>';
-  return '<span class="st pend">INAPOKELA</span>';
+function comboStatusChip(r, sm){
+  var cls = sm ? " st sm" : " st";
+  if(r === "win") return '<span class="' + (sm?"st sm win":"st win") + '"><svg class="ic"><use href="#i-check" xlink:href="#i-check"/></svg>' + (sm?"W":"COMBO WIN") + '</span>';
+  if(r === "loss") return '<span class="' + (sm?"st sm loss":"st loss") + '"><svg class="ic"><use href="#i-x" xlink:href="#i-x"/></svg>' + (sm?"L":"COMBO LOSS") + '</span>';
+  if(r === "void") return '<span class="' + (sm?"st sm void":"st void") + '">VOID</span>';
+  return '<span class="' + (sm?"st sm pend":"st pend") + '">' + (sm?"…":"INAPOKELA") + '</span>';
 }
 
-/* ============ RENDER: TODAY (combo) ============ */
-/* ============ RENDER: BEST PICKS TABLE (table moja ya best picks) ============ */
+/* ============ GAUGE (1.6–3.0) ============ */
+function gauge(total){
+  var lo = 1.0, hi = 3.5;
+  function w(v){ return Math.max(0, Math.min(100, (v - lo) / (hi - lo) * 100)); }
+  return '<div class="gauge"><div class="gauge-zone" style="left:' + w(ODDS_MIN) + '%;width:' + (w(ODDS_MAX) - w(ODDS_MIN)) + '%"></div>' +
+    '<div class="gauge-pin" style="left:' + w(total) + '%"></div></div>' +
+    '<div class="gauge-ticks"><span style="left:' + w(ODDS_MIN) + '%">' + ODDS_MIN.toFixed(1) + '</span>' +
+    '<span style="left:' + w(ODDS_MAX) + '%">' + ODDS_MAX.toFixed(1) + '</span></div>';
+}
+
+/* ============ RENDER: TODAY ============ */
+function renderResearchBar(){
+  if(!DATA || !DATA.live) return "";
+  var d = DATA;
+  return '<div class="resbar"><svg class="ic"><use href="#i-zap" xlink:href="#i-zap"/></svg>' +
+    '<span>SIKU <b>' + dateSw(d.date || localDateStr()) + '</b></span><span class="sep">·</span>' +
+    '<span>MECHI ZIMECHUNGUZWA <b>' + (d.researched != null ? d.researched : "—") + '</b>' +
+    (d.matches_total != null ? ' <span class="sub2">('/ + d.matches_total + ' za siku)</span>' : '') + '</span><span class="sep">·</span>' +
+    '<span>PICKS <b>' + (d.matches || []).length + '</b></span><span class="sep">·</span>' +
+    '<span>RESEARCH <b>' + (LIVE.at || "sasa") + '</b></span></div>';
+}
 function renderBestPicks(){
   var all = allPicks();
-  var acc = buildAccumulator();
   var h = [];
-  h.push('<div class="sec-h"><b>BEST PICKS</b><span class="cnt">table moja · vyanzo 4+ · confidence &ge; 70%</span></div>');
+  h.push('<div class="sec-h"><b>BEST PICKS</b><span class="cnt">siku kamili · vyanzo 4+ · conf &ge; 70%</span></div>');
   if(!all.length){
-    h.push('<div class="empty" style="padding:16px"><b style="font-size:12.5px;display:block;margin-bottom:6px">HAKUNA PICK INAYOPITIA KIWANGO SASA</b>' +
-      '<span class="sub2">kanuni: pick inawekeza ipele imechunguzwa na vyanzo 4+ (bookmakers wengi) na uhakika wa anga 70%<br>bot inaendelea kufunua mechi · jaribu tena kwa muda mfupi</span></div>');
+    h.push('<div class="empty"><b>HAKUNA PICK ILIYOPITA KIWANGO SASA</b>' +
+      'Kanuni: pick inawekeza ipele imechunguzwa na vyanzo 4+ na uhakika &ge; 70%.<br>Server inarudisha research kila min 15 — jaribu tena baadae siku.</div>');
     return h;
   }
   h.push('<div class="bpt">');
   all.forEach(function(p, i){
-    h.push('<div class="bpt-row">');
-    h.push('<div class="bpt-r1">');
-    h.push('<span class="bpt-n">' + (i+1) + '</span>');
-    h.push('<div class="bpt-m"><b>' + esc(p.match) + '</b><span>' + esc(p.comp || "") + ' · ' + fmtT(p.kickoff) + '</span></div>');
-    h.push('<div class="o">' + p.odds.toFixed(2) + '</div>');
-    h.push('</div>');
-    h.push('<div class="bpt-r2">');
-    h.push('<div class="bpt-k"><b>' + esc(p.market) + '</b>' + esc(p.selection) + '</div>');
-    h.push('<div class="bpt-cf"><div class="bar"><i style="width:' + Math.round(p.final*100) + '%"></i></div><div class="t">' + Math.round(p.final*100) + '%</div></div>');
-    h.push('<div class="bpt-s"><b>' + p.n + '</b><span>VYANZO</span></div>');
-    h.push('</div>');
-    h.push('</div>');
+    h.push('<div class="bpt-row"><div class="bpt-r1">' +
+      '<span class="bpt-n">' + (i+1) + '</span>' +
+      '<div class="bpt-m"><b>' + esc(p.match) + '</b><span>' + esc(p.comp || "") + ' · ' + fmtT(p.kickoff) + '</span></div>' +
+      '<div class="o">' + p.odds.toFixed(2) + '</div></div>' +
+      '<div class="bpt-r2"><div class="bpt-k"><b>' + esc(p.market) + '</b>' + esc(p.selection) + '</div>' +
+      '<div class="bpt-cf"><div class="bar"><i style="width:' + Math.round(p.final*100) + '%"></i></div><div class="t">' + Math.round(p.final*100) + '%</div></div>' +
+      '<div class="bpt-s"><b>' + p.n + '</b><span>VYANZO</span></div></div></div>');
   });
   h.push('</div>');
-  if(all.length && acc.legs.length){
-    h.push('<div class="bpt-total"><span class="lbl">BET YA SIKU</span>' +
-      '<span class="item"><b>' + acc.legs.length + '</b>LEGS</span>' +
-      '<span class="item"><b>' + acc.total.toFixed(2) + '</b>TOTAL ODDS</span>' +
-      '<span class="item"><b>~' + Math.round(acc.hitProb*100) + '%</b>MWEZEKANO</span></div>');
-  }
-  h.push('<p class="bpt-note">KILA PICK IMECHUNGUZWA NA VYANZO 4+ (SOKO BOOKMAKERS 30+ · WINCOMPARATOR MODEL · FOOTBALLPREDICTIONS · WHISPERS · FOREBET) · CONSENSUS CONFI &ge; 70% · HAKUNA PICK YA "FEELING"</p>');
+  h.push('<p class="bpt-note">KILA PICK IMECHUNGUZWA NA VYANZO 4+ (SOKO 30+ · WC MODEL · FOOTBALLPREDICTIONS · WHISPERS · FOREBET) · CONSENSUS &ge; 70% · PICKS ZA ' + Math.round(ACC_CONF*100) + '%+ NDIO ZINAZOINGIA KUMBO</p>');
   return h;
 }
-
-/* ============ RENDER: TODAY (combo) ============ */
 function renderToday(){
   var s = getTodaySession() || ensureTodaySession();
-  var h = renderBestPicks();
+  var h = [];
+  h.push(renderResearchBar());
+  h.push('<div class="sec-h" style="margin-top:16px"><b>BET YA LEO — ACCUMULATOR</b><span class="cnt">conf &ge; ' + Math.round(ACC_CONF*100) + '% · total odds ' + ODDS_MIN.toFixed(1) + '–' + ODDS_MAX.toFixed(1) + '</span></div>');
+  if(LIVE.state !== "live"){
+    h.push('<div class="empty" style="padding:16px"><b>SERVER ' + (LIVE.state === "checking" ? "INAFUNGIWA..." : "HAIPATIKANI") + '</b>' +
+      'Hakuna data ya demo — real data pekee. App inajaribu tena yenyewe kila min 2, au bonyeza LIVE/refresh.</div>');
+  }
   var legs = s.picks || [];
   var total = (s.meta && s.meta.total) || legs.reduce(function(a,p){ return a*p.odds; }, 1);
   var hitProb = legs.reduce(function(a,p){ return a*p.final; }, 1);
   var res = dayResult(legs);
-  h.push('<div class="sec-h"><b>BET YA LEO — ACCUMULATOR</b><span class="cnt">1 leg kwa mechi · total odds 1.5–' + ODDS_CAP.toFixed(1) + '</span></div>');
-  if(LIVE.state !== "live"){
-    h.push('<div class="empty" style="padding:14px;font-size:12px">SERVER ' + (LIVE.state === "checking" ? "INAFUNGIWA... (inafanya kazi yenyewe)" : "HAIPATIKANI — inajaribu tena yenyewe") + ' · data ya chini ni ya offline</div>');
-  }
+  var min_met = (s.meta && typeof s.meta.min_met === "boolean") ? s.meta.min_met : total >= ODDS_MIN;
   if(!legs.length){
-    h.push('<div class="empty"><b style="font-size:14px;display:block;margin-bottom:8px">HAKUNA MATCH INAYOWEZA KUBEKIWA SASA</b>' +
-      '<span class="sub2">mechi zote za data hii zimecheza / zimeanza · bet ya siku mpya itajengwa ikipatikana mechi mpya<br>server inarudishwa kila min 2 yenyewe</span></div>');
+    h.push('<div class="empty"><b>HAKUNA COMBO LEIO</b>' +
+      'Hakuna picks nyingi za conf &ge; ' + Math.round(ACC_CONF*100) + '% zinazofikia total ' + ODDS_MIN.toFixed(1) + '–' + ODDS_MAX.toFixed(1) + '.<br>' +
+      'Siku nyingi za mid-week huzua combo ndogo — hii ni kanuni, si hatua. Subiri siku inayofuata.</div>');
   } else {
     h.push('<div class="hero">');
-    h.push('<span class="hero-tag"><svg class="ic"><use href="#i-zap" xlink:href="#i-zap"/></svg>ACCUMULATOR · ' + legs.length + ' LEGS · 1/MECHI</span>');
+    h.push('<span class="hero-tag"><svg class="ic"><use href="#i-zap" xlink:href="#i-zap"/></svg>ACCUMULATOR · ' + legs.length + ' LEGS · SIKU ' + dateSw(s.date) + '</span>');
     h.push('<div class="hero-grid">' +
-      '<div class="hg"><div class="l">TOTAL ODDS</div><div class="v">' + total.toFixed(2) + '</div><div class="sub2" style="margin-top:6px">KAP: ' + ODDS_CAP.toFixed(1) + '</div></div>' +
+      '<div class="hg"><div class="l">TOTAL ODDS</div><div class="v">' + total.toFixed(2) + '</div>' +
+        '<div class="sub2" style="margin-top:6px">KANUNI: ' + ODDS_MIN.toFixed(1) + '–' + ODDS_MAX.toFixed(1) + '</div>' + gauge(total) + '</div>' +
       '<div class="hg"><div class="l">MWEZEKANO WA KUKITA (makadirio)</div><div class="v pct">' + Math.round(hitProb*100) + '%</div>' +
       '<div class="bar"><div class="fill" style="width:' + Math.round(hitProb*100) + '%"></div></div></div></div>');
+    if(!min_met){
+      h.push('<div class="warnbox"><b>⚠ TOTAL ' + total.toFixed(2) + ' < ' + ODDS_MIN.toFixed(1) + ':</b> soko halikutolewa legs nyingi za ' + Math.round(ACC_CONF*100) + '%+ leo. Combo hii <b>haikidhi kanuni ya chini</b> — usichapie isipokuwa unapumzika na hiyo.</div>');
+    }
     h.push('<div class="legs">');
     legs.forEach(function(p, i){
+      var st = p.status && p.status !== "pending" ? comboStatusChip(p.status, true) : "";
       h.push('<div class="leg"><span class="ln">' + (i+1) + '</span>' +
-        '<div class="li"><b>' + esc(p.match) + '</b><span>' + esc(p.market) + ' — ' + esc(p.selection) + '</span></div>' +
-        '<div class="lo"><div class="o">' + p.odds.toFixed(2) + '</div><div class="c">' + Math.round(p.final*100) + '% · ' + p.n + ' vyanzo</div></div></div>');
+        '<div class="li"><b>' + esc(p.match) + '</b><span>' + esc(p.market) + ' — ' + esc(p.selection) + (p.score ? ' · score ' + esc(p.score) : '') + (p.auto ? ' <span class="auto-tag">AUTO</span>' : '') + '</span></div>' +
+        '<div class="lo"><div class="o">' + p.odds.toFixed(2) + '</div><div class="c">' + Math.round(p.final*100) + '% · ' + p.n + ' vyanzo</div></div>' + st + '</div>');
     });
     h.push('</div>');
-    /* sources ya combo */
     var srcs = {};
     legs.forEach(function(p){ (p.src||[]).forEach(function(x){ srcs[x]=1; }); });
     h.push('<div class="hero-src">' + Object.keys(srcs).map(function(x){ return '<span class="srcchip">' + esc(x) + '</span>'; }).join("") + '</div>');
-    h.push('<div class="hero-status"><span class="sub2">ZOTE LAZIMA ZIKITE · MATOKEO YANAHIFADHIWA KWA SIKU IKIPINDUKA</span>' + comboStatusChip(res) + '</div>');
+    h.push('<div class="hero-status"><span class="sub2">ZOTE LAZIMA ZIKITE · MATOKEO YANAJAA YENYewe (WINCOMPARATOR) SIKU IKIPINDUKA</span>' + comboStatusChip(res, false) + '</div>');
     h.push('</div>');
   }
-  /* others */
   var others = (s.others || []);
   if(others.length){
-    h.push('<details class="dtl"><summary><svg class="ic"><use href="#i-layers" xlink:href="#i-layers"/></svg>PICKS NYINGINE ZILIZOPITA KIWANGO (ZILIZOACHWA) — ' + others.length + '</summary>');
+    h.push('<details class="dtl"><summary><svg class="ic"><use href="#i-layers" xlink:href="#i-layers"/></svg>PICKS ZILIZOACHWA (HAKUZIINGIA KUMBO) — ' + others.length + '</summary>');
     others.forEach(function(p){
       h.push('<div class="dtl-row"><span><b>' + esc(p.match) + '</b> <span class="sub2">' + esc(p.market) + '</span></span>' +
         '<span style="display:flex;gap:9px;align-items:center"><span class="pc">' + Math.round(p.final*100) + '%</span><span class="po">' + p.odds.toFixed(2) + '</span></span></div>');
     });
     h.push('</details>');
   }
-  h.push('<p class="foot">DATA: ' + (LIVE.state === "live" ? "LIVE · " + (LIVE.at||"sasa") : "OFFLINE · EMBEDDED") +
-    ' · RESEARCH: 5 VYANZO LIVE · PICK = CONSENSUS VYANZO 4+ NA CONFI &ge; 70% · 1 ACCUMULATOR KWA SIKU (ODDS 1.5–3.0) · UCHEZE KWA UHAKIKA</p>');
+  h.push('<p class="foot">DATA: ' + (LIVE.state === "live" ? "LIVE · " + (LIVE.at||"sasa") : "OFFLINE") +
+    ' · RESEARCH DAILY (MECHI ZOTE ZA SIKU) · PICK = VYANZO 4+ NA CONF &ge; 70% · COMBO = CONF &ge; ' + Math.round(ACC_CONF*100) + '%, ODDS ' + ODDS_MIN.toFixed(1) + '–' + ODDS_MAX.toFixed(1) +
+    ' · HAKUNA DATA YA DEMO · UCHEZA KWA UHAKIKA</p>');
   $("tab-today").innerHTML = h.join("");
 }
 
-/* ============ RENDER: HISTORY (win rate) ============ */
+/* ============ RENDER: HISTORY (win rate + auto results) ============ */
 function renderHistory(){
   var rec = loadRecords();
   var st = winRate(rec);
   var h = [];
-  h.push('<div class="sec-h"><b>WIN RATE ANALYSIS</b><span class="cnt">1 accumulator kwa siku · zote zikite = WIN</span></div>');
+  h.push('<div class="sec-h"><b>WIN RATE</b><span class="cnt">1 accumulator kwa siku · zote zikite = WIN</span></div>');
   h.push('<div class="wr-hero">');
   h.push('<div class="big">' + (st.rate != null ? Math.round(st.rate*100) + "%" : "—") + '</div>');
-  h.push('<div class="lbl">WINNING RATE</div>');
+  h.push('<div class="lbl">WINNING RATE (COMBO)</div>');
   if(st.streak) h.push('<div class="subnote">Streak sasa: ' + st.streak + ' ' + (st.streakType === "win" ? "WINS" : "LOSSES") + '</div>');
-  else h.push('<div class="subnote">' + st.days + ' siku zilizorekodiwa</div>');
+  else h.push('<div class="subnote">' + st.days + ' siku zilizorekodiwa · matokeo yanajaa yenyewe baada ya siku kupinduka</div>');
   h.push('<div class="wr-grid">');
   h.push('<div class="wr-cell"><div class="v grn">' + st.w + '</div><div class="l">WINS</div></div>');
   h.push('<div class="wr-cell"><div class="v red">' + st.l + '</div><div class="l">LOSSES</div></div>');
   h.push('<div class="wr-cell"><div class="v amb">' + st.pend + '</div><div class="l">ZINAPOKELA</div></div>');
-  h.push('<div class="wr-cell"><div class="v gold">' + st.days + '</div><div class="l">RECORDS</div></div>');
-  h.push('<div class="wr-cell"><div class="v">' + (st.avgLegs ? st.avgLegs.toFixed(1) : "—") + '</div><div class="l">AVG LEGS</div></div>');
+  h.push('<div class="wr-cell"><div class="v gold">' + st.days + '</div><div class="l">SIKU</div></div>');
+  h.push('<div class="wr-cell"><div class="v grn">' + (st.legsSum ? st.winsLegs + "/" + st.legsSum : "—") + '</div><div class="l">LEGS ZIMEITA</div></div>');
   h.push('<div class="wr-cell"><div class="v">' + (st.avgTotal ? st.avgTotal.toFixed(2) : "—") + '</div><div class="l">AVG ODDS</div></div>');
-  h.push('</div></div>');
+  h.push('</div>');
+  var mk = marketStats(rec);
+  var mkRows = Object.keys(mk).map(function(k){ return {k:k, v:mk[k]}; })
+    .filter(function(x){ return x.v.w + x.v.l > 0; })
+    .sort(function(a,b){ return (b.v.w+b.v.l) - (a.v.w+a.v.l); });
+  if(mkRows.length){
+    h.push('<div class="mktstats">');
+    mkRows.forEach(function(x){
+      var d = x.v.w + x.v.l;
+      h.push('<div class="mktrow"><span class="mn">' + esc(x.k) + '</span>' +
+        '<span class="mv">' + x.v.w + 'W/' + x.v.l + 'L <em>' + Math.round(x.v.w/d*100) + '%</em></span></div>');
+    });
+    h.push('</div>');
+  }
+  h.push('</div>');
   var days = dayBets(rec);
   if(!days.length){
-    h.push('<div class="empty" style="margin-top:14px">Hakuna records bado. Siku ya kwanza itajengwa kiotomatiki.</div>');
+    h.push('<div class="empty" style="margin-top:14px"><b>HAKUNA RECORDS BADO</b>' +
+      'Siku ya kwanza itajengwa kiotomatiki: research ya mechi zote za siku → 1 accumulator (odds ' + ODDS_MIN.toFixed(1) + '–' + ODDS_MAX.toFixed(1) + ') → siku ikipinduka matokeo yanajaa yenyewe.</div>');
   }
   days.forEach(function(x, idx){
     var r = dayResult(x.picks);
@@ -629,38 +720,38 @@ function renderHistory(){
       : r === "loss" ? '<span class="st loss"><svg class="ic"><use href="#i-x" xlink:href="#i-x"/></svg>LOSS</span>'
       : r === "void" ? '<span class="st void">VOID</span>'
       : '<span class="st pend">INAPOKELA</span>';
+    var hits = x.picks.filter(function(p){ return p.status === "win"; }).length;
+    var decided = x.picks.filter(function(p){ return p.status === "win" || p.status === "loss"; }).length;
     h.push('<div class="day">');
-    h.push('<div class="day-h" data-open="' + idx + '"><div class="d"><b>' + x.picks.length + ' LEGS · TOTAL ' + (x.total ? x.total.toFixed(2) : "—") + '</b>' +
-      '<span>' + sessDateLabel({date:x.date}) + ' · ' + (x.picks[0] ? esc(x.picks[0].match) : "") + (x.picks.length>1 ? ' +' + (x.picks.length-1) : '') + '</span></div>' + rchip + '</div>');
+    h.push('<div class="day-h" data-open="' + idx + '"><div class="d"><b>' + hits + '/' + x.picks.length + ' LEGS ZIMEITA · TOTAL ' + (x.total ? x.total.toFixed(2) : "—") + '</b>' +
+      '<span>' + sessDateLabel({date:x.date}) + ' · ' + (x.picks[0] ? esc(x.picks[0].match) : "") + (x.picks.length>1 ? ' +' + (x.picks.length-1) : '') +
+      (decided < x.picks.length ? ' · ' + (x.picks.length - decided) + ' bado' : '') + '</span></div>' + rchip + '</div>');
     h.push('<div class="day-b" style="display:' + (idx===0?'block':'none') + '" data-body="' + idx + '">');
     x.picks.forEach(function(p){
       var pkey = p.mid + "|" + p.market;
       h.push('<div class="legrow"><span style="flex:1;min-width:0"><span class="pm">' + esc(p.match) + '</span><br>' +
-        '<span class="ps">' + esc(p.market) + (p.score ? ' · <span class="sc">' + esc(p.score) + '</span>' : '') + (p.auto ? ' <span class="auto-tag">AUTO</span>' : '') + '</span></span>' +
+        '<span class="ps">' + esc(p.market) + (p.score ? ' · <span class="sc">' + esc(p.score) + '</span>' : '') + (p.auto ? ' <span class="auto-tag">AUTO</span>' : '') + (p.manual ? ' <span class="auto-tag">MANUAL</span>' : '') + '</span></span>' +
         '<span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">' +
         '<span class="po">' + p.odds.toFixed(2) + '</span> ' +
+        (p.status && p.status !== "pending" ? comboStatusChip(p.status, true) : '') +
         '<span class="ovr">' +
-          '<button class="ov" data-mode="w" data-date="' + esc(x.date) + '" data-p="' + esc(pkey) + '"' + (p.status==="win"?' class="on-w"':'') + '>W</button>' +
-          '<button class="ov" data-mode="l" data-date="' + esc(x.date) + '" data-p="' + esc(pkey) + '"' + (p.status==="loss"?' class="on-l"':'') + '>L</button>' +
-          '<button class="ov" data-mode="v" data-date="' + esc(x.date) + '" data-p="' + esc(pkey) + '"' + (p.status==="void"?' class="on-v"':'') + '>V</button>' +
+          '<button class="ov' + (p.status==="win"?" on-w":"") + '" data-mode="w" data-date="' + esc(x.date) + '" data-p="' + esc(pkey) + '">W</button>' +
+          '<button class="ov' + (p.status==="loss"?" on-l":"") + '" data-mode="l" data-date="' + esc(x.date) + '" data-p="' + esc(pkey) + '">L</button>' +
+          '<button class="ov' + (p.status==="void"?" on-v":"") + '" data-mode="v" data-date="' + esc(x.date) + '" data-p="' + esc(pkey) + '">V</button>' +
         '</span></span></div>');
-      /* score input per leg */
       h.push('<div class="scorein" style="margin-top:8px"><input data-date="' + esc(x.date) + '" data-mid="' + esc(p.mid) + '" data-mkt="' + esc(p.market) + '" value="' + esc(p.score||"") + '" placeholder="score h-a" inputmode="numeric">' +
         '<button class="scorebtn" data-date="' + esc(x.date) + '" data-mid="' + esc(p.mid) + '" data-mkt="' + esc(p.market) + '">FUNGA</button></div>');
     });
     h.push('</div></div></div>');
   });
-  h.push('<p class="foot">RECORDS: KENYE KIFAA HII + SERVER (BACKUP) · KILA SIKU = ACCUMULATOR 1 · MATOKEO YANAHIFADHIWA WAHISIBI KWA SIKU IKIPINDUKA · UCHEZE KWA UHAKIKA</p>');
+  h.push('<p class="foot">Matokeo yanajaa YENYewe (WinComparator final scores) ndani ya min ~15 baada ya mechi kumalizika · manual (W/L/V au score) ni ya kusaidia tu · records: kifaa hii + server (backup) · UCHEZA KWA UHAKIKA</p>');
   $("tab-history").innerHTML = h.join("");
 }
 
 function renderAll(){ renderTopbar(); renderLiveChip(); renderToday(); renderHistory(); }
 
 /* ============ AUTO-SYNC ============ */
-var lastPicksPoll = 0;
-var lastSync = 0;
 function markSync(){
-  lastSync = Date.now();
   var el = $("synctxt");
   if(el) el.textContent = new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit", second:"2-digit"});
   var rb = $("btn-refresh");
@@ -685,7 +776,9 @@ function autoSync(){
   }
   if(now - lastPicksPoll > 2 * 60000){
     lastPicksPoll = now;
-    fetchLive().then(function(d){
+    /* siku mpya → force research ya siku hiyo hiyo */
+    var force = !!(lastDataDate && lastDataDate !== localDateStr());
+    fetchLive(force).then(function(d){
       if(d && !document.hidden){
         setLiveFrom(d);
         ensureTodaySession();
@@ -699,7 +792,8 @@ function startAutoSync(){ setInterval(autoSync, 60000); }
 
 function refreshAll(){
   toast("INARUDISHA DATA...");
-  fetchLive().then(function(d){
+  var force = !!(lastDataDate && lastDataDate !== localDateStr());
+  fetchLive(true).then(function(d){
     setLiveFrom(d);
     if(d) toast("DATA MPYA · " + (LIVE.at || "sasa"));
     ensureTodaySession();
@@ -786,12 +880,12 @@ function enterApp(){
 function boot(){
   renderTopbar();
   var t0 = Date.now();
-  fetchLive().then(function(d){
+  fetchLive(false).then(function(d){
     setLiveFrom(d);
     var wait = Math.max(0, 1900 - (Date.now() - t0));
     setTimeout(enterApp, wait);
   });
-  setTimeout(function(){ setLiveFrom(null); enterApp(); }, 6000);
+  setTimeout(function(){ setLiveFrom(null); enterApp(); }, 8000);
 }
 boot();
 })();

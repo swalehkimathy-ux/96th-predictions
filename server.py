@@ -125,12 +125,17 @@ def global_stats(sessions):
             "rate": (w / (w + l)) if (w + l) else None,
             "sessions": len(sessions), "per_market": per_mkt}
 
-# ================= LIVE DATA (engine v5: live discovery + consensus) =================
+# ================= LIVE DATA (engine v6: DAILY discovery + consensus) =================
+TZ3 = datetime.timezone(datetime.timedelta(hours=3))  # GMT+3 (Tanzania)
+
+def tz3_today():
+    return datetime.datetime.now(TZ3).strftime("%Y-%m-%d")
+
 def build_payload():
     t0 = time.time()
     try:
         import live_research as LR
-        payload = LR.get_picks(max_age_h=14, max_research=40)
+        payload = LR.get_picks(max_research=80)
         counts = {"matches": len(payload.get("matches", [])),
                   "researched": payload.get("researched"),
                   "matches_total": payload.get("matches_total"),
@@ -138,20 +143,23 @@ def build_payload():
     except Exception as e:
         payload = {"generated_ms": int(time.time() * 1000), "live": False, "matches": []}
         counts = {"error": str(e)[:200], "built_in_s": round(time.time() - t0, 1)}
-    payload["generated_utc"] = datetime.datetime.now(datetime.UTC).strftime("%d/%m/%Y %H:%M")
+    payload["generated_utc"] = datetime.datetime.now(TZ3).strftime("%d/%m/%Y %H:%M")
     payload["generated_ms"] = int(time.time() * 1000)
     payload["counts"] = counts
     return payload
 
 def get_payload(force=False):
+    # siku mpya (GMT+3) → cache ya zamani haimtumiki: research ya siku hiyo hiyo
+    today = tz3_today()
     with PCOND:
-        if not force and CACHE["payload"] and (time.time() - CACHE["ts"]) < CACHE_TTL:
+        if (not force and CACHE["payload"] and CACHE.get("date") == today
+                and (time.time() - CACHE["ts"]) < CACHE_TTL):
             return CACHE["payload"]
         if CACHE["busy"]:
             if CACHE["payload"]:
                 return CACHE["payload"]  # build inayoendelea — rudi bila kupinga
-            # payload ya kwanza haijakuja — subiri build hiyo (hadi 60s)
-            PCOND.wait(timeout=60)
+            # payload ya kwanza haijakuja — subiri build hiyo (hadi 90s; research ya siku inachukua muda)
+            PCOND.wait(timeout=90)
             if CACHE["payload"]:
                 return CACHE["payload"]
             raise TimeoutError("payload build busy")
@@ -159,7 +167,8 @@ def get_payload(force=False):
     try:
         payload = build_payload()
         with PCOND:
-            CACHE.update(payload=payload, ts=time.time(), counts=payload["counts"], error=None, busy=False)
+            CACHE.update(payload=payload, ts=time.time(), date=tz3_today(),
+                         counts=payload["counts"], error=None, busy=False)
             PCOND.notify_all()
         auto_results()
         return payload
@@ -171,12 +180,12 @@ def get_payload(force=False):
             return CACHE["payload"]
         raise
 
-# ================= AUTO RESULTS (The Odds API - free tier) =================
+# ================= AUTO RESULTS (WC scores 1st — no key; Odds API 2nd — fallback) =================
 import urllib.request
 ODDS_API_KEY = os.environ.get("ODDS_API_KEY", "")
 _EVENTS_CACHE = {"ts": 0.0, "data": {}}
 _EVENTS_TTL = 1800  # 30min kwa sport (kuokoa quota ya Odds API free: 500 req/mwezi)
-_AUTORES_MIN_GAP = int(os.environ.get("P96_AUTORES_GAP") or 1800)  # sekunde kati ya auto-results
+_AUTORES_MIN_GAP = int(os.environ.get("P96_AUTORES_GAP") or 900)  # sekunde kati ya auto-results (default 15min)
 _AUTORES_LAST = [0.0]
 _ALIAS = {"hearts": {"midlothian"}, "spurs": {"tottenham"}, "wolves": {"wolverhampton"}}
 
@@ -249,21 +258,19 @@ def _odds_events(sport):
 
 def auto_results():
     """Hujaza scores za mechi zilizomalizika kwenye picks bado 'pending' (auto).
-    Rate-limited (P96_AUTORES_GAP) ili kuokoa quota ya Odds API free tier.
+    v7.3: chanzo 1 = WinComparator final scores (hakuna key) · chanzo 2 = Odds API (fallback,
+    inahitaji ODDS_API_KEY). Rate-limited (P96_AUTORES_GAP, default 15min).
     Best-effort: makosa hayaimarisi request ya /api/sessions."""
     try:
         _auto_results_inner()
     except Exception as e:
         sys.stderr.write("[auto_results] error (imependwa): %s\n" % e)
 
-def _auto_results_inner():
-    if not ODDS_API_KEY:
-        return
-    now = time.time()
-    if now - _AUTORES_LAST[0] < _AUTORES_MIN_GAP:
-        return
-    sports = {}
-    now_ms = now * 1000
+def _pending_picks(now_ms):
+    """[(sid, pick)] — si manual, kickoff +120min < now, bado hakuna result."""
+    with dbx() as c:
+        done = {(r[0], r[1]) for r in c.execute("SELECT session_id, mid FROM results")}
+    out = []
     with dbx() as c:
         for row in c.execute("SELECT id, picks FROM sessions").fetchall():
             for p in json.loads(row["picks"] or "[]"):
@@ -271,11 +278,44 @@ def _auto_results_inner():
                     continue
                 if now_ms < (p.get("kickoff") or 0) + 120 * 60000:
                     continue  # mechi bado hai/ya hivi karibuni
-                sport = sport_for_comp(p.get("comp"))
-                if sport:
-                    sports.setdefault(sport, []).append((row["id"], p))
+                if (row["id"], p.get("mid")) in done:
+                    continue
+                out.append((row["id"], p))
+    return out
+
+def _auto_results_wc(pending, now_ms, cap=15):
+    """Chanzo 1: final score kutoka page ya mechi ya WinComparator (hakuna key).
+    Pick ya live ina mid = slug ya WC, hivyo hii hufanya kazi kila wakati."""
+    try:
+        import live_research as LR
+    except Exception:
+        return 0
+    found = 0
+    with DBLOCK, dbx() as c:
+        for sid, p in pending:
+            if found >= cap:
+                break
+            slug = p.get("mid") or ""
+            if " " in slug or "/" in slug or not slug:
+                continue
+            score = LR.wc_result(slug)
+            if score:
+                c.execute("INSERT INTO results(session_id, mid, score, updated_at) VALUES(?,?,?,?)",
+                          (sid, p["mid"], "%d-%d" % score, int(now_ms)))
+                found += 1
+    return found
+
+def _auto_results_odds(pending, now_ms):
+    """Chanzo 2 (fallback, inahitaji ODDS_API_KEY): The Odds API events."""
+    if not ODDS_API_KEY:
+        return 0
+    sports = {}
+    for sid, p in pending:
+        sport = sport_for_comp(p.get("comp"))
+        if sport:
+            sports.setdefault(sport, []).append((sid, p))
     if not sports:
-        return
+        return 0
     found = 0
     with DBLOCK, dbx() as c:
         for sport, items in sports.items():
@@ -300,18 +340,28 @@ def _auto_results_inner():
                     if not (direct or swap):
                         continue
                     h, a = (ev["home_score"], ev["away_score"]) if direct else (ev["away_score"], ev["home_score"])
-                    cur = c.execute("SELECT score FROM results WHERE session_id=? AND mid=?",
-                                    (sid, p["mid"])).fetchone()
-                    if cur:
-                        continue  # score tayari imepo (manual au auto)
                     c.execute("INSERT INTO results(session_id, mid, score, updated_at) VALUES(?,?,?,?)",
                               (sid, p["mid"], "%d-%d" % (h, a), int(now_ms)))
                     found += 1
                     break
+    return found
+
+def _auto_results_inner():
+    now = time.time()
+    if now - _AUTORES_LAST[0] < _AUTORES_MIN_GAP:
+        return
+    now_ms = now * 1000
+    pending = _pending_picks(now_ms)
+    if not pending:
+        return
+    found = _auto_results_wc(pending, now_ms)
+    if ODDS_API_KEY:
+        pending2 = _pending_picks(now_ms)  # baada ya WC pass — tazama zile zilizobaki
+        found += _auto_results_odds(pending2, now_ms)
     if found:
         _AUTORES_LAST[0] = now
     else:
-        # hakuna score mpya — punguza gap ili rufu ijayo iwe karibu (bila kupoteza quota sana)
+        # hakuna score mpya — punguza gap ili rufu ijayo iwe karibu
         _AUTORES_LAST[0] = now - _AUTORES_MIN_GAP / 2
 
 # ================= HTTP =================
