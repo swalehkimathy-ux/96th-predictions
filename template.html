@@ -638,10 +638,10 @@ function renderResearchBar(){
 function renderBestPicks(){
   var all = allPicks();
   var h = [];
-  h.push('<div class="sec-h"><b>BEST PICKS</b><span class="cnt">siku kamili · vyanzo 4+ · conf &ge; 70%</span></div>');
+  h.push('<div class="sec-h"><b>BEST PICKS</b><span class="cnt">siku kamili · vyanzo 3+ · conf &ge; 70%</span></div>');
   if(!all.length){
     h.push('<div class="empty"><b>HAKUNA PICK ILIYOPITA KIWANGO SASA</b>' +
-      'Kanuni: pick inawekeza ipele imechunguzwa na vyanzo 4+ na uhakika &ge; 70%.<br>Server inarudisha research kila min 15 — jaribu tena baadae siku.</div>');
+      'Kanuni: pick inawekeza ipele imechunguzwa na vyanzo 3+ na uhakika &ge; 70%.<br>Server inarudisha research kila min 15 — jaribu tena baadae siku.</div>');
     return h;
   }
   h.push('<div class="bpt">');
@@ -655,7 +655,7 @@ function renderBestPicks(){
       '<div class="bpt-s"><b>' + p.n + '</b><span>VYANZO</span></div></div></div>');
   });
   h.push('</div>');
-  h.push('<p class="bpt-note">KILA PICK IMECHUNGUZWA NA VYANZO 4+ (SOKO 30+ · WC MODEL · FOOTBALLPREDICTIONS · WHISPERS · FOREBET) · CONSENSUS &ge; 70% · PICKS ZA ' + Math.round(ACC_CONF*100) + '%+ NDIO ZINAZOINGIA KUMBO</p>');
+  h.push('<p class="bpt-note">KILA PICK IMECHUNGUZWA NA VYANZO 3+ (SOKO 30+ · WC MODEL · FOOTBALLPREDICTIONS) · CONSENSUS &ge; 70% · PICKS ZA ' + Math.round(ACC_CONF*100) + '%+ NDIO ZINAZOINGIA KUMBO</p>');
   return h;
 }
 /* Fixtures za siku (zote zilizochunguzwa) — zinabadilika kiotomatiki siku ikipinduka.
@@ -670,7 +670,7 @@ function renderFixturesInner(){
   fx.sort(function(a,b){ return (a.kickoff||0) - (b.kickoff||0); });
   var h = [];
   h.push('<div class="fx-sec"><svg class="ic"><use href="#i-layers" xlink:href="#i-layers"/></svg>MECHI ZA LEO — ZIMECHUNGUZWA ' + fx.length +
-    '<span class="fx-sec-note">tips zinapatikana kwenye mechi zilizopita vyanzo 4+</span></div>');
+    '<span class="fx-sec-note">tips zinapatikana kwenye mechi zilizopita vyanzo 3+</span></div>');
   fx.forEach(function(f){
     var pk = pickMids[f.id];
     h.push('<div class="fxrow"><span class="fx-t">' + fmtT(f.kickoff) + '</span>' +
@@ -750,7 +750,7 @@ function renderToday(){
     h.push('</details>');
   }
   h.push('<p class="foot">DATA: ' + (LIVE.state === "live" ? "LIVE · " + (LIVE.at||"sasa") : "OFFLINE") +
-    ' · RESEARCH DAILY (MECHI ZOTE ZA SIKU) · PICK = VYANZO 4+ NA CONF &ge; 70% · COMBO = CONF &ge; ' + Math.round(ACC_CONF*100) + '%, ODDS ' + ODDS_MIN.toFixed(1) + '–' + ODDS_MAX.toFixed(1) +
+    ' · RESEARCH DAILY (MECHI ZOTE ZA SIKU) · PICK = VYANZO 3+ NA CONF &ge; 70% · COMBO = CONF &ge; ' + Math.round(ACC_CONF*100) + '%, ODDS ' + ODDS_MIN.toFixed(1) + '–' + ODDS_MAX.toFixed(1) +
     ' · HAKUNA DATA YA DEMO · UCHEZA KWA UHAKIKA</p>');
   $("tab-today").innerHTML = h.join("");
 }

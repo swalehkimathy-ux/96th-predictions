@@ -269,3 +269,42 @@ kamili — hushukumiwi na TZ ya viewer. ESPN scoreboard (403 kwa datacenter IPs)
   fixture ya kwanza inionekana **09:30 PM** (TZ+3) — si 12:00 AM, autoScorePicks calls==due.
 - **Clear-all** `clear75.js` **6/6 PASS**: stale 25/08 zimeondolewa, leo inajirekodiwa upya
   (1 session), DELETE zimepelekwa (stale 2 + leo), today + history zime-render tena.
+
+---
+
+# v7.5.1 — Tips zinarudi (N_MIN 4→3) (28/08/2026, asubuhi)
+
+## Tatizo (screenshot user)
+
+Siku mpya (28/08) ilielekeza vizuri (mechi 7 za leo, saa sahihi) lakini **hakuna tips na
+hakuna total odds** — kila mechi "hakuna tip", ACC tupu.
+
+## Root cause
+
+Kanuni ya pick ilihitaji **vyanzo 4+** (n >= 4). Katika uhalisia vyanzo vinavyopatikana
+daima ni 3 tu:
+- **Soko** (odds 30+ bookmakers) ✓
+- **WinComparator Model** ✓
+- **FootballPredictions** ✓
+- **Football Whispers** ✗ — inatoa posts za *siku ijayo* pekee (29/08...); za leo
+  hazijapatikana (hu-publish jioni) → 0 kwa mechi za leo
+- **Forebet** ✗ — cache static (`data/raw.json`) iliyosimama 25–26/08 + forebet.com
+  403 kwa datacenter IPs
+
+Hivyo hakuna mechi iliyofikia n=4 → **picks 0 kila siku ya aina hiyo**.
+
+## Fix
+
+- **N_MIN = 4 → 3** (live_research.py). Vyanzo 3 ni consensus halisi (odds za soko +
+  model + site ya pili ya predictions). Kanuni za user **hakuzibadilika**: pick conf ≥ 70%,
+  combo conf ≥ 80%, total odds 1.6–3.0.
+- Matukio ya "vyanzo 4+" → "vyanzo 3+" (footer, notes, rule string).
+- **Simulation ya leo (28/08):** mechi 7 → picks 6 (Over 1.5, conf 79–91%) → **ACC total
+  2.26 · 5 legs · min_met=True**.
+
+## Test evidence
+
+- `/api/picks` local (28/08): picks 6/7, ACC 2.26 (5 legs, zote 80%+), kickoffs UTC sahihi.
+- Node smoke TZ+3 **13/13**: tips kwenye mechi 6, "hakuna tip" x1, footer **2.26**,
+  kickoff "08:00 PM" (TZ+3), SAFISHA ZOTE ipo.
+- Clear-all **6/6** (stale 25/08 zinaondoka, leo inajirekodiwa upya).

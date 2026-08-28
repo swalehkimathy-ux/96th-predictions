@@ -14,7 +14,7 @@ inachunguzwa na vyanzo 5:
   5. Forebet                — local cache (siku ile ile)
 
 Kanuni ya pick (kwa user): pick inafanya kazi IPELE
-  - imevotiwa na vyanzo 4+ (n >= 4)
+  - imevotiwa na vyanzo 3+ (n >= 3)
   - na consensus confidence >= 70% (conf = avg + 0.03*(n-1), cap 0.97)
 
 ACCUMULATOR (bet ya siku):
@@ -87,7 +87,7 @@ FWS = "Football Whispers"
 FBS = "Forebet"
 ALL_SOURCES = [SOKO, WCM, FPS, FWS, FBS]
 
-N_MIN = 4        # vyanzo vichache vya kupitisha pick
+N_MIN = 3        # vyanzo vichache vya kupitisha pick (Soko + WC Model + FPS ziko daima; FW/Forebet hupungua)
 CONF_MIN = 0.70  # confidence vichache (70%)
 
 # ---------------- DAILY MODE (siku kamili, GMT+3 Tanzania) ----------------
